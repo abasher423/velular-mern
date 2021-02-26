@@ -22,6 +22,7 @@ app.use((req, res, next) => {
         res.header('Acess-Control-Allow-Methods', 'PUT, POST, PATCH, DELETE, GET');
         return res.status(200).json({});
     }
+    next();
 });
 
 // routes middleware
