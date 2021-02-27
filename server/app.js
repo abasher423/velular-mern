@@ -1,15 +1,32 @@
 import express from 'express';
 import morgan from 'morgan';
-import bodyParser from 'body-parser'
-import productRoutes from './routes/products.js';
+import bodyParser from 'body-parser';
+import mongoose from 'mongoose';
+import productRoutes from './api/routes/products.js';
+import db from './api/config/keys.js'
 
 // server
 const app = express();
-const PORT = process.env.PORT || 3000;
+
 
 app.use(morgan('dev'));
 app.use(bodyParser.urlencoded({extended: false})); // "true" allows parsing extended bodies with rich data
 app.use(bodyParser.json());
+
+const dbOptions = { useNewUrlParser: true, useUnifiedTopology: true };
+
+mongoose
+  .connect(db.mongoURI, dbOptions)
+  .then(() => {
+      console.log('Database is now connected...');
+
+      const PORT = process.env.PORT || 3000;
+      app.listen(PORT, () => console.log('Server running on port 3000...'));
+  })
+  .catch (error => {
+      console.log(error);
+      throw error;
+  });
 
 // setting Headers to prevent CORS errors
 app.use((req, res, next) => {
@@ -42,7 +59,7 @@ app.use((error, req, res, next) => {
     });
 });
 
-app.listen(PORT, () => console.log('Server running on port 3000...'));
+
 
 export default app;
 //4.42 
