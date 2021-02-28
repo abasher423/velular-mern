@@ -5,10 +5,20 @@ import Product from '../models/product.js';
 const router = express.Router();
 
 router.get('/', (req, res) => {
-    Product.find()
+    Product.find() //.where to add conditions or .limit for pagination
       .exec()
-      .then()
-      .catch();
+      .then(docs => {
+          console.log(docs);
+          if (docs.length > 0){
+            res.status(200).json(docs);
+          } else {
+            res.status(500).json({message: 'No entries founds for products'});
+          }
+      })
+      .catch(error => {
+          console.log(error);
+          res.status(500).json({error: error});
+      });
 });
 
 router.post('/', (req, res) => {
@@ -36,7 +46,7 @@ router.post('/', (req, res) => {
       .catch(error => {
           console.log(error);
           res.status(500).json({error: error});
-      })
+      });
 });
 
 router.get('/:productId', (req, res) => {
@@ -60,10 +70,32 @@ router.get('/:productId', (req, res) => {
 });
 
 router.patch('/:productId', (req, res) => {
-    res.status(201).json({
-        message: "Updated product!",
-        productId: req.params.productId
-    });
+    const id = req.params.productId; 
+    const updateOps = {}; // objct so if we want to only update certain values we can (change)
+    for (const ops of req.body){
+      updateOps[ops.propName] = ops.value;
+    }
+    Product.updateOne({_id: id}, {$set: updateOps})
+      .exec()
+      .then(result => {
+        console.log(result);
+        res.status(200).json(result);
+      })
+      .catch(error => {
+        console.log(error);
+        res.status(500).json({error: error});
+      });
+});
+
+router.delete('/:productId', (req, res) => {
+    const id = req.params.productId;
+    Product.remove({_id: id})
+      .exec()
+      .then(result => res.status(200).json(result))
+      .catch(error => {
+          console.log(error);
+          res.status(500).json({error: error});
+      });
 });
 
 export default router;
