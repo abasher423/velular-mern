@@ -4,8 +4,11 @@ import Product from '../models/product.js';
 
 const router = express.Router();
 
+// @desc Fetch all products
+// @route GET /api/products
+// @access Public
 router.get('/', (req, res) => {
-    Product.find() //.where to add conditions or .limit for pagination
+     Product.find() //.where to add conditions or .limit for pagination
       .exec()
       .then(docs => {
           console.log(docs);
@@ -21,6 +24,9 @@ router.get('/', (req, res) => {
       });
 });
 
+// @desc Create single product
+// @route POST /api/products
+// @access Private
 router.post('/', (req, res) => {
     // product we want to create
     const product = new Product({
@@ -49,6 +55,9 @@ router.post('/', (req, res) => {
       });
 });
 
+// @desc Fetch single product
+// @route GET /api/products/:productId
+// @access Public
 router.get('/:productId', (req, res) => {
     // store id as a variable from "params"
     // params: thing that is passed via the URL /products/id123
@@ -69,6 +78,9 @@ router.get('/:productId', (req, res) => {
       });
 });
 
+// @desc Update single product
+// @route PATCH /api/products/:productId
+// @access Private
 router.patch('/:productId', (req, res) => {
     const id = req.params.productId; 
     const updateOps = {}; // objct so if we want to only update certain values we can (change)
@@ -87,6 +99,9 @@ router.patch('/:productId', (req, res) => {
       });
 });
 
+// @desc Delete single product
+// @route DELETE /api/products/:productId
+// @access Private
 router.delete('/:productId', (req, res) => {
     const id = req.params.productId;
     Product.remove({_id: id})
