@@ -4,10 +4,11 @@ import Product from '../models/product.js';
 
 const router = express.Router();
 
-router.get('/', (req,res,next) => {
-    res.status(200).json({
-        message: "GET request from /products received"
-    });
+router.get('/', (req, res) => {
+    Product.find()
+      .exec()
+      .then()
+      .catch();
 });
 
 router.post('/', (req, res) => {
@@ -24,7 +25,7 @@ router.post('/', (req, res) => {
         reason: req.body.reason
     });
     product
-      .save() // saves product in the db
+      .save() // saves product to the db
       .then(result =>{
         console.log(result);
         res.status(201).json({
@@ -34,6 +35,7 @@ router.post('/', (req, res) => {
       })
       .catch(error => {
           console.log(error);
+          res.status(500).json({error: error});
       })
 });
 
@@ -41,15 +43,20 @@ router.get('/:productId', (req, res) => {
     // store id as a variable from "params"
     // params: thing that is passed via the URL /products/id123
     const id = req.params.productId;
-    if (id === 'special'){
-        res.status(200).json({
-            message: "You discovered the special ID"
-        });
-    } else {
-        res.status(200).json({
-            message: 'You passed an ID'
-        });
-    }
+    Product.findById(id)
+      .exec()
+      .then(doc => {
+          console.log(doc);
+          if(doc){  // check if the product exists
+            res.status(200).json(doc);  
+          } else{
+            res.status(404).json({message: 'No valid entry found for the provided product ID'});
+          }
+      })
+      .catch(error => {
+        console.log(error);
+        res.status(500).json({error: error});
+      });
 });
 
 router.patch('/:productId', (req, res) => {
