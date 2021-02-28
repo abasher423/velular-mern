@@ -2,7 +2,7 @@ import mongoose from 'mongoose';
 const { Schema } = mongoose;
 
 const productSchema = new Schema({
-    _id: mongoose.Types.ObjectId,
+    _id: mongoose.Schema.ObjectId,
     name: { type: String, required: true },
     description: { type: String, required: true },
     brand: { type: String, required: true },
