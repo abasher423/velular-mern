@@ -1,4 +1,7 @@
 import express from 'express';
+import mongoose from 'mongoose';
+import Product from '../models/product.js';
+
 const router = express.Router();
 
 router.get('/', (req,res,next) => {
@@ -9,14 +12,29 @@ router.get('/', (req,res,next) => {
 
 router.post('/', (req, res) => {
     // product we want to create
-    const product = {
+    const product = new Product({
+        _id: new mongoose.Types.ObjectId(),
         name: req.body.name,
-        price: req.body.price
-    }
-    res.status(201).json({
-        message: "GET request from /products received",
-        createdProduct: product
+        description: req.body.description,
+        brand: req.body.brand,
+        size: req.body.size,
+        quantity: req.body.quantity,
+        price: req.body.price,
+        status: req.body.status,
+        reason: req.body.reason
     });
+    product
+      .save() // saves product in the db
+      .then(result =>{
+        console.log(result);
+        res.status(201).json({
+            message: "product created",
+            createdProduct: product
+        });
+      })
+      .catch(error => {
+          console.log(error);
+      })
 });
 
 router.get('/:productId', (req, res) => {
