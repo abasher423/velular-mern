@@ -5,7 +5,6 @@ import mongoose from 'mongoose';
 import productRoutes from './api/routes/products.js';
 import db from './api/config/keys.js'
 
-// server
 const app = express();
 
 
@@ -43,10 +42,10 @@ app.use((req, res, next) => {
 });
 
 // routes middleware
-app.use('/products', productRoutes);
+app.use('/api/products', productRoutes);
 
 app.use((req,res,next) => {
-    const error = new Error('Not Found');
+    const error = new Error('Incorrect URL Page Not Found');
     error.status = 404;
     next(error);
 });
