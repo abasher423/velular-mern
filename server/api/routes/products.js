@@ -35,7 +35,14 @@ router.get('/', async (req, res) => {
             }
             res.status(200).json(response);
         } else {
-            res.status(500).json({ message: 'No entries exist for products'});
+            res.status(500).json({ 
+                message: 'No entries exist for products',
+                request: {
+                    type: 'POST',
+                    description: 'Create a product',
+                    url: 'http://localhost:3000/api/products'
+                }
+            });
         }
     } catch (err){
         console.log(err);
@@ -61,7 +68,14 @@ router.get('/:productId', async (req, res) => {
                 }
             });
         } else {
-            res.status(500).json({ message: 'No entry exists for provided product ID'});
+            res.status(500).json({ 
+                message: 'No entry exists for provided product ID',
+                request: {
+                    type: 'GET',
+                    description: 'Get all products',
+                    url: 'http://localhost:3000/api/products'
+                }
+            });
         }
     } catch (err){
         console.log(err);
@@ -101,7 +115,8 @@ router.post('/', async (req, res) => {
                 reason: result.reason,
                 url: {
                     type: 'GET',
-                    url: `http:localhost:/products/${result._id}`
+                    description: 'Get created product',
+                    url: `http:localhost:/api/products/${result._id}`
                 }
             }
         })
@@ -122,7 +137,6 @@ router.patch('/:productId', async (req, res) => {
         }
         
         const result = await Product.updateOne({_id: req.params.productId}, {$set: updateOps});
-        console.log(result);
         res.status(201).json({
             message: 'Product Successfully Updated',
             request: {
@@ -143,15 +157,35 @@ router.patch('/:productId', async (req, res) => {
 // @access Private
 router.delete('/:productId', async (req, res) => {
     try {
-        const product = await Product.remove({ _id: req.params.productId });
+        const product = await Product.deleteOne({ _id: req.params.productId });
         if (product.n > 0){ // if product trying to be deleted, doesn't exist
-            console.log(product);
             res.status(200).json({
                 message: 'Product Successfully Deleted',
-                product
+                request: {
+                    type: 'POST',
+                    url: 'http://localhost:3000/api/products',
+                    description: 'Create new product', // by providing the following body
+                    body: {    
+                        name: 'String',
+                        description: 'String',
+                        brand: 'String',
+                        size: 'Number',
+                        quantity: 'Number',
+                        price: 'Number',
+                        status: 'String',
+                        reason: 'String'
+                    } 
+                }
             });
         } else {
-            res.status(500).json({ message: 'No entry exists or already deleted' });
+            res.status(500).json({ 
+                message: 'No entry exists or already deleted',
+                request: {
+                    type: 'GET',
+                    description: 'Get all products',
+                    url: 'http://localhost:3000/api/products'
+                }
+            });
         }
     } catch (err){
         console.log(err);
