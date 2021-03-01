@@ -1,5 +1,6 @@
 import express from 'express';
 import mongoose from 'mongoose';
+import product from '../models/product.js';
 import Product from '../models/product.js';
 
 const router = express.Router();
@@ -9,10 +10,30 @@ const router = express.Router();
 // @access Public
 router.get('/', async (req, res) => {
     try {
-        const products = await Product.find();
+        const products = await Product.find().select('_id name description brand size quantity price status reason');
         if (products.length > 0){ //.where to add conditions or .limit for pagination
-            console.log(products);
-            res.status(200).json(products);
+            const response = {
+                count: products.length,
+                products: products.map(product => {
+                    return {
+                        _id: product._id,
+                        name: product.name,
+                        description: product.description,
+                        brand: product.brand,
+                        size: product.size,
+                        quantity: product.quantity,
+                        price: product.price,
+                        status: product.status,
+                        reason: product.reason,
+                        requests: {
+                            tpe: 'GET',
+                            description: 'Get current product',
+                            url: `http://localhost:3000/api/products/${product._id}`
+                        }
+                    }
+                })
+            }
+            res.status(200).json(response);
         } else {
             res.status(500).json({ message: 'No entries exist for products'});
         }
@@ -27,10 +48,18 @@ router.get('/', async (req, res) => {
 // @access Public
 router.get('/:productId', async (req, res) => {
     try {
-        const product = await Product.findById({ _id: req.params.productId });
+        const id = req.params.productId;
+        const product = await Product.findById({ _id: id }).select('_id name description brand size quantity price status reason');
         if (product){ // checks if the product exists
             console.log(product);
-            res.status(200).json(product);
+            res.status(200).json({
+                product,
+                requests: {
+                    type: 'GET',
+                    description: 'Get all products',
+                    url: 'http://localhost/api/products'
+                }
+            });
         } else {
             res.status(500).json({ message: 'No entry exists for provided product ID'});
         }
@@ -56,11 +85,25 @@ router.post('/', async (req, res) => {
             status: req.body.status,
             reason: req.body.reason
         });
-        await product.save();
-        console.log(product);
+        const result = await product.save();
+        console.log(result);
         res.status(201).json({
             message: 'Product Successfuly Created',
-            product
+            createdPoduct: {
+                _id: result._id,
+                name: result.name,
+                description: result.description,
+                brand: result.brand,
+                size: result.size,
+                quantity: result.quantity,
+                price: result.price,
+                status: result.status,
+                reason: result.reason,
+                url: {
+                    type: 'GET',
+                    url: `http:localhost:/products/${result._id}`
+                }
+            }
         })
     } catch (err){
         console.log(err);
@@ -77,9 +120,17 @@ router.patch('/:productId', async (req, res) => {
         for (const ops of req.body){
         updateOps[ops.propName] = ops.value;
         }
+        
         const result = await Product.updateOne({_id: req.params.productId}, {$set: updateOps});
         console.log(result);
-        res,status(201).json(result);
+        res.status(201).json({
+            message: 'Product Successfully Updated',
+            request: {
+                type: 'GET',
+                description: 'Get updated product',
+                url: `http://localhost:300/api/products/${result._id}`
+            }
+        });
     } catch (err){
         console.log(err);
         res.status(500).json({ error: err });
