@@ -7,7 +7,7 @@ import db from './api/config/keys.js'
 
 const app = express();
 
-
+// mongoose.Promise = global.Promise;
 app.use(morgan('dev'));
 app.use(bodyParser.urlencoded({extended: false})); // "true" allows parsing extended bodies with rich data
 app.use(bodyParser.json());
