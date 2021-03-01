@@ -7,110 +7,105 @@ const router = express.Router();
 // @desc Fetch all products
 // @route GET /api/products
 // @access Public
-router.get('/', (req, res) => {
-     Product.find() //.where to add conditions or .limit for pagination
-      .exec()
-      .then(docs => {
-          console.log(docs);
-          if (docs.length > 0){
-            res.status(200).json(docs);
-          } else {
-            res.status(500).json({message: 'No entries founds for products'});
-          }
-      })
-      .catch(error => {
-          console.log(error);
-          res.status(500).json({error: error});
-      });
-});
-
-// @desc Create single product
-// @route POST /api/products
-// @access Private
-router.post('/', (req, res) => {
-    // product we want to create
-    const product = new Product({
-        _id: new mongoose.Types.ObjectId(),
-        name: req.body.name,
-        description: req.body.description,
-        brand: req.body.brand,
-        size: req.body.size,
-        quantity: req.body.quantity,
-        price: req.body.price,
-        status: req.body.status,
-        reason: req.body.reason
-    });
-    product
-      .save() // saves product to the db
-      .then(result =>{
-        console.log(result);
-        res.status(201).json({
-            message: "product created",
-            createdProduct: product
-        });
-      })
-      .catch(error => {
-          console.log(error);
-          res.status(500).json({error: error});
-      });
+router.get('/', async (req, res) => {
+    try {
+        const products = await Product.find();
+        if (products.length > 0){ //.where to add conditions or .limit for pagination
+            console.log(products);
+            res.status(200).json(products);
+        } else {
+            res.status(500).json({ message: 'No entries exist for products'});
+        }
+    } catch (err){
+        console.log(err);
+        res.status(500).json({ error: err });
+    }
 });
 
 // @desc Fetch single product
 // @route GET /api/products/:productId
 // @access Public
-router.get('/:productId', (req, res) => {
-    // store id as a variable from "params"
-    // params: thing that is passed via the URL /products/id123
-    const id = req.params.productId;
-    Product.findById(id)
-      .exec()
-      .then(doc => {
-          console.log(doc);
-          if(doc){  // check if the product exists
-            res.status(200).json(doc);  
-          } else{
-            res.status(404).json({message: 'No valid entry found for the provided product ID'});
-          }
-      })
-      .catch(error => {
-        console.log(error);
-        res.status(500).json({error: error});
-      });
+router.get('/:productId', async (req, res) => {
+    try {
+        const product = await Product.findById({ _id: req.params.productId });
+        if (product){ // checks if the product exists
+            console.log(product);
+            res.status(200).json(product);
+        } else {
+            res.status(500).json({ message: 'No entry exists for provided product ID'});
+        }
+    } catch (err){
+        console.log(err);
+        res.status(500).json({ error: err })
+    }
+});
+
+// @desc Create single product
+// @route POST /api/products
+// @access Private
+router.post('/', async (req, res) => {
+    try {
+        const product = new Product({
+            _id: new mongoose.Types.ObjectId(),
+            name: req.body.name,
+            description: req.body.description,
+            brand: req.body.brand,
+            size: req.body.size,
+            quantity: req.body.quantity,
+            price: req.body.price,
+            status: req.body.status,
+            reason: req.body.reason
+        });
+        await product.save();
+        console.log(product);
+        res.status(201).json({
+            message: 'Product Successfuly Created',
+            product
+        })
+    } catch (err){
+        console.log(err);
+        res.status(500).json({ error: err });
+    }
 });
 
 // @desc Update single product
 // @route PATCH /api/products/:productId
 // @access Private
-router.patch('/:productId', (req, res) => {
-    const id = req.params.productId; 
-    const updateOps = {}; // objct so if we want to only update certain values we can (change)
-    for (const ops of req.body){
-      updateOps[ops.propName] = ops.value;
-    }
-    Product.updateOne({_id: id}, {$set: updateOps})
-      .exec()
-      .then(result => {
+router.patch('/:productId', async (req, res) => { 
+    try {
+        const updateOps = {}; // objct so if we want to only update certain values we can (change)
+        for (const ops of req.body){
+        updateOps[ops.propName] = ops.value;
+        }
+        const result = await Product.updateOne({_id: req.params.productId}, {$set: updateOps});
         console.log(result);
-        res.status(200).json(result);
-      })
-      .catch(error => {
-        console.log(error);
-        res.status(500).json({error: error});
-      });
+        res,status(201).json(result);
+    } catch (err){
+        console.log(err);
+        res.status(500).json({ error: err });
+    }
+
 });
 
 // @desc Delete single product
 // @route DELETE /api/products/:productId
 // @access Private
-router.delete('/:productId', (req, res) => {
-    const id = req.params.productId;
-    Product.remove({_id: id})
-      .exec()
-      .then(result => res.status(200).json(result))
-      .catch(error => {
-          console.log(error);
-          res.status(500).json({error: error});
-      });
+router.delete('/:productId', async (req, res) => {
+    try {
+        const product = await Product.remove({ _id: req.params.productId });
+        if (product.n > 0){ // if product trying to be deleted, doesn't exist
+            console.log(product);
+            res.status(200).json({
+                message: 'Product Successfully Deleted',
+                product
+            });
+        } else {
+            res.status(500).json({ message: 'No entry exists or already deleted' });
+        }
+    } catch (err){
+        console.log(err);
+        res.status(500).json({ error: err });
+    }
 });
 
 export default router;
