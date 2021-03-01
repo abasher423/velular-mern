@@ -1,44 +1,195 @@
 import express from 'express';
+import mongoose from 'mongoose';
+import Product from '../models/product.js';
+
 const router = express.Router();
 
-router.get('/', (req,res,next) => {
-    res.status(200).json({
-        message: "GET request from /products received"
-    });
-});
-
-router.post('/', (req, res) => {
-    // product we want to create
-    const product = {
-        name: req.body.name,
-        price: req.body.price
+// @desc Fetch all products
+// @route GET /api/products
+// @access Public
+router.get('/', async (req, res) => {
+    try {
+        const products = await Product.find().select('_id name description brand size quantity price status reason');
+        if (products.length > 0){ //.where to add conditions or .limit for pagination
+            const response = {
+                count: products.length,
+                products: products.map(product => {
+                    return {
+                        _id: product._id,
+                        name: product.name,
+                        description: product.description,
+                        brand: product.brand,
+                        size: product.size,
+                        quantity: product.quantity,
+                        price: product.price,
+                        status: product.status,
+                        reason: product.reason,
+                        requests: {
+                            tpe: 'GET',
+                            description: 'Get current product',
+                            url: `http://localhost:3000/api/products/${product._id}`
+                        }
+                    }
+                })
+            }
+            res.status(200).json(response);
+        } else {
+            res.status(500).json({ 
+                message: 'No entries exist for products',
+                request: {
+                    type: 'POST',
+                    description: 'Create a product',
+                    url: 'http://localhost:3000/api/products'
+                }
+            });
+        }
+    } catch (err){
+        console.log(err);
+        res.status(500).json({ error: err });
     }
-    res.status(201).json({
-        message: "GET request from /products received",
-        createdProduct: product
-    });
 });
 
-router.get('/:productId', (req, res) => {
-    // store id as a variable from "params"
-    // params: thing that is passed via the URL /products/id123
-    const id = req.params.productId;
-    if (id === 'special'){
-        res.status(200).json({
-            message: "You discovered the special ID"
-        });
-    } else {
-        res.status(200).json({
-            message: 'You passed an ID'
-        });
+// @desc Fetch single product
+// @route GET /api/products/:productId
+// @access Public
+router.get('/:productId', async (req, res) => {
+    try {
+        const id = req.params.productId;
+        const product = await Product.findById({ _id: id }).select('_id name description brand size quantity price status reason');
+        if (product){ // checks if the product exists
+            console.log(product);
+            res.status(200).json({
+                product,
+                requests: {
+                    type: 'GET',
+                    description: 'Get all products',
+                    url: 'http://localhost/api/products'
+                }
+            });
+        } else {
+            res.status(500).json({ 
+                message: 'No entry exists for provided product ID',
+                request: {
+                    type: 'GET',
+                    description: 'Get all products',
+                    url: 'http://localhost:3000/api/products'
+                }
+            });
+        }
+    } catch (err){
+        console.log(err);
+        res.status(500).json({ error: err })
     }
 });
 
-router.patch('/:productId', (req, res) => {
-    res.status(201).json({
-        message: "Updated product!",
-        productId: req.params.productId
-    });
+// @desc Create single product
+// @route POST /api/products
+// @access Private
+router.post('/', async (req, res) => {
+    try {
+        const product = new Product({
+            _id: new mongoose.Types.ObjectId(),
+            name: req.body.name,
+            description: req.body.description,
+            brand: req.body.brand,
+            size: req.body.size,
+            quantity: req.body.quantity,
+            price: req.body.price,
+            status: req.body.status,
+            reason: req.body.reason
+        });
+        const result = await product.save();
+        console.log(result);
+        res.status(201).json({
+            message: 'Product Successfuly Created',
+            createdPoduct: {
+                _id: result._id,
+                name: result.name,
+                description: result.description,
+                brand: result.brand,
+                size: result.size,
+                quantity: result.quantity,
+                price: result.price,
+                status: result.status,
+                reason: result.reason,
+                url: {
+                    type: 'GET',
+                    description: 'Get created product',
+                    url: `http:localhost:/api/products/${result._id}`
+                }
+            }
+        })
+    } catch (err){
+        console.log(err);
+        res.status(500).json({ error: err });
+    }
+});
+
+// @desc Update single product
+// @route PATCH /api/products/:productId
+// @access Private
+router.patch('/:productId', async (req, res) => { 
+    try {
+        const updateOps = {}; // objct so if we want to only update certain values we can (change)
+        for (const ops of req.body){
+        updateOps[ops.propName] = ops.value;
+        }
+        
+        const result = await Product.updateOne({_id: req.params.productId}, {$set: updateOps});
+        res.status(201).json({
+            message: 'Product Successfully Updated',
+            request: {
+                type: 'GET',
+                description: 'Get updated product',
+                url: `http://localhost:300/api/products/${result._id}`
+            }
+        });
+    } catch (err){
+        console.log(err);
+        res.status(500).json({ error: err });
+    }
+
+});
+
+// @desc Delete single product
+// @route DELETE /api/products/:productId
+// @access Private
+router.delete('/:productId', async (req, res) => {
+    try {
+        const product = await Product.deleteOne({ _id: req.params.productId });
+        if (product.n > 0){ // if product trying to be deleted, doesn't exist
+            res.status(200).json({
+                message: 'Product Successfully Deleted',
+                request: {
+                    type: 'POST',
+                    url: 'http://localhost:3000/api/products',
+                    description: 'Create new product', // by providing the following body
+                    body: {    
+                        name: 'String',
+                        description: 'String',
+                        brand: 'String',
+                        size: 'Number',
+                        quantity: 'Number',
+                        price: 'Number',
+                        status: 'String',
+                        reason: 'String'
+                    } 
+                }
+            });
+        } else {
+            res.status(500).json({ 
+                message: 'No entry exists or already deleted',
+                request: {
+                    type: 'GET',
+                    description: 'Get all products',
+                    url: 'http://localhost:3000/api/products'
+                }
+            });
+        }
+    } catch (err){
+        console.log(err);
+        res.status(500).json({ error: err });
+    }
 });
 
 export default router;
