@@ -5,6 +5,36 @@ import Product from '../models/product.js';
 
 const router = express.Router();
 
+const getResponse = (order, type, desc, id) => {
+    return {
+        _id: order._id,
+        productId: order.product,
+        currency: order.currency,
+        quantity: order.quantity,
+        amount: order.amount,
+        date: order.date,
+        shipping: {
+            customer: order.customer,
+            email: order.email,
+            street: order.street,
+            city: order.city,
+            region: order.region,
+            state: order.state,
+            country: order.country
+        },
+        payment: {
+            method: order.method
+        },
+        products: order.products,
+        complete: order.complete,
+        request: {
+            type: type,
+            description: desc,
+            url: `http://localhost:3000/api/orders/${id}`
+        }
+    }
+};
+
 // @desc Fetch all orders
 // @route GET /api/orders
 // @access Private
@@ -15,33 +45,7 @@ router.get('/', async (req, res) => {
             const response = {
                 count: orders.length,
                 orders: orders.map(order => {
-                    return {
-                        _id: order._id,
-                        productId: order.product,
-                        currency: order.currency,
-                        quantity: order.quantity,
-                        amount: order.amount,
-                        date: order.date,
-                        shipping: {
-                            customer: order.customer,
-                            email: order.email,
-                            street: order.street,
-                            city: order.city,
-                            region: order.region,
-                            state: order.state,
-                            country: order.country
-                        },
-                        payment: {
-                            method: order.method
-                        },
-                        products: order.products,
-                        complete: order.complete,
-                        request: {
-                            type: 'GET',
-                            description: 'Get current order',
-                            url: `http://localhost:3000/api/orders/${order._id}`
-                        }
-                    }
+                    return getResponse(order, 'GET', 'Get current order', order._id);
                 })
             }
             res.status(200).json(response);
@@ -69,36 +73,9 @@ router.get('/:orderId', async (req, res) => {
         const order = await Order.findById(req.params.orderId); //.select('_id product currency quantity amount method date')
         if (order){
             console.log(order);
-            res.status(200).json({
-                _id: order._id,
-                productId: order.product,
-                currency: order.currency,
-                quantity: order.quantity,
-                amount: order.amount,
-                date: order.date,
-                shipping: {
-                    customer: order.customer,
-                    email: order.email,
-                    street: order.street,
-                    city: order.city,
-                    region: order.region,
-                    state: order.state,
-                    country: order.country
-                },
-                payment: {
-                    method: order.method
-                },
-                products: order.products,
-                complete: order.complete,
-                payment: {
-                    method: order.method
-                },
-                request: {
-                    type: 'GET',
-                    description: 'Get all orders',
-                    url: 'http://localhost:3000/api/orders'
-                }
-            })
+            res.status(200).json(getResponse(order, 'GET', 'Get all orders', ''));
+        } else {
+            res.status(404).json({ message: 'order not found' });
         }
     } catch (err){
         console.log(err);
@@ -139,33 +116,7 @@ router.post('/', (req, res) => {
             console.log(result);
             res.status(201).json({
                 message: 'Order created successfully',
-                createdOrder: {
-                _id: result._id,
-                productId: result.product,
-                currency: result.currency,
-                quantity: result.quantity,
-                amount: result.amount,
-                date: result.date,
-                shipping: {
-                    customer: result.customer,
-                    email: result.email,
-                    street: result.street,
-                    city: result.city,
-                    region: result.region,
-                    state: result.state,
-                    country: result.country
-                },
-                payment: {
-                    method: result.method
-                },
-                products: result.products,
-                complete: result.complete
-            },
-            request: {
-                type: 'GET',
-                description: 'Get created orders',
-                url: `http://localhost:3000/api/orders${result._id}`
-            }
+                createdOrder: getResponse(result, 'GET', 'Get created order', result._id)
             });
         })
         .catch(err => {
