@@ -8,24 +8,14 @@ const router = express.Router();
 const getResponse = (order, type, desc, id) => {
     return {
         _id: order._id,
-        productId: order.product,
+        product: order.product,
         currency: order.currency,
         quantity: order.quantity,
         amount: order.amount,
         date: order.date,
-        shipping: {
-            customer: order.customer,
-            email: order.email,
-            street: order.street,
-            city: order.city,
-            region: order.region,
-            state: order.state,
-            country: order.country
-        },
         payment: {
             method: order.method
         },
-        products: order.products,
         complete: order.complete,
         request: {
             type: type,
@@ -35,12 +25,25 @@ const getResponse = (order, type, desc, id) => {
     }
 };
 
+const createOrder = (req) =>  {
+    return {
+        _id: mongoose.Types.ObjectId(),
+        product: req.body.productId,
+        currency: req.body.currency,
+        quantity: req.body.quantity,
+        amount: req.body.amount,
+        method: req.body.method,
+        date: req.body.date,
+        complete: req.body.complete
+    }    
+};
+
 // @desc Fetch all orders
 // @route GET /api/orders
 // @access Private
 router.get('/', async (req, res) => {
     try {
-        const orders = await Order.find(); //.select('_id product currency quantity amount method date')
+        const orders = await Order.find().populate('product', 'name price'); //.select('_id product currency quantity amount method date')
         if (orders.length > 0){
             const response = {
                 count: orders.length,
@@ -70,7 +73,7 @@ router.get('/', async (req, res) => {
 // @access Public
 router.get('/:orderId', async (req, res) => {
     try {
-        const order = await Order.findById(req.params.orderId); //.select('_id product currency quantity amount method date')
+        const order = await Order.findById(req.params.orderId).populate('product'); //.select('_id product currency quantity amount method date')
         if (order){
             console.log(order);
             res.status(200).json(getResponse(order, 'GET', 'Get all orders', ''));
@@ -92,24 +95,7 @@ router.post('/', (req, res) => {
             if(!product){
                 return res.status(404).json({ message: 'Product not found' });
             }
-            const order = new Order({
-                _id: mongoose.Types.ObjectId(),
-                productId: req.body.productId,
-                products: req.body.products,
-                currency: req.body.currency,
-                quantity: req.body.quantity,
-                amount: req.body.amount,
-                method: req.body.method,
-                date: req.body.date,
-                customer: req.body.customer,
-                email: req.body.email,
-                street: req.body.street,
-                city: req.body.city,
-                region: req.body.region,
-                state: req.body.state,
-                country: req.body.country,
-                complete: req.body.complete
-            });
+            const order = new Order(createOrder(req));
             return order.save();
         })
         .then(result => {
