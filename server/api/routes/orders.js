@@ -10,7 +10,7 @@ const router = express.Router();
 // @access Private
 router.get('/', async (req, res) => {
     try {
-        const orders = await Order.find().select('_id product currency quantity amount method date');
+        const orders = await Order.find(); //.select('_id product currency quantity amount method date')
         if (orders.length > 0){
             const response = {
                 count: orders.length,
@@ -22,9 +22,20 @@ router.get('/', async (req, res) => {
                         quantity: order.quantity,
                         amount: order.amount,
                         date: order.date,
+                        shipping: {
+                            customer: order.customer,
+                            email: order.email,
+                            street: order.street,
+                            city: order.city,
+                            region: order.region,
+                            state: order.state,
+                            country: order.country
+                        },
                         payment: {
                             method: order.method
                         },
+                        products: order.products,
+                        complete: order.complete,
                         request: {
                             type: 'GET',
                             description: 'Get current order',
@@ -55,7 +66,7 @@ router.get('/', async (req, res) => {
 // @access Public
 router.get('/:orderId', async (req, res) => {
     try {
-        const order = await Order.findById(req.params.orderId).select('_id product currency quantity amount method date');
+        const order = await Order.findById(req.params.orderId); //.select('_id product currency quantity amount method date')
         if (order){
             console.log(order);
             res.status(200).json({
@@ -65,6 +76,20 @@ router.get('/:orderId', async (req, res) => {
                 quantity: order.quantity,
                 amount: order.amount,
                 date: order.date,
+                shipping: {
+                    customer: order.customer,
+                    email: order.email,
+                    street: order.street,
+                    city: order.city,
+                    region: order.region,
+                    state: order.state,
+                    country: order.country
+                },
+                payment: {
+                    method: order.method
+                },
+                products: order.products,
+                complete: order.complete,
                 payment: {
                     method: order.method
                 },
@@ -92,12 +117,21 @@ router.post('/', (req, res) => {
             }
             const order = new Order({
                 _id: mongoose.Types.ObjectId(),
-                product: req.body.productId,
+                productId: req.body.productId,
+                products: req.body.products,
                 currency: req.body.currency,
                 quantity: req.body.quantity,
                 amount: req.body.amount,
                 method: req.body.method,
-                date: req.body.date
+                date: req.body.date,
+                customer: req.body.customer,
+                email: req.body.email,
+                street: req.body.street,
+                city: req.body.city,
+                region: req.body.region,
+                state: req.body.state,
+                country: req.body.country,
+                complete: req.body.complete
             });
             return order.save();
         })
@@ -112,9 +146,20 @@ router.post('/', (req, res) => {
                 quantity: result.quantity,
                 amount: result.amount,
                 date: result.date,
+                shipping: {
+                    customer: result.customer,
+                    email: result.email,
+                    street: result.street,
+                    city: result.city,
+                    region: result.region,
+                    state: result.state,
+                    country: result.country
+                },
                 payment: {
                     method: result.method
-                }
+                },
+                products: result.products,
+                complete: result.complete
             },
             request: {
                 type: 'GET',
