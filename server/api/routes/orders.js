@@ -55,8 +55,7 @@ router.get('/', async (req, res) => {
 // @access Public
 router.get('/:orderId', async (req, res) => {
     try {
-        const id = req.params.orderId;
-        const order = await Order.findById({ _id: id }).select('_id product currency quantity amount method date');
+        const order = await Order.findById(req.params.orderId).select('_id product currency quantity amount method date');
         if (order){
             console.log(order);
             res.status(200).json({
@@ -128,6 +127,42 @@ router.post('/', (req, res) => {
             console.log(err);
             res.status(500).json({ error: err });
         })
+});
+
+router.delete('/:orderId', async (req, res) => {
+    try {
+        const result = await Order.deleteOne({_id: req.params.orderId});
+        if (result.n > 0){
+            console.log(result);
+            res.status(200).json({
+                message: 'Order deleted successfully',
+                request: {
+                    type: 'POST',
+                    description: 'Create an order',
+                    url: 'http://localhost:3000/api/orders',
+                    body: {
+                        product: 'ObjectId',
+                        currency: 'String',
+                        amount: 'Number',
+                        method: 'String',
+                        date: 'Date'
+                    }
+                }
+            });
+        } else {
+            res.status(404).json({
+                message: 'No entry exists or aleady deleted',
+                request: {
+                    type: 'GET',
+                    description: 'Get all orders',
+                    url: 'http://localhost:3000/api/orders'
+                }
+            });
+        }
+    } catch (err){
+        console.log(err);
+        res.status(500).json({ error: err });
+    }
 });
 
 export default router;
