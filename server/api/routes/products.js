@@ -57,8 +57,7 @@ router.get('/', async (req, res) => {
 // @access Public
 router.get('/:productId', async (req, res) => {
     try {
-        const id = req.params.productId;
-        const product = await Product.findById({ _id: id }).select('_id name description brand size quantity initialPrice price status reason');
+        const product = await Product.findById(req.params.productId).select('_id name description brand size quantity initialPrice price status reason');
         if (product){ // checks if the product exists
             console.log(product);
             res.status(200).json({
@@ -174,8 +173,8 @@ router.patch('/:productId', async (req, res) => {
 // @access Private
 router.delete('/:productId', async (req, res) => {
     try {
-        const product = await Product.deleteOne({ _id: req.params.productId });
-        if (product.n > 0){ // if product trying to be deleted, doesn't exist
+        const result = await Product.deleteOne({ _id: req.params.productId });
+        if (result.n > 0){ // if product trying to be deleted, doesn't exist
             res.status(200).json({
                 message: 'Product Successfully Deleted',
                 request: {
