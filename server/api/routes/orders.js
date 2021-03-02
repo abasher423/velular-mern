@@ -1,6 +1,7 @@
 import express from 'express';
 import mongoose from 'mongoose';
 import Order from '../models/order.js';
+import Product from '../models/product.js';
 
 const router = express.Router();
 
@@ -9,7 +10,7 @@ const router = express.Router();
 // @access Private
 router.get('/', async (req, res) => {
     try {
-        const orders = await Order.find();
+        const orders = await Order.find().select('_id product currency quantity amount method date');
         if (orders.length > 0){
             const response = {
                 count: orders.length,
@@ -23,13 +24,57 @@ router.get('/', async (req, res) => {
                         date: order.date,
                         payment: {
                             method: order.method
+                        },
+                        request: {
+                            type: 'GET',
+                            description: 'Get current order',
+                            url: `http://localhost:3000/api/orders/${order._id}`
                         }
                     }
                 })
             }
             res.status(200).json(response);
         } else {
-            res.status(404).json({ message: 'No entry exists for orders'});
+            res.status(404).json({ 
+                message: 'No entry exists for orders',
+                request: {
+                    type: 'POST',
+                    description: 'Create an order',
+                    url: 'http://localhost:3000/api/orders'
+                }
+            });
+        }
+    } catch (err){
+        console.log(err);
+        res.status(500).json({ error: err });
+    }
+});
+
+// @desc Fetch single product
+// @route GET /api/products/:productId
+// @access Public
+router.get('/:orderId', async (req, res) => {
+    try {
+        const id = req.params.orderId;
+        const order = await Order.findById({ _id: id }).select('_id product currency quantity amount method date');
+        if (order){
+            console.log(order);
+            res.status(200).json({
+                _id: order._id,
+                productId: order.product,
+                currency: order.currency,
+                quantity: order.quantity,
+                amount: order.amount,
+                date: order.date,
+                payment: {
+                    method: order.method
+                },
+                request: {
+                    type: 'GET',
+                    description: 'Get all orders',
+                    url: 'http://localhost:3000/api/orders'
+                }
+            })
         }
     } catch (err){
         console.log(err);
@@ -40,24 +85,49 @@ router.get('/', async (req, res) => {
 // @desc Create an order
 // @route POST /api/odrders
 // @access Private
-router.post('/', async (req, res) => {
-    try {
-        const order = new Order({
-            _id: mongoose.Types.ObjectId(),
-            product: req.body.productId,
-            currency: req.body.currency,
-            quantity: req.body.quantity,
-            amount: req.body.amount,
-            method: req.body.method,
-            date: req.body.date
-        });
-        const result = await order.save();
-        console.log(result);
-        res.status(201).json(result);
-    } catch (err){
-        console.log(err);
-        res.status(500).json({ error: err });
-    }
+router.post('/', (req, res) => {
+    Product.findById(req.body.productId)
+        .then(product => {
+            if(!product){
+                return res.status(404).json({ message: 'Product not found' });
+            }
+            const order = new Order({
+                _id: mongoose.Types.ObjectId(),
+                product: req.body.productId,
+                currency: req.body.currency,
+                quantity: req.body.quantity,
+                amount: req.body.amount,
+                method: req.body.method,
+                date: req.body.date
+            });
+            return order.save();
+        })
+        .then(result => {
+            console.log(result);
+            res.status(201).json({
+                message: 'Order created successfully',
+                createdOrder: {
+                _id: result._id,
+                productId: result.product,
+                currency: result.currency,
+                quantity: result.quantity,
+                amount: result.amount,
+                date: result.date,
+                payment: {
+                    method: result.method
+                }
+            },
+            request: {
+                type: 'GET',
+                description: 'Get created orders',
+                url: `http://localhost:3000/api/orders${result._id}`
+            }
+            });
+        })
+        .catch(err => {
+            console.log(err);
+            res.status(500).json({ error: err });
+        })
 });
 
 export default router;
