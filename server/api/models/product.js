@@ -8,6 +8,7 @@ const productSchema = new Schema({
     brand: { type: String, required: true },
     size: { type: Number, required: true},
     quantity: { type: Number, required: true },
+    initialPrice: { type: Number },
     price: { type: Number, required: true },
     status: { type: String,  enum: ['Accepted', 'Rejected', 'Pending'], required: true },
     reason: { type: String }
