@@ -11,7 +11,7 @@ const productSchema = new Schema({
     quantity: { type: Number, required: true },
     initialPrice: { type: Number },
     price: { type: Number, required: true },
-    status: { type: String,  enum: ['Accepted', 'Rejected', 'Pending'], required: true },
+    status: { type: String,  enum: ['Accepted', 'Rejected', 'Pending'], default: 'Rejected' },
     reason: { type: String }
 });
 
