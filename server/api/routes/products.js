@@ -9,7 +9,7 @@ const router = express.Router();
 // @access Public
 router.get('/', async (req, res) => {
     try {
-        const products = await Product.find().select('_id name description brand size quantity price status reason');
+        const products = await Product.find().select('_id name description brand size quantity initialPrice price status reason');
         if (products.length > 0){ //.where to add conditions or .limit for pagination
             const response = {
                 count: products.length,
@@ -21,7 +21,10 @@ router.get('/', async (req, res) => {
                         brand: product.brand,
                         size: product.size,
                         quantity: product.quantity,
-                        price: product.price,
+                        pricing: {
+                            initialPrice: product.initialPrice, 
+                            price: product.price 
+                        },
                         status: product.status,
                         reason: product.reason,
                         requests: {
@@ -54,12 +57,22 @@ router.get('/', async (req, res) => {
 // @access Public
 router.get('/:productId', async (req, res) => {
     try {
-        const id = req.params.productId;
-        const product = await Product.findById({ _id: id }).select('_id name description brand size quantity price status reason');
+        const product = await Product.findById(req.params.productId).select('_id name description brand size quantity initialPrice price status reason');
         if (product){ // checks if the product exists
             console.log(product);
             res.status(200).json({
-                product,
+                _id: product._id,
+                name: product.name,
+                description: product.description,
+                brand: product.brand,
+                size: product.size,
+                quantity: product.quantity,
+                pricing: {
+                    initialPrice: product.initialPrice, 
+                    price: product.price 
+                },
+                status: product.status,
+                reason: product.reason,
                 requests: {
                     type: 'GET',
                     description: 'Get all products',
@@ -94,6 +107,7 @@ router.post('/', async (req, res) => {
             brand: req.body.brand,
             size: req.body.size,
             quantity: req.body.quantity,
+            initialPrice: req.body.initialPrice,
             price: req.body.price,
             status: req.body.status,
             reason: req.body.reason
@@ -109,7 +123,10 @@ router.post('/', async (req, res) => {
                 brand: result.brand,
                 size: result.size,
                 quantity: result.quantity,
-                price: result.price,
+                pricing: {
+                    initialPrice: result.initialPrice,
+                    price: result.price
+                },
                 status: result.status,
                 reason: result.reason,
                 url: {
@@ -156,14 +173,14 @@ router.patch('/:productId', async (req, res) => {
 // @access Private
 router.delete('/:productId', async (req, res) => {
     try {
-        const product = await Product.deleteOne({ _id: req.params.productId });
-        if (product.n > 0){ // if product trying to be deleted, doesn't exist
+        const result = await Product.deleteOne({ _id: req.params.productId });
+        if (result.n > 0){ // if product trying to be deleted, doesn't exist
             res.status(200).json({
                 message: 'Product Successfully Deleted',
                 request: {
                     type: 'POST',
-                    url: 'http://localhost:3000/api/products',
                     description: 'Create new product', // by providing the following body
+                    url: 'http://localhost:3000/api/products',
                     body: {    
                         name: 'String',
                         description: 'String',
