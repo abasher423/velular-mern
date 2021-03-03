@@ -1,15 +1,42 @@
 import express from 'express';
 import mongoose from 'mongoose';
+import multer from 'multer';
 import Product from '../models/product.js';
 
 const router = express.Router();
+
+const fileFilter = (req, file, cb) => {
+    if (file.mimetype === 'image/jpeg' || file.mimetype === 'image/png'){
+        // accept a file
+        cb(null, true);
+    } else {
+        // reject a file
+        cb(new Error('Incorrect file'), false);
+    }
+}
+const storage = multer.diskStorage({
+    destination: (req, file, cb) => {
+        cb(null, 'uploads/');
+    },
+    filename: (req, file, cb) => {
+        cb(null, new Date().toISOString().replace(/:/g, '-') + file.originalname);
+    }
+});
+
+const upload = multer({
+    storage: storage,
+    limits: {
+        fileSize: 1024 * 1024 * 5 // max 5mb for image size
+    },
+    fileFilter: fileFilter
+});
 
 // @desc Fetch all products
 // @route GET /api/products
 // @access Public
 router.get('/', async (req, res) => {
     try {
-        const products = await Product.find().select('_id name description brand size quantity initialPrice price status reason');
+        const products = await Product.find().select('_id name description brand size quantity initialPrice price status reason productImage');
         if (products.length > 0){ //.where to add conditions or .limit for pagination
             const response = {
                 count: products.length,
@@ -21,6 +48,7 @@ router.get('/', async (req, res) => {
                         brand: product.brand,
                         size: product.size,
                         quantity: product.quantity,
+                        productImage: product.productImage,
                         pricing: {
                             initialPrice: product.initialPrice, 
                             price: product.price 
@@ -57,7 +85,7 @@ router.get('/', async (req, res) => {
 // @access Public
 router.get('/:productId', async (req, res) => {
     try {
-        const product = await Product.findById(req.params.productId).select('_id name description brand size quantity initialPrice price status reason');
+        const product = await Product.findById(req.params.productId).select('_id name description brand size quantity initialPrice price status reason productImage');
         if (product){ // checks if the product exists
             console.log(product);
             res.status(200).json({
@@ -67,6 +95,7 @@ router.get('/:productId', async (req, res) => {
                 brand: product.brand,
                 size: product.size,
                 quantity: product.quantity,
+                productImage: product.productImage,
                 pricing: {
                     initialPrice: product.initialPrice, 
                     price: product.price 
@@ -98,13 +127,15 @@ router.get('/:productId', async (req, res) => {
 // @desc Create single product
 // @route POST /api/products
 // @access Private
-router.post('/', async (req, res) => {
+router.post('/', upload.single('productImage'), async (req, res) => {
     try {
+        console.log(req.file);
         const product = new Product({
             _id: new mongoose.Types.ObjectId(),
             name: req.body.name,
             description: req.body.description,
             brand: req.body.brand,
+            productImage: req.file.path,
             size: req.body.size,
             quantity: req.body.quantity,
             initialPrice: req.body.initialPrice,
@@ -184,6 +215,7 @@ router.delete('/:productId', async (req, res) => {
                     body: {    
                         name: 'String',
                         description: 'String',
+                        productImage: 'String',
                         brand: 'String',
                         size: 'Number',
                         quantity: 'Number',

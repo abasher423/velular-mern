@@ -10,6 +10,7 @@ const app = express();
 
 // mongoose.Promise = global.Promise;
 app.use(morgan('dev'));
+app.use('/uploads', express.static('uploads')); // makes uploads folder publicly accessable
 app.use(bodyParser.urlencoded({extended: false})); // "true" allows parsing extended bodies with rich data
 app.use(bodyParser.json());
 
