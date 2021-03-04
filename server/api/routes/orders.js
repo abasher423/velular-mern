@@ -8,7 +8,7 @@ const router = express.Router();
 const getResponse = (order, type, desc, id) => {
     return {
         _id: order._id,
-        product: order.product,
+        products: order.products,
         currency: order.currency,
         quantity: order.quantity,
         amount: order.amount,
@@ -28,7 +28,7 @@ const getResponse = (order, type, desc, id) => {
 const createOrder = (req) =>  {
     return {
         _id: mongoose.Types.ObjectId(),
-        product: req.body.productId,
+        products: req.body.productId,
         currency: req.body.currency,
         quantity: req.body.quantity,
         amount: req.body.amount,
@@ -43,7 +43,7 @@ const createOrder = (req) =>  {
 // @access Private
 router.get('/', async (req, res) => {
     try {
-        const orders = await Order.find().populate('product', 'name price'); //.select('_id product currency quantity amount method date')
+        const orders = await Order.find().populate('products', 'name price quantity'); //.select('_id product currency quantity amount method date')
         if (orders.length > 0){
             const response = {
                 count: orders.length,
@@ -73,7 +73,7 @@ router.get('/', async (req, res) => {
 // @access Public
 router.get('/:orderId', async (req, res) => {
     try {
-        const order = await Order.findById(req.params.orderId).populate('product'); //.select('_id product currency quantity amount method date')
+        const order = await Order.findById(req.params.orderId).populate('products', 'name price quantity'); //.select('_id product currency quantity amount method date')
         if (order){
             console.log(order);
             res.status(200).json(getResponse(order, 'GET', 'Get all orders', ''));
