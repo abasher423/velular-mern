@@ -63,6 +63,39 @@ router.get('/:cartId', async (req, res) => {
     }
 });
 
+router.post('/', (req, res) => {
+    Product.findById(req.body.productId)
+        .then(product => {
+            if(!product){
+                return res.status(404).json({ message: 'Product not found' });
+            };
+            const { productId, quantity, total, active, modified } = req.body;
+            const cart = new Cart({ _id: mongoose.Types.ObjectId(), products: productId, quantity, total, active, modified });
+            return cart.save();
+        })
+        .then(docs => {
+            console.log(docs);
+            res.status(201).json({
+                message: 'Cart Created Successfully',
+                _id: docs._id,
+                products: docs.products,
+                active: docs.active,
+                modified: docs.modified,
+                quantity: docs.quantity,
+                total: docs.total,
+                request: {
+                    tpye: 'GET',
+                    description: 'Get created cart',
+                    url: `http://localhost:3000/api/cart/${docs._id}`
+                }
+            });
+        })
+        .catch(err => {
+            console.log(err);
+            res.status(500).json({ error: err });
+        })
+});
+
 
 
 export default router;
