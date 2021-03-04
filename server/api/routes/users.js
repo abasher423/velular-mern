@@ -39,6 +39,36 @@ router.post('/signup', (req, res) => {
         })
 });
 
+router.post('/login', (req, res) => {
+    User.findOne({ email: req.body.email })
+        .exec()
+        .then(user => {
+            if (!user){ // if the user doesn't exist
+                return res.status(401).json({ message: 'Incorrect email or password' }); // if error with email
+            }
+            bcrypt.compare(req.body.password, user.password, (err, result) => {
+                if (result) {
+                    const token = jwt.sign({ // what we want to pass to the client (inside the token)
+                        userId: user._id,
+                        email: user.email,
+                        fullName: user.fullName
+                    }, 
+                    process.env.JWT_KEY,
+                    {
+                        expiresIn: "1h"
+                    });
+                    res.status(200).json({ 
+                        message: 'Authentication Successfull',
+                        token: token //jsonwebtoken 
+                    })
+                } else { // if error with password
+                    res.status(401).json({ message: 'Incorrect  password' });
+                }
+            });
+        })
+        .catch()
+});
+
 
 
 export default router;
