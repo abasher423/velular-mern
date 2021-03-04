@@ -4,8 +4,8 @@ import bodyParser from 'body-parser';
 import mongoose from 'mongoose';
 import productRoutes from './api/routes/products.js';
 import orderRoutes from './api/routes/orders.js';
-import cartRoutes from './api/routes/carts.js'
-import db from './api/config/keys.js'
+import cartRoutes from './api/routes/carts.js';
+import userRoutes from './api/routes/users.js';
 
 const app = express();
 
@@ -15,10 +15,10 @@ app.use('/uploads', express.static('uploads')); // makes uploads folder publicly
 app.use(bodyParser.urlencoded({extended: false})); // "true" allows parsing extended bodies with rich data
 app.use(bodyParser.json());
 
-const dbOptions = { useNewUrlParser: true, useUnifiedTopology: true };
+const dbOptions = { useNewUrlParser: true, useUnifiedTopology: true, useCreateIndex: true };
 
 mongoose
-  .connect(db.mongoURI, dbOptions)
+  .connect(process.env.MONGO_ATLAS_PW, dbOptions)
   .then(() => {
       console.log('Database is now connected...');
 
@@ -48,6 +48,7 @@ app.use((req, res, next) => {
 app.use('/api/products', productRoutes);
 app.use('/api/orders', orderRoutes);
 app.use('/api/cart', cartRoutes);
+app.use('/api/users', userRoutes);
 
 app.use((req,res,next) => {
     const error = new Error('Incorrect URL Page Not Found');
