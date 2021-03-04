@@ -4,6 +4,7 @@ import bodyParser from 'body-parser';
 import mongoose from 'mongoose';
 import productRoutes from './api/routes/products.js';
 import orderRoutes from './api/routes/orders.js';
+import cartRoutes from './api/routes/carts.js'
 import db from './api/config/keys.js'
 
 const app = express();
@@ -46,6 +47,7 @@ app.use((req, res, next) => {
 // routes middleware
 app.use('/api/products', productRoutes);
 app.use('/api/orders', orderRoutes);
+app.use('/api/cart', cartRoutes);
 
 app.use((req,res,next) => {
     const error = new Error('Incorrect URL Page Not Found');
