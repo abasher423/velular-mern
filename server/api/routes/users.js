@@ -69,6 +69,18 @@ router.post('/login', (req, res) => {
         .catch()
 });
 
-
+router.delete('/:userId', async (req, res) => {
+    try {
+        const result = await User.deleteOne({ _id: req.params._id });
+        if (result.n > 0){
+            res.status(200).json({ message: 'User deleted' });
+        } else {
+            res.status(404).json({ message: 'User already deleted' });
+        }
+    } catch (err){
+        console.log(err);
+        res.status(500).json({ error: err });
+    }
+});
 
 export default router;
