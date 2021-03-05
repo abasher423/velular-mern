@@ -13,6 +13,7 @@ const getResponse = (order, type, desc, id) => {
         quantity: order.quantity,
         amount: order.amount,
         date: order.date,
+        shipping: order.shipping,
         payment: {
             method: order.method
         },
@@ -34,7 +35,8 @@ const createOrder = (req) =>  {
         amount: req.body.amount,
         method: req.body.method,
         date: req.body.date,
-        complete: req.body.complete
+        complete: req.body.complete,
+        shipping: req.body.userId
     }    
 };
 
@@ -43,7 +45,7 @@ const createOrder = (req) =>  {
 // @access Private
 router.get('/', async (req, res) => {
     try {
-        const orders = await Order.find().populate('products', 'name price quantity'); //.select('_id product currency quantity amount method date')
+        const orders = await Order.find().populate('products', 'name price quantity').populate('shipping', 'email fullName street city country stat postcode '); //.select('_id product currency quantity amount method date')
         if (orders.length > 0){
             const response = {
                 count: orders.length,

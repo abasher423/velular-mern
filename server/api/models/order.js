@@ -9,7 +9,8 @@ const orderSchema = new Schema({
     amount: { type: Number, required: true } ,
     method: { type: String,  required: true },
     date: { type: Date, default: Date.now },
-    complete: { type: Boolean, default: false }
+    complete: { type: Boolean, default: false },
+    shipping: { type: mongoose.Schema.ObjectId, ref: 'User', required: true }
 });
 
 export default mongoose.model('Order', orderSchema);
