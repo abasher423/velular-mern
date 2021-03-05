@@ -12,7 +12,8 @@ const productSchema = new Schema({
     initialPrice: { type: Number },
     price: { type: Number, required: true },
     status: { type: String,  enum: ['Accepted', 'Rejected', 'Pending'], default: 'Rejected' },
-    reason: { type: String }
+    reason: { type: String },
+    review: { type: mongoose.Schema.ObjectId, ref: 'Review' }
 });
 
 export default mongoose.model('Product', productSchema);
