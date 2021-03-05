@@ -6,6 +6,7 @@ import productRoutes from './api/routes/products.js';
 import orderRoutes from './api/routes/orders.js';
 import cartRoutes from './api/routes/carts.js';
 import userRoutes from './api/routes/users.js';
+import reviewRoutes from './api/routes/reviews.js';
 
 const app = express();
 
@@ -49,6 +50,7 @@ app.use('/api/products', productRoutes);
 app.use('/api/orders', orderRoutes);
 app.use('/api/cart', cartRoutes);
 app.use('/api/users', userRoutes);
+app.use('/api/reviews', reviewRoutes);
 
 app.use((req,res,next) => {
     const error = new Error('Incorrect URL Page Not Found');

@@ -13,7 +13,7 @@ const userSchema = new Schema({
     state: {type: String, required: true },
     postcode: { type: String, required: true },
     role: { type: String, enum: ['customer', 'artist', 'admin', 'manager'], required: true },
-    orders: [{ type: mongoose.Schema.ObjectId, ref: 'Order' }]
+    verified: { type: Boolean, default: false }
 });
 
 export default mongoose.model('User', userSchema);

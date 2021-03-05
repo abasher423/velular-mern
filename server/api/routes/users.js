@@ -6,6 +6,59 @@ import bcrypt from 'bcrypt'; // hashes and adds salt
 
 const router = express.Router();
 
+router.get('/', async (req, res) => {
+    try {
+        const users = await User.find().select('_id username role verified')
+        if (users.length > 0){
+            res.status(200).json({
+                count: users.length,
+                users: users.map(user => {
+                    return { 
+                        userId: user._id,
+                        username: user.username,
+                        role: user.role,
+                        verified: user.verified,
+                        request: {
+                            type: 'GET',
+                            description: 'Get current  user',
+                            url: `http://localhost:3000/api/users/${user._id}`
+                        }
+                    }
+                })
+            })
+        } else {
+            res.status(404).json({ message: 'No entry exists for user' })
+        }
+    } catch (err){
+        console.log(err);
+        res.status({ error: err });
+    }
+});
+
+router.get('/:userId', async (req, res) => {
+    try {
+        const user = await User.findById(req.params.userId);
+        if (user){
+            res.status(200).json({
+                userId: user._id,
+                email: user.email,
+                fullName: user.fullName,
+                street: user.street,
+                city: user.city,
+                country: user.country,
+                state: user.state,
+                postcode: user.postcode,
+                role: user.role
+            });
+        } else {
+            res.status(404).json({ message: 'No entry exists' });
+        }
+    } catch (err){
+        console.log(err);
+        res.status(500).json({ error: err });
+    }
+});
+
 router.post('/signup', (req, res) => {
     User.find({ email: req.body.email })
         .exec()
@@ -17,12 +70,12 @@ router.post('/signup', (req, res) => {
                     if (err) {
                         return res.status(500).json({ error: err });
                     } else {
-                        const { email, fullName, username, street, city, country, state, postcode, role, orderId } = req.body;
+                        const { email, fullName, username, street, city, country, state, postcode, role, verified, orderId } = req.body;
                         const user = new User({ 
                             _id: mongoose.Types.ObjectId(),
                             password: hash, 
                             orders: orderId,
-                            email, username, fullName, street, city, country, state, postcode, role  
+                            email, username, fullName, street, city, country, state, postcode, role, verified
                         });
                         user.save()
                             .then(result => {
@@ -66,7 +119,25 @@ router.post('/login', (req, res) => {
                 }
             });
         })
-        .catch()
+        .catch(err => {
+            console.log(err);
+            res.status(500).json({ error: err });
+        })
+});
+
+router.patch('/:userId', async (req, res) => {
+        const updateOps = {}; // objct so if we want to only update certain values we can (change)
+        for (const ops of req.body){
+        updateOps[ops.propName] = ops.value;
+        }
+
+        try {
+            await User.updateOne({_id: req.params.userId}, {$set: updateOps});
+            res.status(200).json({ message: 'User updated successfully' });
+        } catch (err){
+            console.log(err);
+            res.status(500).json({ error: err });
+        }
 });
 
 router.delete('/:userId', async (req, res) => {
