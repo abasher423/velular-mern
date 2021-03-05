@@ -8,12 +8,12 @@ const router = express.Router();
 const getResponse = (order, type, desc, id) => {
     return {
         _id: order._id,
-        products: order.products,
         currency: order.currency,
         quantity: order.quantity,
         amount: order.amount,
         date: order.date,
         shipping: order.shipping,
+        products: order.products,
         payment: {
             method: order.method
         },
@@ -45,7 +45,9 @@ const createOrder = (req) =>  {
 // @access Private
 router.get('/', async (req, res) => {
     try {
-        const orders = await Order.find().populate('products', 'name price quantity').populate('shipping', 'email fullName street city country stat postcode '); //.select('_id product currency quantity amount method date')
+        const orders = await Order.find()
+        .populate('products', 'name price quantity')
+        .populate('shipping', 'email fullName street city country stat postcode');
         if (orders.length > 0){
             const response = {
                 count: orders.length,
@@ -75,7 +77,10 @@ router.get('/', async (req, res) => {
 // @access Public
 router.get('/:orderId', async (req, res) => {
     try {
-        const order = await Order.findById(req.params.orderId).populate('products', 'name price quantity'); //.select('_id product currency quantity amount method date')
+        const order = await Order
+        .findById(req.params.orderId)
+        .populate('products', 'name price quantity')
+        .populate('shipping', 'email fullName street city country stat postcode');
         if (order){
             console.log(order);
             res.status(200).json(getResponse(order, 'GET', 'Get all orders', ''));
