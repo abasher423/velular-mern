@@ -7,6 +7,7 @@ import Button from '@material-ui/core/Button';
 import IconButton from '@material-ui/core/IconButton';
 import Container from '@material-ui/core/Container';
 import title from '../images/title.png';
+import Link from 'react-router-dom/Link'
 import SearchIcon from '@material-ui/icons/Search';
 import FavoriteBorderIcon from '@material-ui/icons/FavoriteBorder';
 import ShoppingBasketOutlinedIcon from '@material-ui/icons/ShoppingBasketOutlined';
@@ -48,23 +49,25 @@ const Header = () => {
                 <Container>
                 <Toolbar>
                     <Typography variant="h6" className={classes.title}>
-                    <img src={title} alt="logo" className={classes.logo}/>
-                    <Button className={classes.breadcrumbs} color="inherit">Shop</Button>
-                    <Button className={classes.breadcrumbs} color="inherit">Brands</Button>
-                    <Button className={classes.breadcrumbs} color="inherit">Favourites</Button>
-                    <Button className={classes.breadcrumbs} color="inherit">services</Button>
+                    <Link to={'/'}>
+                        <img src={title} alt="logo" className={classes.logo}/>
+                    </Link>
+                    <Button className={classes.breadcrumbs} color="inherit" component={Link} to={'/products'} >Shop</Button>
+                    <Button className={classes.breadcrumbs} color="inherit" component={Link} to={'/products/brands'} >Brands</Button>
+                    <Button className={classes.breadcrumbs} color="inherit" component={Link} to={'/favourites'} >Favourites</Button>
+                    <Button className={classes.breadcrumbs} color="inherit" component={Link} to={'/services'} >services</Button>
                     </Typography>
                     
-                    <IconButton edge="start" className={classes.icons} color="inherit" aria-label="search">
+                    <IconButton edge="start" className={classes.icons} color="inherit" component={Link} to={'/search'} aria-label="search">
                         <SearchIcon />
                     </IconButton>
-                    <IconButton edge="start" className={classes.icons} color="inherit" aria-label="favorite">
+                    <IconButton edge="start" className={classes.icons} color="inherit" component={Link} to={'/favourites'} aria-label="favorite">
                         <FavoriteBorderIcon />
                     </IconButton>
-                    <IconButton edge="start" className={classes.icons} color="inherit" aria-label="cart">
+                    <IconButton edge="start" className={classes.icons} component={Link} to={'/cart'} color="inherit" aria-label="cart">
                         <ShoppingBasketOutlinedIcon />
                     </IconButton>
-                    <IconButton edge="start" className={classes.icons} color="inherit" aria-label="login">
+                    <IconButton edge="start" className={classes.icons} component={Link} to={'/register'} color="inherit" aria-label="login">
                         <PersonOutlineOutlinedIcon />
                     </IconButton>
                 </Toolbar>
