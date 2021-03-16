@@ -6,7 +6,7 @@ import Product from '../models/product.js';
 // @access Public
 const products_get_all = async (req, res) => {
     try {
-        const products = await Product.find({ status: 'Accepted' }).select('_id name description brand size quantity initialPrice price status reason productImage');
+        const products = await Product.find().select('_id name description brand size quantityInStock initialPrice price status reason productImage');
         if (products.length > 0){ //.where to add conditions or .limit for pagination
             const response = {
                 count: products.length,
@@ -17,7 +17,7 @@ const products_get_all = async (req, res) => {
                         description: product.description,
                         brand: product.brand,
                         size: product.size,
-                        quantity: product.quantity,
+                        quantityInStock: product.quantityInStock,
                         productImage: product.productImage,
                         pricing: {
                             initialPrice: product.initialPrice, 
@@ -28,7 +28,7 @@ const products_get_all = async (req, res) => {
                         requests: {
                             tpe: 'GET',
                             description: 'Get current product',
-                            url: `http://localhost:3000/api/products/${product._id}`
+                            url: `http://localhost:8080/api/products/${product._id}`
                         }
                     }
                 })
@@ -55,7 +55,7 @@ const products_get_all = async (req, res) => {
 // @access Public
 const products_get_product = async (req, res) => {
     try {
-        const product = await Product.findById(req.params.productId).select('_id name description brand size quantity initialPrice price status reason productImage');
+        const product = await Product.findById(req.params.productId).select('_id name description brand size quantityInStock initialPrice price status reason productImage');
         if (product){ // checks if the product exists
             console.log(product);
             res.status(200).json({
@@ -64,12 +64,9 @@ const products_get_product = async (req, res) => {
                 description: product.description,
                 brand: product.brand,
                 size: product.size,
-                quantity: product.quantity,
+                quantityInStock: product.quantityInStock,
                 productImage: product.productImage,
-                pricing: {
-                    initialPrice: product.initialPrice, 
-                    price: product.price 
-                },
+                price: product.price,
                 status: product.status,
                 reason: product.reason,
                 requests: {
@@ -105,9 +102,10 @@ const products_create_product = async (req, res) => {
             name: req.body.name,
             description: req.body.description,
             brand: req.body.brand,
-            productImage: req.file.path,
+            category: req.body.category,
+            productImage: `/images/${req.file.originalname}`,
             size: req.body.size,
-            quantity: req.body.quantity,
+            quantityInStock: req.body.quantityInStock,
             initialPrice: req.body.initialPrice,
             price: req.body.price,
             status: req.body.status,
@@ -123,7 +121,7 @@ const products_create_product = async (req, res) => {
                 description: result.description,
                 brand: result.brand,
                 size: result.size,
-                quantity: result.quantity,
+                quantityInStock: result.quantityInStock,
                 pricing: {
                     initialPrice: result.initialPrice,
                     price: result.price
@@ -188,7 +186,7 @@ const products_delete_product = async (req, res) => {
                         productImage: 'String',
                         brand: 'String',
                         size: 'Number',
-                        quantity: 'Number',
+                        quantityInStock: 'Number',
                         price: 'Number',
                         status: 'String',
                         reason: 'String'
