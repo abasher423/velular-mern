@@ -32,7 +32,7 @@ const useStyles = makeStyles({
     }
 });
 
-const ProductScreen = ({ history, match }) => {
+const ProductDetailScreen = ({ history, match }) => {
     const [quantity, setQuantity] = useState(0);
 
     const classes = useStyles();
@@ -140,4 +140,4 @@ const ProductScreen = ({ history, match }) => {
     );
 };
 
-export default ProductScreen;
+export default ProductDetailScreen;
