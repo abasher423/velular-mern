@@ -7,14 +7,16 @@ import orderRoutes from './api/routes/orders.js';
 import cartRoutes from './api/routes/carts.js';
 import userRoutes from './api/routes/users.js';
 import reviewRoutes from './api/routes/reviews.js';
+import cors from 'cors';
 
 const app = express();
 
 // mongoose.Promise = global.Promise;
 app.use(morgan('dev'));
 app.use('/uploads', express.static('uploads')); // makes uploads folder publicly accessable
-app.use(bodyParser.urlencoded({extended: false})); // "true" allows parsing extended bodies with rich data
-app.use(bodyParser.json());
+app.use(express.urlencoded({extended: false})); // "true" allows parsing extended bodies with rich data
+app.use(express.json());
+app.use(cors());
 
 const dbOptions = { useNewUrlParser: true, useUnifiedTopology: true, useCreateIndex: true };
 
@@ -23,8 +25,8 @@ mongoose
   .then(() => {
       console.log('Database is now connected...');
 
-      const PORT = process.env.PORT || 3000;
-      app.listen(PORT, () => console.log('Server running on port 3000...'));
+      const PORT = process.env.PORT || 8080;
+      app.listen(PORT, () => console.log(`Server running on port ${PORT}...`));
   })
   .catch (error => {
       console.log(error);
@@ -59,7 +61,7 @@ app.use((req,res,next) => {
 });
 
 app.use((error, req, res, next) => {
-    res.status(error.status || 500).json({
+    res.status(error.status || 8080).json({
         error: {
             message: error.message // Not Found
         }
