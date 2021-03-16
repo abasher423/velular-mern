@@ -7,7 +7,7 @@ import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
 import Image from 'material-ui-image';
 import NavigateNextIcon from '@material-ui/icons/NavigateNext';
-import Link from 'react-router-dom/Link';
+import { Link } from 'react-router-dom';
 
 const useStyles = makeStyles({
     slogan: {
@@ -93,7 +93,7 @@ const HomePage = () => {
                 </Grid>
 
                 {/* --------------- Cards ------------------- */}
-                <Grid xs={12} md={4}>
+                <Grid item xs={12} md={4}>
                     <Container>
                         <Paper>
                         <div className={classes.image}>
@@ -107,7 +107,7 @@ const HomePage = () => {
                     </Container>
                 </Grid>
                 
-                <Grid xs={12} md={4}>
+                <Grid item xs={12} md={4}>
                     <Container>
                         <Paper>
                         <div className={classes.image}>
@@ -121,7 +121,7 @@ const HomePage = () => {
                     </Container>
                 </Grid>
 
-                <Grid xs={12} md={4}>
+                <Grid item xs={12} md={4}>
                     <Container>
                         <Paper>
                         <div className={classes.image}>

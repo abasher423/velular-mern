@@ -9,6 +9,7 @@ import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
 import Rating from './Rating';
 import Link from 'react-router-dom/Link';
+import { Divider } from '@material-ui/core';
 
 const useStyles = makeStyles({
   root: {
@@ -17,6 +18,9 @@ const useStyles = makeStyles({
   },
   media: {
     height: 200,
+  },
+  divide: {
+    margin: "0.25rem 0"
   }
 });
 
@@ -29,19 +33,26 @@ const Product = ({ product }) => {
             <CardActionArea>
                 <CardMedia
                 className={classes.media}
-                image={product.image}
+                image={product.productImage}
                 title="product"
                 />
                 <CardContent>
-                  <Typography gutterBottom variant="h5" component="h2">
-                      {product.title}
+                  <Typography gutterBottom variant="h3" component="h2">
+                      {product.name}
                   </Typography>
+                  <Divider className={classes.divide}/>
+                  <Typography gutterBottom variant="h6" component="h2">
+                    {product.brand}
+                  </Typography>
+                  <Divider className={classes.divide}/>
                   <Typography variant="body2" color="textSecondary" component="p">
                       {product.description}
                   </Typography>
+                  <Divider className={classes.divide}/>
                   <Typography variant="h5" component="h3">
-                      {`£${product.price}`}
+                      {`£${product.pricing.price}`}
                   </Typography>
+                  <Divider className={classes.divide}/>
                   <Typography gutterBottom variant="h6" component="h2">
                     <Rating value={product.rating} text={`${product.numReviews} reviews`}/>
                   </Typography>

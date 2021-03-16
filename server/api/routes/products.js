@@ -35,10 +35,10 @@ router.get('/', ProductsController.products_get_all);
 
 router.get('/:productId', ProductsController.products_get_product);
 
-router.post('/', checkAuth('admin'), upload.single('productImage'), ProductsController.products_create_product);
+router.post('/', upload.single('productImage'), ProductsController.products_create_product);
 
 router.patch('/:productId', checkAuth('admin'), ProductsController.products_update_product);
 
-router.delete('/:productId', checkAuth('admin'), ProductsController.products_delete_product);
+router.delete('/:productId', ProductsController.products_delete_product);
 
 export default router;

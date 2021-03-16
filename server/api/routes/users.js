@@ -4,7 +4,7 @@ import UsersController from '../controllers/users.js';
 
 const router = express.Router();
 
-router.get('/', checkAuth('manager'), UsersController.users_get_all);
+router.get('/', UsersController.users_get_all);
 
 router.get('/:userId', UsersController.users_get_user);
 
