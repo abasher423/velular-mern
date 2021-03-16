@@ -6,6 +6,7 @@ import HomePage from './screens/HomePage';
 import ListedProducts from './screens/Listedproducts'
 import ProductScreen from './screens/ProductScreen';
 import CreateProductScreen  from './screens/CreateProductScreen';
+import CartScreen from './screens/CartScreen';
 import { Container } from '@material-ui/core';
 
 const App = () => {
@@ -19,6 +20,7 @@ const App = () => {
             <Route path='/products' component={ListedProducts} exact />
             <Route path='/products/:productId' component={ProductScreen} />
             <Route path='/create-a-custom' component={CreateProductScreen} exact/>
+            <Route path='/cart/:cartId?' component={CartScreen} exact/>
           </Container>
         </main>
         {/* <Footer /> */}
