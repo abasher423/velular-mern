@@ -36,7 +36,7 @@ const useStyles = makeStyles({
     }
 });
 
-const HomePage = () => {
+const HomePageScreen = () => {
     const classes = useStyles();
 
     return (
@@ -139,4 +139,4 @@ const HomePage = () => {
     );
 };
 
-export default HomePage;
+export default HomePageScreen;

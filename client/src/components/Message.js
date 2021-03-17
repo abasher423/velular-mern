@@ -1,3 +1,5 @@
+ // https://stackoverflow.com/questions/65214950/how-to-disappear-alert-after-5-seconds-in-react-js
+import { useState, useEffect } from 'react'
 import { makeStyles } from '@material-ui/core/styles';
 import Alert from '@material-ui/lab/Alert';
 
@@ -12,7 +14,23 @@ const useStyles = makeStyles((theme) => ({
 
 const Message = ({ status, text }) => {
     const classes = useStyles();
+    const [show, setShow] = useState(true);
 
+    useEffect(() => {
+      const timer = setTimeout(() => {
+        // after 3 seconds set show to false
+        setShow(false);
+      }, 5000)
+
+      return () => {
+        clearTimeout(timer);
+      }
+    }, []);
+
+     // If show is false the component will return null and stop here
+    if (!show) return null
+
+      // If show is true this will be returned
     return (
         <div className={classes.root}>
           {/* error, warning, info or success */}

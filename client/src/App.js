@@ -2,10 +2,10 @@ import React from 'react';
 import { BrowserRouter as Router, Route } from 'react-router-dom';
 import Header from './components/Header';
 import Footer from './components/Footer';
-import HomePage from './screens/HomePage';
-import ListedProducts from './screens/Listedproducts'
-import ProductScreen from './screens/ProductScreen';
-import CreateProductScreen  from './screens/CreateProductScreen';
+import HomePageScreen from './screens/HomePageScreen';
+import ProductListScreen from './screens/ProductListScreen'
+import ProductDetailScreen from './screens/ProductDetailScreen';
+import ProductCreateScreen  from './screens/ProductCreateScreen';
 import CartScreen from './screens/CartScreen';
 import { Container } from '@material-ui/core';
 
@@ -16,10 +16,10 @@ const App = () => {
           <Header />
         <main>
           <Container>
-            <Route path='/' component={HomePage} exact />
-            <Route path='/products' component={ListedProducts} exact />
-            <Route path='/products/:productId' component={ProductScreen} />
-            <Route path='/create-a-custom' component={CreateProductScreen} exact/>
+            <Route path='/' component={HomePageScreen} exact />
+            <Route path='/products' component={ProductListScreen} exact />
+            <Route path='/products/:productId' component={ProductDetailScreen} />
+            <Route path='/create-a-custom' component={ProductCreateScreen} exact/>
             <Route path='/cart/:cartId?' component={CartScreen} exact/>
           </Container>
         </main>

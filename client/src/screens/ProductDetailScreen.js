@@ -18,6 +18,7 @@ import Card from '@material-ui/core/Card';
 import Loader from '../components/Loader';
 import Message from '../components/Message';
 import { listProductDetails } from '../actions/productActions';
+import { addToCart } from '../actions/cartActions';
 
 const useStyles = makeStyles({
     root: {
@@ -32,8 +33,8 @@ const useStyles = makeStyles({
     }
 });
 
-const ProductScreen = ({ history, match }) => {
-    const [quantity, setQuantity] = useState(0);
+const ProductDetailScreen = ({ history, match }) => {
+    const [quantity, setQuantity] = useState(1);
 
     const classes = useStyles();
     const dispatch = useDispatch();
@@ -45,17 +46,19 @@ const ProductScreen = ({ history, match }) => {
         dispatch(listProductDetails(match.params.productId));
     }, [dispatch, match]);
 
-    const handleChange = e => {
+    const handleQtyChange = e => {
         setQuantity(e.target.value)
     };
 
-    const addToCartHandler = () => {
-        history.push(`/cart/${match.params.productId}?qty=${quantity}`)
+    const addToCartHandler = (e) => {
+        dispatch(addToCart(product._id, quantity))
+        history.push('/cart')
+        // history.push(`/cart/${product._id}?qty=${quantity}`);
     }
     return (
         <>
             <Container>
-                <Button variant="contained" component={Link} to={'/products'} style={{ margin: "50px 0" }}>Back</Button>
+                <Button variant="contained" color="secondary" component={Link} to={'/products'} style={{ marginBottom: "2rem" }}>Back</Button>
             </Container>
             <Container>
                 { loading ? <Loader /> : error ? <Message status="error" text={error} /> : (
@@ -106,7 +109,7 @@ const ProductScreen = ({ history, match }) => {
                                         labelId="demo-simple-select-label"
                                         id="demo-simple-select"
                                         value={quantity}
-                                        onChange={handleChange}
+                                        onChange={handleQtyChange}
                                         >
                                         {
                                             [...Array(product.quantityInStock).keys()].map(x => (
@@ -140,4 +143,4 @@ const ProductScreen = ({ history, match }) => {
     );
 };
 
-export default ProductScreen;
+export default ProductDetailScreen;
