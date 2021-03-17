@@ -1,5 +1,5 @@
 // action creators
-import productServices from '../services/productsServices';
+import productServices from '../services/productServices';
 import { 
     PRODUCT_LIST_REQUEST, 
     PRODUCT_LIST_SUCCESS, 
