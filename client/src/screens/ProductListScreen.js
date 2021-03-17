@@ -6,6 +6,7 @@ import Grid from '@material-ui/core/Grid'
 import Loader from '../components/Loader';
 import Message from '../components/Message';
 import { listProducts }from '../actions/productActions';
+import { Typography } from '@material-ui/core';
 
 const ListedProducts = () => {
     const dispatch = useDispatch();
@@ -20,7 +21,7 @@ const ListedProducts = () => {
 
     return (
         <>
-        <h1>Latest Products</h1>
+        <Typography variant="h2" component="h2" style={{ marginBottom: "3rem" }}>Latest Products</Typography>
         { loading ? <Loader /> : error ? <Message status="error" text={error} />
             : <Grid container spacing={2} alignItems="stretch">
             {products.map(product => {
