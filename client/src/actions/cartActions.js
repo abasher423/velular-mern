@@ -1,4 +1,4 @@
-import { CART_ADD_ITEM } from '../constants/cartConstants';
+import { CART_ADD_ITEM, CART_DELETE_ITEM } from '../constants/cartConstants';
 import productServices from '../services/productsServices';
 
 // getState fetches the state tree (for local storage)
@@ -19,5 +19,14 @@ export const addToCart = (productId, quantity) => async (dispatch, getState) => 
     })
 
     // saving to local storage (using localstorage API)
+    localStorage.setItem('cartItems', JSON.stringify(getState().cart.cartItems));
+}
+
+export const deleteFromCart = (productId) => (dispatch, getState) => {
+    dispatch({
+        type: CART_DELETE_ITEM,
+        payload: productId
+    })
+
     localStorage.setItem('cartItems', JSON.stringify(getState().cart.cartItems));
 }
