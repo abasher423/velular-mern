@@ -40,7 +40,8 @@ const useStyles = makeStyles((theme) => ({
         justifyContent: "space-between"
     },
     btn: {
-        display: "block"
+        display: "block",
+        backgroundColor: theme.palette.success.main
     }
   }));
 
@@ -66,39 +67,40 @@ const CartScreen = ({ match, location, history}) => {
     return (
         <Container>
             <Grid container spacing={2}>
-            <Grid item xs={12} md={6}>
-                <Typography variant="h2" component="h2" className={classes.title}>Shopping Cart</Typography>
+                <Grid item xs={12} md={6}>
+                    <Typography variant="h2" component="h2" className={classes.title}>Shopping Cart</Typography>
+                </Grid>
+                <Grid item xs={12} md={6}>
+                    <Card className={classes.root} variant="outlined" align="center">
+                        <CardContent justify="space-between">
+                            <div className={classes.box}>
+                                <Typography gutterBottom>Items</Typography>
+                                <Typography variant="h5"gutterBottom>{cartItems.reduce((acc, element) => acc + element.quantity, 0)}</Typography>
+                            </div>
+                            <Divider style={{margin: "0.5rem 0"}}/>
+                            <div className={classes.box}>
+                                <Typography gutterBottom>Subtotal</Typography>
+                                <Typography variant="h5"gutterBottom>£{cartItems.reduce((acc, element) => acc + element.quantity * element.price, 0).toFixed(2)}</Typography>
+                            </div>
+                        </CardContent>
+                        <CardActions>
+                            <Button 
+                            variant="contained" 
+                            color="secondary" 
+                            size="small" 
+                            className={classes.btn}
+                            onClick={checkoutHandler} 
+                            disabled={cartItems.length === 0}>
+                                Proceed to checkout
+                            </Button>
+                        </CardActions>
+                    </Card>
+                </Grid>
             </Grid>
-            <Grid item xs={12} md={6}>
-            <Card className={classes.root} variant="outlined" align="center">
-            <CardContent justify="space-between">
-                <div className={classes.box}>
-                    <Typography gutterBottom>Items</Typography>
-                    <Typography variant="h5"gutterBottom>{cartItems.reduce((acc, element) => acc + element.quantity, 0)}</Typography>
-                </div>
-                <Divider style={{margin: "0.5rem 0"}}/>
-                <div className={classes.box}>
-                    <Typography gutterBottom>Subtotal</Typography>
-                    <Typography variant="h5"gutterBottom>£{cartItems.reduce((acc, element) => acc + element.quantity * element.price, 0).toFixed(2)}</Typography>
-                </div>
-            </CardContent>
-            <CardActions>
-                <Button 
-                variant="outlined" 
-                color="primary" 
-                size="small" 
-                className={classes.btn}
-                onClick={checkoutHandler} 
-                disabled={cartItems.length === 0}>
-                    Proceed to checkout
-                </Button>
-            </CardActions>
-            </Card>
-            </Grid>
-            </Grid>
+            <Button variant="contained" color="secondary"  component={Link} to={'/products'}style={{ marginBottom: "2rem"}}>back</Button>
             {cartItems.length === 0 
                 ?   <div>
-                    <Button variant="contained" color="secondary"  component={Link} to={'/products'}style={{ marginBottom: "2rem"}}>go back</Button>
+                    
                     <Message status="info" text="Your cart is empty" />
                 </div>  
                 : (
