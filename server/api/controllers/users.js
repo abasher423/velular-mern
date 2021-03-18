@@ -45,7 +45,8 @@ const users_get_user = async (req, res) => {
             res.status(200).json({
                 userId: user._id,
                 email: user.email,
-                fullName: user.fullName,
+                firstName: user.firstName,
+                lastName: user.lastName,
                 street: user.street,
                 city: user.city,
                 country: user.country,
@@ -76,12 +77,12 @@ const user_signup = (req, res) => {
                     if (err) {
                         return res.status(500).json({ error: err });
                     } else {
-                        const { email, fullName, username, street, city, country, state, postcode, role, verified, orderId } = req.body;
+                        const { email, firstName, lastName, username, street, city, country, state, postcode, role, verified, orderId } = req.body;
                         const user = new User({ 
                             _id: mongoose.Types.ObjectId(),
                             password: hash, 
                             orders: orderId,
-                            email, username, fullName, street, city, country, state, postcode, role, verified
+                            email, username, firstName, lastName, street, city, country, state, postcode, role, verified
                         });
                         user.save()
                             .then(result => {
@@ -113,7 +114,8 @@ const user_login = (req, res) => {
                     const token = jwt.sign({ // what we want to pass to the client (inside the token)
                         userId: user._id,
                         email: user.email,
-                        fullName: user.fullName,
+                        firstName: user.firstName,
+                        lastName: user.lastName,
                         role: user.role
                     }, 
                     process.env.JWT_KEY,
@@ -122,7 +124,10 @@ const user_login = (req, res) => {
                     });
                     res.status(200).json({ 
                         message: 'Authentication Successfull',
-                        token: token //jsonwebtoken 
+                        token: token, //jsonwebtoken,
+                        firstName: user.firstName,
+                        lastName: user.lastName,
+                        email: user.email
                     })
                 } else { // if error with password
                     res.status(401).json({ message: 'Incorrect  password' });
