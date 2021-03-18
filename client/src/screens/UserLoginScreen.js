@@ -40,13 +40,15 @@ const UserLoginScreen = ({ location, history }) => {
 
     const dispatch = useDispatch();
 
+
     const userLogin = useSelector(state => state.userLogin);
     const { loading, error, userInfo } = userLogin;
 
+    
     useEffect(() => {
         // if not logged in
         if (userInfo) {
-            // history.push(redirect);
+            history.push(redirect);
         }
     }, [history, userInfo, redirect])
 
@@ -90,7 +92,6 @@ const UserLoginScreen = ({ location, history }) => {
                                 value={email}
                                 onChange={handleEmailChange}
                                 name="email"
-                                autoComplete="email"
                             />
                         </Grid>
                         <Grid item xs={12} align="center">
@@ -104,7 +105,6 @@ const UserLoginScreen = ({ location, history }) => {
                                 value={password}
                                 onChange={handlepasswordChange}
                                 name="password"
-                                autoComplete="password"
                             />
                         </Grid>
                         <Grid item xs={12} align="center">

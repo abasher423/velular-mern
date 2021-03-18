@@ -11,13 +11,22 @@ export const login = (email, password) => async (dispatch) => {
             type: USER_LOGIN_REQUEST
         });
 
+        const credentials = {
+            "email": email,
+            "password": password
+        }
         const config = {
             headers: {
                 'Content-Type': 'application/json'
             }
         };
 
-        const { data } = authenticationServices.login({ email, password}, config);
+        const { data } = await authenticationServices.login({
+            email: email,
+            password: password
+        });
+
+        console.log(data);
 
         dispatch({
             type: USER_LOGIN_SUCCESS,
