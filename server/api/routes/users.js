@@ -8,7 +8,7 @@ router.get('/', UsersController.users_get_all);
 
 router.get('/:userId', UsersController.users_get_user);
 
-router.post('/signup', UsersController.user_signup);
+router.post('/register', UsersController.user_register);
 
 router.post('/login', UsersController.user_login);
 
