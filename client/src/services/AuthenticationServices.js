@@ -5,6 +5,11 @@ const login = (credentials) => {
     return api().post('/users/login', credentials)
 }
 
+const register = (data) => {
+    return api().post('/users/register', data)
+}
+
 export default{
-    login
+    login,
+    register
 }
