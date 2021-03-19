@@ -126,7 +126,8 @@ const ProductDetailScreen = ({ history, match }) => {
                                 <Button 
                                 variant="contained" 
                                 color="secondary" 
-                                size="small" 
+                                size="small"
+                                fullWidth 
                                 className={classes.btn}
                                 onClick={addToCartHandler} 
                                 disabled={product.countInStock === 0}>
