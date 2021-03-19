@@ -1,5 +1,5 @@
 import { CART_ADD_ITEM, CART_DELETE_ITEM } from '../constants/cartConstants';
-import productServices from '../services/productsServices';
+import productServices from '../services/productServices';
 
 // getState fetches the state tree (for local storage)
 export const addToCart = (productId, quantity) => async (dispatch, getState) => {

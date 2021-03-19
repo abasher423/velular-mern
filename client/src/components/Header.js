@@ -1,9 +1,13 @@
 import React from 'react';
+import { useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import makeStyles from '@material-ui/core/styles/makeStyles';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
+import Menu from '@material-ui/core/Menu';
+import MenuItem from '@material-ui/core/MenuItem';
 import IconButton from '@material-ui/core/IconButton';
 import Container from '@material-ui/core/Container';
 import title from '../images/title.png';
@@ -12,6 +16,7 @@ import SearchIcon from '@material-ui/icons/Search';
 import FavoriteBorderIcon from '@material-ui/icons/FavoriteBorder';
 import ShoppingBasketOutlinedIcon from '@material-ui/icons/ShoppingBasketOutlined';
 import PersonOutlineOutlinedIcon from '@material-ui/icons/PersonOutlineOutlined';
+import { logout } from '../actions/userActions';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -38,11 +43,37 @@ const useStyles = makeStyles((theme) => ({
     h6: {
       "fontWeight": 600,
     }
+  },
+  loggedIn: {
+      backgroundColor: theme.palette.success.main,
+      color: 'white'
   }
 }));
 
 const Header = () => {
     const classes = useStyles();
+    const dispatch = useDispatch();
+
+    const [anchorEl, setAnchorEl] = useState(null);
+
+
+
+    const userLogin = useSelector(state => state.userLogin);
+    const { userInfo } = userLogin;
+
+    const handleClick = (event) => {
+        setAnchorEl(event.currentTarget);
+      };
+    
+    const handleClose = () => {
+        setAnchorEl(null);
+    };
+    const logoutHandler = () => {
+        dispatch(logout());
+        setAnchorEl(null);
+    };
+
+    // https://material-ui.com/components/menus/
 
     return (
         <div className={classes.root}>
@@ -68,9 +99,33 @@ const Header = () => {
                     <IconButton edge="start" className={classes.icons} component={Link} to={'/cart'} color="inherit" aria-label="cart">
                         <ShoppingBasketOutlinedIcon />
                     </IconButton>
-                    <IconButton edge="start" className={classes.icons} component={Link} to={'/register'} color="inherit" aria-label="login">
+                    { userInfo ? (
+                        <div>
+                            <Button 
+                                className={userInfo ? classes.loggedIn : ''}
+                                variant="contained"
+                                color="primary"
+                                onClick={handleClick}>
+                                    {userInfo.firstName}
+                                </Button>
+                            <Menu
+                                id="simple-menu"
+                                anchorEl={anchorEl}
+                                keepMounted
+                                open={Boolean(anchorEl)}
+                                onClose={handleClose}
+                            >
+                                <MenuItem onClick={handleClose}>Profile</MenuItem>
+                                <MenuItem onClick={handleClose}>Account</MenuItem>
+                                <MenuItem onClick={handleClose}>Orders</MenuItem>
+                                <MenuItem onClick={handleClose}>Help</MenuItem>
+                                <MenuItem onClick={logoutHandler}>Logout</MenuItem>
+                            </Menu>
+                        </div>
+                    ) :
+                    <IconButton edge="start" className={classes.icons} component={Link} to={'/login'} color="inherit" aria-label="login">
                         <PersonOutlineOutlinedIcon />
-                    </IconButton>
+                    </IconButton>}
                 </Toolbar>
                 </Container>
             </AppBar>

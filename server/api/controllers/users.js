@@ -45,7 +45,8 @@ const users_get_user = async (req, res) => {
             res.status(200).json({
                 userId: user._id,
                 email: user.email,
-                fullName: user.fullName,
+                firstName: user.firstName,
+                lastName: user.lastName,
                 street: user.street,
                 city: user.city,
                 country: user.country,
@@ -65,7 +66,7 @@ const users_get_user = async (req, res) => {
 // @desc Create a user
 // @route GET /api/users
 // @access Public
-const user_signup = (req, res) => {
+const user_register = (req, res) => {
     User.find({ email: req.body.email })
         .exec()
         .then(user => {
@@ -76,17 +77,23 @@ const user_signup = (req, res) => {
                     if (err) {
                         return res.status(500).json({ error: err });
                     } else {
-                        const { email, fullName, username, street, city, country, state, postcode, role, verified, orderId } = req.body;
+                        const { email, firstName, lastName, role, verified} = req.body;
                         const user = new User({ 
                             _id: mongoose.Types.ObjectId(),
                             password: hash, 
-                            orders: orderId,
-                            email, username, fullName, street, city, country, state, postcode, role, verified
+                            // orders: orderId,
+                            email, firstName, lastName, role, verified
                         });
                         user.save()
                             .then(result => {
                                 console.log(result);
-                                res.status(201).json({ message: 'User created' });
+                                res.status(201).json({ 
+                                    message: 'User created',
+                                    email: user.email,
+                                    password: user.password,
+                                    firstName: user.firstName,
+                                    lastName: user.lastName
+                                });
                             })
                             .catch(err => {
                                 console.log(err);
@@ -113,7 +120,8 @@ const user_login = (req, res) => {
                     const token = jwt.sign({ // what we want to pass to the client (inside the token)
                         userId: user._id,
                         email: user.email,
-                        fullName: user.fullName,
+                        firstName: user.firstName,
+                        lastName: user.lastName,
                         role: user.role
                     }, 
                     process.env.JWT_KEY,
@@ -122,7 +130,11 @@ const user_login = (req, res) => {
                     });
                     res.status(200).json({ 
                         message: 'Authentication Successfull',
-                        token: token //jsonwebtoken 
+                        token: token, //jsonwebtoken,
+                        firstName: user.firstName,
+                        lastName: user.lastName,
+                        email: user.email,
+                        role: user.role
                     })
                 } else { // if error with password
                     res.status(401).json({ message: 'Incorrect  password' });
@@ -173,7 +185,7 @@ const users_delete_user = async (req, res) => {
 export default {
     users_get_all,
     users_get_user,
-    user_signup,
+    user_register,
     user_login,
     users_update_user,
     users_delete_user

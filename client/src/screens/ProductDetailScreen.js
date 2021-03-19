@@ -5,7 +5,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import Rating from '../components/Rating';
 import Button from '@material-ui/core/Button';
 import Grid from '@material-ui/core/Grid';
-import { Container, Divider } from '@material-ui/core';
+import { Container, Divider, ThemeProvider } from '@material-ui/core';
 import Image from 'material-ui-image';
 import Typography from '@material-ui/core/Typography';
 import CardContent from '@material-ui/core/CardContent';
@@ -20,7 +20,7 @@ import Message from '../components/Message';
 import { listProductDetails } from '../actions/productActions';
 import { addToCart } from '../actions/cartActions';
 
-const useStyles = makeStyles({
+const useStyles = makeStyles( theme => ({
     root: {
         minWidth: 275,
       },
@@ -29,9 +29,10 @@ const useStyles = makeStyles({
         justifyContent: "space-between"
     },
     btn: {
-        marginBottom: "0.5rem"
+        marginBottom: "0.5rem",
+        backgroundColor: theme.palette.success.main
     }
-});
+}));
 
 const ProductDetailScreen = ({ history, match }) => {
     const [quantity, setQuantity] = useState(1);
@@ -123,9 +124,10 @@ const ProductDetailScreen = ({ history, match }) => {
                             </CardContent>
                             <CardActions>
                                 <Button 
-                                variant="outlined" 
-                                color="primary" 
-                                size="small" 
+                                variant="contained" 
+                                color="secondary" 
+                                size="small"
+                                fullWidth 
                                 className={classes.btn}
                                 onClick={addToCartHandler} 
                                 disabled={product.countInStock === 0}>
