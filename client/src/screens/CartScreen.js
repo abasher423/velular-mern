@@ -87,7 +87,8 @@ const CartScreen = ({ match, location, history}) => {
                             <Button 
                             variant="contained" 
                             color="secondary" 
-                            size="small" 
+                            size="small"
+                            fullWidth
                             className={classes.btn}
                             onClick={checkoutHandler} 
                             disabled={cartItems.length === 0}>

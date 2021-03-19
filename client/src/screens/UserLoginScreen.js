@@ -1,13 +1,11 @@
 // https://github.com/mui-org/material-ui/blob/master/docs/src/pages/getting-started/templates/sign-in/SignIn.js
 
 import { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import Message from '../components/Message';
 import Loader from '../components/Loader';
 import { login } from '../actions/userActions';
-import LockOutlinedIcon from '@material-ui/icons/LockOutlined'
-import { Container, Grid, Typography, FormGroup, makeStyles, TextField, Button, Avatar } from '@material-ui/core';
+import { Container, Grid, Typography, FormGroup, makeStyles, TextField, Button, Avatar, Link } from '@material-ui/core';
 
 const useStyles = makeStyles(theme => ({
     form: {
@@ -19,15 +17,17 @@ const useStyles = makeStyles(theme => ({
       },
       submit: {
           "&:hover": {
-            backgroundColor: theme.palette.secondary.main,
+            backgroundColor: theme.palette.success.main,
           },
+        backgroundColor: theme.palette.info.dark,
+        color: "white",
         margin: theme.spacing(3, 0, 2),
         width: "400px"
       },
       avatar: {
-          backgroundColor: theme.palette.secondary.main,
-          width: theme.spacing(5),
-          height: theme.spacing(5),
+          backgroundColor: "white",
+          width: theme.spacing(15),
+          height: theme.spacing(15),
       }
 }));
 
@@ -68,14 +68,14 @@ const UserLoginScreen = ({ location, history }) => {
 
     return (
         // <Grid container spacing={2}>
-            <Container>
+            <Container component="main" maxWidth="xs">
                 <Grid item xs={12} align="center">
                 <Avatar className={classes.avatar}>
-                    <LockOutlinedIcon />
+                    <img src="images/logo.png" alt="logo"/>
                 </Avatar>
                 </Grid>
                 <Grid item xs={12} align="center">
-                    <Typography variant="h3" component="h1">Sign In</Typography>
+                    <Typography variant="h3" component="h1">Login</Typography>
                 </Grid>
                 {error && <Message status="error" text={error} />}
                 {loading && <Loader />}
@@ -111,23 +111,15 @@ const UserLoginScreen = ({ location, history }) => {
                             <Button 
                                 type="submit"
                                 variant="contained"
-                                color="primary"
                                 onClick={submitHandler}
                                 className={classes.submit}
                             >
                                 Sign in
                             </Button>
                         </Grid>
-                        <Grid item xs={3} align="center" style={{marginLeft: "300px"}}>
-                            <Link href="#" variant="body2">
-                                Forgot Password?
-                            </Link>
-                        </Grid>
-                        <Grid item xs={3} align="center">
-                            <Link 
-                                to={redirect ? `/register?redirect=${redirect}` : '/register'} 
-                                variant="body2">
-                                Sign Up
+                        <Grid item xs={12}>
+                            <Link href="/register" variant="body2">
+                                Dont have an account? Register
                             </Link>
                         </Grid>
                     </Grid>
