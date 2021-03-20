@@ -50,7 +50,7 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
-const Header = () => {
+const Header = ({ history }) => {
     const classes = useStyles();
     const dispatch = useDispatch();
 
@@ -115,10 +115,10 @@ const Header = () => {
                                 open={Boolean(anchorEl)}
                                 onClose={handleClose}
                             >
-                                <MenuItem onClick={handleClose}>Profile</MenuItem>
-                                <MenuItem onClick={handleClose}>Account</MenuItem>
-                                <MenuItem onClick={handleClose}>Orders</MenuItem>
-                                <MenuItem onClick={handleClose}>Help</MenuItem>
+                                <MenuItem component={Link} to={'/profile'} onClick={handleClose}>Profile</MenuItem>
+                                <MenuItem component={Link} to={'/account'} onClick={handleClose}>Account</MenuItem>
+                                <MenuItem component={Link} to={'/orders'} onClick={handleClose}>Orders</MenuItem>
+                                <MenuItem component={Link} to={'/help'} onClick={handleClose}>Help</MenuItem>
                                 <MenuItem onClick={logoutHandler}>Logout</MenuItem>
                             </Menu>
                         </div>
