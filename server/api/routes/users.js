@@ -1,12 +1,13 @@
 import express from 'express';
 import checkAuth from '../auth/check-auth.js';
+import checkRole from '../auth/check-role.js';
 import UsersController from '../controllers/users.js';
 
 const router = express.Router();
 
 router.get('/', UsersController.users_get_all);
 
-router.get('/:userId', UsersController.users_get_user);
+router.get('/:userId', checkAuth(), UsersController.users_get_user);
 
 router.post('/register', UsersController.user_register);
 

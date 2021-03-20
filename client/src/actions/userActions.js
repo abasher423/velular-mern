@@ -1,4 +1,7 @@
 import { 
+    USER_DETAILS_FAILURE,
+    USER_DETAILS_REQUEST,
+    USER_DETAILS_SUCCESS,
     USER_LOGIN_FAILURE, 
     USER_LOGIN_REQUEST, 
     USER_LOGIN_SUCCESS, 
@@ -8,6 +11,7 @@ import {
     USER_REGISTER_SUCCESS
 } from "../constants/userConstants";
 import authenticationServices from '../services/AuthenticationServices';
+import userServices from '../services/userServices';
 
 export const login = (email, password) => async (dispatch) => {
     try {
@@ -83,6 +87,38 @@ export const register = (firstName, lastName, email, password, role) => async (d
     } catch (error){
         dispatch({
             type: USER_REGISTER_FAILURE,
+            payload: 
+            error.response && error.response.data.message 
+                ? error.response.data.message 
+                : error.message
+        })
+    }
+}
+
+export const getUserDetails = (userId) => async (dispatch, getState) => {
+    try {
+        dispatch({
+            type: USER_DETAILS_REQUEST
+        });
+
+        const { userLogin: { userInfo } } = getState();
+
+        const config = {
+            headers: {
+                Authorization: `Bearer ${userInfo.token}`
+            }
+        }
+
+        const { data } = await userServices.indexOne(userId, config);
+
+        dispatch({
+            type: USER_DETAILS_SUCCESS,
+            payload: data
+        })
+
+    } catch (error){
+        dispatch({
+            type: USER_DETAILS_FAILURE,
             payload: 
             error.response && error.response.data.message 
                 ? error.response.data.message 

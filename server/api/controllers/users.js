@@ -15,7 +15,8 @@ const users_get_all = async (req, res) => {
                 users: users.map(user => {
                     return { 
                         userId: user._id,
-                        username: user.username,
+                        firstName: user.firstName,
+                        lastName: user.lastName,
                         role: user.role,
                         verified: user.verified,
                         request: {
@@ -147,18 +148,36 @@ const user_login = (req, res) => {
         })
 };
 
-// @desc Updat a user
+// @desc Update a user
 // @route PATCH /api/users/userId
 // @access Public
 const users_update_user = async (req, res) => {
-    const updateOps = {}; // objct so if we want to only update certain values we can (change)
-    for (const ops of req.body){
-    updateOps[ops.propName] = ops.value;
-    }
-
     try {
-        await User.updateOne({_id: req.params.userId}, {$set: updateOps});
-        res.status(200).json({ message: 'User updated successfully' });
+        const user = await User.findById(req.params.userId);
+        const updateOps = {}; // objct so if we want to only update certain values we can (change)
+        for (const ops of req.body){
+            updateOps[ops.propName] = ops.value;
+        }
+        console.log(updateOps)
+        console.log(user.password)
+        bcrypt.compare(updateOps.password, user.password, async (err, result) => {
+            if (result){
+                bcrypt.hash(updateOps.password, 10, async (err, hash) => {
+                    if (err) {
+                        res.status(500).json({ error: err});
+                    } else {
+                        updateOps['password'] = hash;
+                        console.log(updateOps)
+                        await User.updateOne({_id: req.params.userId}, {$set: updateOps});
+                        res.status(200).json({ message: 'User updated successfully' });
+                    }
+                });
+            } else {
+                res.status(401).json({ message: "incorrect password" })
+            }
+        })
+        
+        
     } catch (err){
         console.log(err);
         res.status(500).json({ error: err });
