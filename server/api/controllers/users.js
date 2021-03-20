@@ -41,23 +41,29 @@ const users_get_all = async (req, res) => {
 // @access Public
 const users_get_user = async (req, res) => {
     try {
-        const user = await User.findById(req.params.userId);
-        if (user){
-            res.status(200).json({
-                userId: user._id,
-                email: user.email,
-                firstName: user.firstName,
-                lastName: user.lastName,
-                street: user.street,
-                city: user.city,
-                country: user.country,
-                state: user.state,
-                postcode: user.postcode,
-                role: user.role
-            });
+        if (req.userData.userId === req.params.userId){ 
+            const user = await User.findById(req.params.userId); // checks the userId provided in the jwt against the one in params
+            if (user){
+                res.status(200).json({
+                    userId: user._id,
+                    email: user.email,
+                    firstName: user.firstName,
+                    lastName: user.lastName,
+                    street: user.street,
+                    city: user.city,
+                    country: user.country,
+                    state: user.state,
+                    postcode: user.postcode,
+                    role: user.role
+                });
+            } else {
+                res.status(404).json({ message: 'No entry exists' });
+            }
         } else {
-            res.status(404).json({ message: 'No entry exists' });
+            res.status(401).json({ message: "userId does not match" })
         }
+        
+        
     } catch (err){
         console.log(err);
         res.status(500).json({ error: err });

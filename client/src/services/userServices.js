@@ -2,7 +2,7 @@
 import api from './api';
 
 const indexOne = (userId, token) => {
-    return api.get(`/users/${userId}`);
+    return api().get(`/users/${userId}`, token);
 };
 
 const update = (userId, userData, token) => {
