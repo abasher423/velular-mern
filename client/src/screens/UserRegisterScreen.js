@@ -124,7 +124,7 @@ const UserRegisterScreen = ({ history, location }) => {
                                 label="First Name"
                                 value={firstName}
                                 onChange={firstNameHandler}
-                                name="email"
+                                name="firstName"
                             />
                         </Grid>
                         <Grid item xs={12} md={6} align="center">
@@ -136,7 +136,7 @@ const UserRegisterScreen = ({ history, location }) => {
                                 label="Last Name"
                                 value={lastName}
                                 onChange={lastNameHandler}
-                                name="email"
+                                name="lastName"
                             />
                         </Grid>
                     </Grid>

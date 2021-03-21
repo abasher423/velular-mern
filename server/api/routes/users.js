@@ -13,7 +13,7 @@ router.post('/register', UsersController.user_register);
 
 router.post('/login', UsersController.user_login);
 
-router.patch('/:userId', UsersController.users_update_user);
+router.patch('/:userId', checkAuth(), UsersController.users_update_user);
 
 router.delete('/:userId', checkAuth('manager'), UsersController.users_delete_user);
 

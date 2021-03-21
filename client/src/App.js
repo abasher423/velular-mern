@@ -5,6 +5,7 @@ import Footer from './components/Footer';
 import HomePageScreen from './screens/HomePageScreen';
 import UserRegisterScreen from './screens/UserRegisterScreen';
 import UserLoginScreen from './screens/UserLoginScreen';
+import UserProfileScreen from './screens/UserProfileScreen';
 import ProductListScreen from './screens/ProductListScreen';
 import ProductDetailScreen from './screens/ProductDetailScreen';
 import ProductCreateScreen  from './screens/ProductCreateScreen';
@@ -25,6 +26,7 @@ const App = () => {
             <Route path='/cart/:cartId?' component={CartScreen} exact/>
             <Route path='/register' component={UserRegisterScreen} exact />
             <Route path='/login' component={UserLoginScreen} exact />
+            <Route path='/profile' component={UserProfileScreen} exact />
           </Container>
         </main>
         {/* <Footer /> */}
