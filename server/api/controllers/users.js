@@ -8,7 +8,7 @@ import User from '../models/user.js';
 // @access Private
 const users_get_all = async (req, res) => {
     try {
-        const users = await User.find().select('_id username role verified')
+        const users = await User.find()
         if (users.length > 0){
             res.status(200).json({
                 count: users.length,
@@ -17,6 +17,7 @@ const users_get_all = async (req, res) => {
                         userId: user._id,
                         firstName: user.firstName,
                         lastName: user.lastName,
+                        password: user.password,
                         role: user.role,
                         verified: user.verified,
                         request: {
@@ -49,11 +50,7 @@ const users_get_user = async (req, res) => {
                     email: user.email,
                     firstName: user.firstName,
                     lastName: user.lastName,
-                    street: user.street,
-                    city: user.city,
-                    country: user.country,
-                    state: user.state,
-                    postcode: user.postcode,
+                    password: user.password,
                     role: user.role
                 });
             } else {
@@ -129,7 +126,8 @@ const user_login = (req, res) => {
                         email: user.email,
                         firstName: user.firstName,
                         lastName: user.lastName,
-                        role: user.role
+                        role: user.role,
+                        // password: user.password
                     }, 
                     process.env.JWT_KEY,
                     {
@@ -160,30 +158,43 @@ const user_login = (req, res) => {
 const users_update_user = async (req, res) => {
     try {
         const user = await User.findById(req.params.userId);
-        const updateOps = {}; // objct so if we want to only update certain values we can (change)
-        for (const ops of req.body){
-            updateOps[ops.propName] = ops.value;
+        const updateItems = {}; // objct so if we want to only update certain values we can (change)
+        for (const item of req.body){
+            updateItems[item.propName] = item.value;
         }
-        console.log(updateOps)
-        console.log(user.password)
-        bcrypt.compare(updateOps.password, user.password, async (err, result) => {
-            if (result){
-                bcrypt.hash(updateOps.password, 10, async (err, hash) => {
-                    if (err) {
-                        res.status(500).json({ error: err});
+        const password = updateItems.password
+        if (req.userData.userId === req.params.userId){ // if password exists
+            if (password === '' || password === null){ // if new password set to null, set password to existing password
+                updateItems.password = user.password
+                await User.updateOne({_id: req.params.userId}, {$set: updateItems});
+                res.status(200).json({ 
+                    message: 'User updated successfully',
+                    firstName: user.firstName, 
+                    lastName: user.lastName, 
+                    email: user.email,
+                    role: user.role
+            });
+            } else {
+                bcrypt.hash(password, 10, async (err, hash) => { // if new password exists, ncrypt it and then update
+                    if (err){
+                        res.status(500).json({ error: err });
                     } else {
-                        updateOps['password'] = hash;
-                        console.log(updateOps)
-                        await User.updateOne({_id: req.params.userId}, {$set: updateOps});
-                        res.status(200).json({ message: 'User updated successfully' });
+                        console.log('hash', hash)
+                        updateItems.password = hash;
+                        await User.updateOne({_id: req.params.userId}, {$set: updateItems});
+                        res.status(200).json({ 
+                            message: 'User updated successfully',
+                            firstName: user.firstName, 
+                            lastName: user.lastName, 
+                            email: user.email,
+                            role: user.role
+                    });
                     }
                 });
-            } else {
-                res.status(401).json({ message: "incorrect password" })
             }
-        })
-        
-        
+        } else {
+            res.status(401).json({ message: 'Authentication Failed'})
+        }
     } catch (err){
         console.log(err);
         res.status(500).json({ error: err });
