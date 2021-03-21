@@ -5,8 +5,8 @@ const indexOne = (userId, token) => {
     return api().get(`/users/${userId}`, token);
 };
 
-const update = (userId, userData, token) => {
-    return api().patch(`/users/${userId}`, userData, token)
+const update = (userId, updateItems, token) => {
+    return api().patch(`/users/${userId}`, updateItems, token)
 };
 
 export default{
