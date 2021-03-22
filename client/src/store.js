@@ -17,14 +17,21 @@ const reducer = combineReducers({
 
 // fetching cart from local storage
 const cartItemsFromStorage = localStorage.getItem('cartItems') 
-    ? JSON.parse(localStorage.getItem('cartItems')) : []
+    ? JSON.parse(localStorage.getItem('cartItems')) : [];
 
 // fetching user info from local storage
 const userInfoFromStorage = localStorage.getItem('userInfo')
-  ? JSON.parse(localStorage.getItem('userInfo')) : null
+  ? JSON.parse(localStorage.getItem('userInfo')) : null;
+
+// fetching shipping details info from local storage
+const shippingDetailsFromStorage = localStorage.getItem('shippingDetails')
+  ? JSON.parse(localStorage.getItem('shippingDetails')) : {};
 
 const initialState = {
-    cart: { cartItems: cartItemsFromStorage },
+    cart: { 
+        cartItems: cartItemsFromStorage,
+        shippingDetails: shippingDetailsFromStorage 
+    },
     userLogin: { userInfo: userInfoFromStorage } // need to change
 };
 
