@@ -46,12 +46,6 @@ const useStyles = makeStyles((theme) => ({
   }));
 
 const CartScreen = ({ match, location, history}) => {
-    // const productId = match.params.cartId;
-    // const qty = location.search ? Number(location.search.split('=')[1]) : 1;
-
-    // useEffect(() => {
-	// 	if (productId) dispatch(addToCart(productId, qty))
-	// }, [dispatch, productId, qty])
     const classes = useStyles();
     const dispatch = useDispatch();
     const { cartItems } = useSelector((state) => state.cart)
