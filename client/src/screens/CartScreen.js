@@ -33,7 +33,7 @@ const useStyles = makeStyles((theme) => ({
         width: "900px",
         height: "100px",
         margin: "1rem 0",
-        background: "#f5f5f5" 
+        // background: "#f5f5f5" 
     },
     box: {
         display: "flex",
@@ -46,12 +46,6 @@ const useStyles = makeStyles((theme) => ({
   }));
 
 const CartScreen = ({ match, location, history}) => {
-    // const productId = match.params.cartId;
-    // const qty = location.search ? Number(location.search.split('=')[1]) : 1;
-
-    // useEffect(() => {
-	// 	if (productId) dispatch(addToCart(productId, qty))
-	// }, [dispatch, productId, qty])
     const classes = useStyles();
     const dispatch = useDispatch();
     const { cartItems } = useSelector((state) => state.cart)
@@ -139,8 +133,6 @@ const CartScreen = ({ match, location, history}) => {
                                 } />
                             </ListItem>
                             </Paper>
-                            
-                            
                         )
                     })}
                 </List>

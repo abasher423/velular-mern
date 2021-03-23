@@ -75,7 +75,7 @@ const UserLoginScreen = ({ location, history }) => {
                 </Avatar>
                 </Grid>
                 <Grid item xs={12} align="center">
-                    <Typography variant="h3" component="h1">Login</Typography>
+                    <Typography variant="h2" component="h2">Login</Typography>
                 </Grid>
                 {error && <Message status="error" text={error} />}
                 {loading && <Loader />}
