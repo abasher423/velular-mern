@@ -50,7 +50,10 @@ const useStyles = makeStyles((theme) => ({
     }
   },
   loggedIn: {
-      backgroundColor: theme.palette.success.main,
+      "&:hover": {
+        backgroundColor: theme.palette.success.main
+      },
+      backgroundColor: theme.palette.info.dark,
       color: 'white'
   }
 }));

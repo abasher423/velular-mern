@@ -33,7 +33,7 @@ const useStyles = makeStyles((theme) => ({
         width: "900px",
         height: "100px",
         margin: "1rem 0",
-        background: "#f5f5f5" 
+        // background: "#f5f5f5" 
     },
     box: {
         display: "flex",
@@ -133,8 +133,6 @@ const CartScreen = ({ match, location, history}) => {
                                 } />
                             </ListItem>
                             </Paper>
-                            
-                            
                         )
                     })}
                 </List>

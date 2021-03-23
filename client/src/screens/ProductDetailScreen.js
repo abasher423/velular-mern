@@ -5,7 +5,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import Rating from '../components/Rating';
 import Button from '@material-ui/core/Button';
 import Grid from '@material-ui/core/Grid';
-import { Container, Divider, ThemeProvider } from '@material-ui/core';
+import { Container, Divider, IconButton, ThemeProvider } from '@material-ui/core';
 import Image from 'material-ui-image';
 import Typography from '@material-ui/core/Typography';
 import CardContent from '@material-ui/core/CardContent';
@@ -19,6 +19,7 @@ import Loader from '../components/Loader';
 import Message from '../components/Message';
 import { listProductDetails } from '../actions/productActions';
 import { addToCart } from '../actions/cartActions';
+import ArrowBackIcon from '@material-ui/icons/ArrowBack';
 
 const useStyles = makeStyles( theme => ({
     root: {
@@ -29,8 +30,19 @@ const useStyles = makeStyles( theme => ({
         justifyContent: "space-between"
     },
     btn: {
+        "&:hover": {
+            backgroundColor: theme.palette.success.main
+        },
         marginBottom: "0.5rem",
-        backgroundColor: theme.palette.success.main
+        backgroundColor: theme.palette.info.dark
+    },
+    backIcon: {
+        "&:hover": {
+            backgroundColor: "black"
+        },
+        backgroundColor: theme.palette.text.secondary,
+        color: "white",
+        marginBottom: "2rem"
     }
 }));
 
@@ -59,7 +71,9 @@ const ProductDetailScreen = ({ history, match }) => {
     return (
         <>
             <Container>
-                <Button variant="contained" color="secondary" component={Link} to={'/products'} style={{ marginBottom: "2rem" }}>Back</Button>
+            <IconButton edge="start" className={classes.backIcon} color="inherit" component={Link} to={'/products'} aria-label="back">
+                <ArrowBackIcon />
+            </IconButton>
             </Container>
             <Container>
                 { loading ? <Loader /> : error ? <Message status="error" text={error} /> : (

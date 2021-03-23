@@ -13,8 +13,8 @@ const PaymentDetailsForm = ({ paymentMethod, paymentMethodChange }) => {
                     value={paymentMethod}
                     onChange={e => paymentMethodChange(e)}
                 >
-                    <FormControlLabel value="paypal" control={<Radio color="primary" />} label="PayPal" />
-                    <FormControlLabel value="stripe" control={<Radio color="primary" />} label="Stripe" />
+                    <FormControlLabel value="PayPal" control={<Radio color="primary" />} label="PayPal" />
+                    <FormControlLabel value="Stripe" control={<Radio color="primary" />} label="Stripe" />
                 </RadioGroup>
             </FormControl>
         </div>
