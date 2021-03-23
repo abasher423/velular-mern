@@ -12,6 +12,7 @@ import ProductCreateScreen  from './screens/ProductCreateScreen';
 import CartScreen from './screens/CartScreen';
 import { Container } from '@material-ui/core';
 import ShippingScreen from './screens/ShippingScreen';
+import PlaceOrderScreen from './screens/PlaceOrderScreen';
 
 const App = () => {
   return (
@@ -29,6 +30,7 @@ const App = () => {
             <Route path='/login' component={UserLoginScreen} exact />
             <Route path='/profile' component={UserProfileScreen} exact />
             <Route path='/shipping' component={ShippingScreen} exact />
+            <Route path='/place-order' component={PlaceOrderScreen} exact />
           </Container>
         </main>
         {/* <Footer /> */}
