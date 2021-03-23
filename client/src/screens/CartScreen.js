@@ -8,6 +8,7 @@ import { Button, Typography, Avatar, Divider, Paper, List, ListItem, ListItemAva
 import makeStyles from '@material-ui/core/styles/makeStyles';
 import { addToCart, deleteFromCart } from '../actions/cartActions';
 import DeleteIcon from '@material-ui/icons/Delete';
+import ArrowBackIcon from '@material-ui/icons/ArrowBack';
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -40,9 +41,20 @@ const useStyles = makeStyles((theme) => ({
         justifyContent: "space-between"
     },
     btn: {
+        "&:hover": {
+            backgroundColor: theme.palette.success.main
+        },
         display: "block",
-        backgroundColor: theme.palette.success.main
-    }
+        backgroundColor: theme.palette.info.dark
+    },
+    backIcon: {
+        "&:hover": {
+            backgroundColor: "black"
+        },
+        backgroundColor: theme.palette.text.secondary,
+        color: "white",
+        marginBottom: "2rem"
+    },
   }));
 
 const CartScreen = ({ match, location, history}) => {
@@ -62,7 +74,7 @@ const CartScreen = ({ match, location, history}) => {
         <Container>
             <Grid container spacing={2}>
                 <Grid item xs={12} md={6}>
-                    <Typography variant="h2" component="h2" className={classes.title}>Shopping Cart</Typography>
+                    <Typography variant="h3" component="h1" className={classes.title}>Shopping Cart</Typography>
                 </Grid>
                 <Grid item xs={12} md={6}>
                     <Card className={classes.root} variant="outlined" align="center">
@@ -80,7 +92,7 @@ const CartScreen = ({ match, location, history}) => {
                         <CardActions>
                             <Button 
                             variant="contained" 
-                            color="secondary" 
+                            color="primary" 
                             size="small"
                             fullWidth
                             className={classes.btn}
@@ -92,7 +104,16 @@ const CartScreen = ({ match, location, history}) => {
                     </Card>
                 </Grid>
             </Grid>
-            <Button variant="contained" color="secondary"  component={Link} to={'/products'}style={{ marginBottom: "2rem"}}>back</Button>
+            <IconButton 
+                edge="start" 
+                className={classes.backIcon} 
+                color="inherit" component={Link} 
+                // to={cartItems ? `/products/${cartItems[cartItems.length-1].productId}` : '/products'} 
+                to={'/products'}
+                aria-label="back"
+            >
+                <ArrowBackIcon />
+            </IconButton>
             {cartItems.length === 0 
                 ?   <div>
                     
