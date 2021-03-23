@@ -23,20 +23,6 @@ const getResponse = (order, type, desc, id) => {
     }
 };
 
-const createOrder = (req) =>  {
-    return {
-        _id: mongoose.Types.ObjectId(),
-        products: req.body.productId,
-        currency: req.body.currency,
-        quantity: req.body.quantity,
-        amount: req.body.amount,
-        method: req.body.method,
-        date: req.body.date,
-        complete: req.body.complete,
-        shipping: req.body.userId
-    }    
-};
-
 // @desc Fetch all orders
 // @route GET /api/orders
 // @access Private
@@ -90,29 +76,35 @@ const orders_get_order = async (req, res) => {
     }
 };
 
+// https://www.udemy.com/course/mern-ecommerce/learn/lecture/22495586?start=150#questions
 // @desc Create an order
 // @route POST /api/odrders
 // @access Public
-const orders_create_order = (req, res) => {
-    Product.findById(req.body.productId)
-        .then(product => {
-            if(!product){
-                return res.status(404).json({ message: 'Product not found' });
-            }
-            const order = new Order(createOrder(req));
-            return order.save();
-        })
-        .then(result => {
-            console.log(result);
-            res.status(201).json({
-                message: 'Order created successfully',
-                createdOrder: getResponse(result, 'GET', 'Get created order', result._id)
+const orders_create_order = async (req, res) => {
+   try {
+        const { orderItems, shippingDetails, paymentMethod, itemsPrice, taxPrice, shippingPrice, totalPrice } = req.body;
+        if (orderItems.length >= 1){
+            const order = new Order({
+                _id: mongoose.Types.ObjectId(),
+                user: req.userData.userId,
+                orderItems, shippingDetails, paymentMethod, itemsPrice, taxPrice, shippingPrice, totalPrice
             });
-        })
-        .catch(err => {
-            console.log(err);
-            res.status(500).json({ error: err });
-        })
+            await order.save();
+            res.status(201).json({order,
+                message: 'Order created successfully',
+                request: {
+                    type: 'GET',
+                    description: 'Get Created Order',
+                    url: `http://localhost:8080/api/orders/${order._id}`
+                }
+            });
+        } else {
+            res.status(400).json({ message: "No items in cart"})
+        }
+    return order.save();
+   } catch (err){
+       res.status(500).json({ error: err });
+   }
 };
 
 // @desc Delete an order

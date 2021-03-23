@@ -3,19 +3,18 @@ const { Schema } = mongoose;
 
 const orderSchema = new Schema({
     _id: { type: mongoose.Schema.ObjectId, required: true },
-    currency: { type: String, required: true },
-    quantity: { type: Number, default: 1 },
-    amount: { type: Number, required: true } ,
-    method: { type: String,  required: true },
+    currency: { type: String, default: 'GBP'},
     date: { type: Date, default: Date.now },
     user: { type: mongoose.Schema.ObjectId, ref: 'User', requireD: true },
-    orderItems: [{ 
-        productName: { type: String, required: true},
+    orderItems: [{
+        productId: { type: mongoose.Schema.ObjectId, ref: 'Product', required: true },
+        name: { type: String, required: true},
         quantity: {type: Number, required: true },
+        price: {type: Number, requireD: true },
         productImage: { type: String, required: true },
-        product: { type: mongoose.Schema.ObjectId, ref: 'Product', required: true }
+        
      }],
-    shipping: {
+    shippingDetails: {
         address: { type: String, required: true },
         city: { type: String, required: true },
         postCode: { type: String, required: true },
