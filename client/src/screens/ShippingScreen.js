@@ -16,6 +16,7 @@ import PaymentDetailsForm from '../components/PaymentDetailsForm';
 import { useDispatch, useSelector } from 'react-redux';
 import { saveShippingDetails } from '../actions/cartActions';
 import { savePaymentMethod } from '../actions/cartActions';
+import ReviewForm from '../components/ReviewForm';
 
 const useStyles = makeStyles((theme) => ({
     appBar: {
@@ -126,9 +127,9 @@ const ShippingScreen = ({ history }) => {
                 paymentMethodChange={addPaymentMethod}
             />;
           case 2:
-            // return <Review />;
+            return <ReviewForm />;
           default:
-            // throw new Error('Unknown step');
+            throw new Error('Unknown step');
         }
     }
 
@@ -150,13 +151,6 @@ const ShippingScreen = ({ history }) => {
           <React.Fragment>
             {activeStep === steps.length ? (
               <React.Fragment>
-                <Typography variant="h5" gutterBottom>
-                  Thank you for your order.
-                </Typography>
-                <Typography variant="subtitle1">
-                  Your order number is #2001539. We have emailed your order confirmation, and will
-                  send you an update when your order has shipped.
-                </Typography>
               </React.Fragment>
             ) : (
               <React.Fragment>
