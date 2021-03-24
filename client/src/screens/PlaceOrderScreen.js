@@ -5,6 +5,10 @@ import { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import ArrowBackIcon from '@material-ui/icons/ArrowBack';
 import { Link } from 'react-router-dom';
+import { createOrder } from '../actions/orderActions';
+import Message from '../components/Message';
+import { USER_DETAILS_RESET } from '../constants/userConstants';
+import { ORDER_CREATE_RESET } from '../constants/orderConstants';
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -49,14 +53,18 @@ const useStyles = makeStyles((theme) => ({
         },
         backgroundColor: theme.palette.text.secondary,
         color: "white"
+    },
+    main: {
+        // marginTop: "2rem"
     }
   }));
 
 const PlaceOrderScreen = ({ history }) => {
     const classes = useStyles();
+    const dispatch = useDispatch();
     const cart = useSelector(state => state.cart);
     if (!cart.shippingDetails.hasOwnProperty('address')){
-        history.push('/cart');
+        history.push('/shipping');
     }
     
     // calculate prices
@@ -65,29 +73,48 @@ const PlaceOrderScreen = ({ history }) => {
     }
     cart.itemsPrice = addDecimals(cart.cartItems.reduce((acc, item) => acc + item.price * item.quantity, 0));
     // shipping price (if total is < £100 then its £10 shipping fee)
-    cart.shippingPrice = addDecimals(cart.itemsPrice > 100 ? 0 : 100);
+    cart.shippingPrice = addDecimals(cart.itemsPrice > 100 ? 0 : 20);
     // 15% tax
     cart.taxPrice = addDecimals(Number((0.05 * cart.itemsPrice).toFixed(2)));
     // total price
     cart.totalPrice = (Number(cart.itemsPrice) + Number(cart.shippingPrice) + Number(cart.taxPrice)).toFixed(2);
 
-    
-    const placeOrderHandler = () => {
+    const orderCreate = useSelector(state => state.orderCreate);
+    const { order, success, error } = orderCreate;
 
+    useEffect(() => {
+        if (success) {
+          history.push(`/orders/${order._id}`)
+          dispatch({ type: USER_DETAILS_RESET });
+          dispatch({ type: ORDER_CREATE_RESET });
+        }
+        // eslint-disable-next-line
+      }, [history, success])
+
+    const placeOrderHandler = () => {
+        dispatch(createOrder({
+            orderItems: cart.cartItems,
+            shippingDetails: cart.shippingDetails,
+            paymentMethod: cart.paymentMethod,
+            itemsPrice: cart.itemsPrice,
+            shippingPrice: cart.shippingPrice,
+            taxPrice: cart.taxPrice,
+            totalPrice: cart.totalPrice
+        }));
     };
 
     return(
-        <Grid container>
+        <Grid container spacing={2}>
             {/* <Container> */}
                 <Grid item xs={12}>
                     <Typography component="h1" variant="h3" align="center">Review Your Order</Typography>
                 </Grid>
-                <Grid item xs={8}>
-                    <Grid item xs={12} className={classes.item}>
-                        <IconButton edge="start" className={classes.backIcon} color="inherit" component={Link} to={'/shipping'} aria-label="back">
-                            <ArrowBackIcon />
-                        </IconButton>
-                    </Grid>
+                <Grid item xs={12} className={classes.item}>
+                <IconButton edge="start" className={classes.backIcon} color="inherit" component={Link} to={'/shipping'} aria-label="back">
+                    <ArrowBackIcon />
+                </IconButton>
+                </Grid>
+                <Grid item xs={8} className={classes.main}>
                     <Grid item xs={12} className={classes.item} >
                         <Typography component="h1" variant="h4"> Shipping Details </Typography>
                     </Grid>
@@ -117,10 +144,10 @@ const PlaceOrderScreen = ({ history }) => {
                     </Grid>
                     <Grid item xs={12}>
                         <List dense className={classes.root}>
-                        {cart.cartItems.map(item => {
+                        {cart.cartItems.map((item, idx) => {
                             return (
                                 <Paper className={classes.drawerPaper}>
-                                    <ListItem key={item.productId} Button>
+                                    <ListItem key={idx}>
                                     <ListItemAvatar style={{margin: "0.5rem 0"}}>
                                         <Avatar alt="product image" src={item.productImage}  className={classes.large}/>
                                     </ListItemAvatar>
@@ -139,7 +166,7 @@ const PlaceOrderScreen = ({ history }) => {
                         </List>
                     </Grid>
                 </Grid>
-                <Grid item xs={4}>
+                <Grid item xs={4} className={classes.main}>
                     <Card className={classes.root} variant="outlined" align="center">
                         <CardContent justify="space-between">
                             <div>
@@ -164,6 +191,9 @@ const PlaceOrderScreen = ({ history }) => {
                             <div className={classes.box}>
                                 <Typography variant="h6">Total</Typography>
                                 <Typography>£{cart.totalPrice}</Typography>
+                            </div>
+                            <div>
+                            {error && <Message status="error" text={error} />}
                             </div>
                         </CardContent>
                         <CardActions>

@@ -8,7 +8,7 @@ import Stepper from '@material-ui/core/Stepper';
 import Step from '@material-ui/core/Step';
 import StepLabel from '@material-ui/core/StepLabel';
 import Button from '@material-ui/core/Button';
-import Link from '@material-ui/core/Link';
+import Message from '../components/Message';
 import Typography from '@material-ui/core/Typography';
 import { useState } from 'react';
 import ShippingForm from '../components/ShippingForm';
@@ -17,6 +17,9 @@ import { useDispatch, useSelector } from 'react-redux';
 import { saveShippingDetails } from '../actions/cartActions';
 import { savePaymentMethod } from '../actions/cartActions';
 import ReviewForm from '../components/ReviewForm';
+import { IconButton } from '@material-ui/core';
+import ArrowBackIcon from '@material-ui/icons/ArrowBack';
+import { Link } from 'react-router-dom';
 
 const useStyles = makeStyles((theme) => ({
     appBar: {
@@ -53,6 +56,13 @@ const useStyles = makeStyles((theme) => ({
       marginTop: theme.spacing(3),
       marginLeft: theme.spacing(1),
     },
+    backIcon: {
+        "&:hover": {
+            backgroundColor: "black"
+        },
+        backgroundColor: theme.palette.text.secondary,
+        color: "white"
+    }
   }));
 
 const steps = ['Shipping Address', 'Payment Details', 'Review Your Order'];
@@ -67,6 +77,7 @@ const ShippingScreen = ({ history }) => {
     const [postCode, setPostCode] = useState(shippingDetails.postCode ? shippingDetails.postCode : '');
     const [country, setCountry] = useState(shippingDetails.country ? shippingDetails.country : '');
     const [paymentMethod, setPaymentMethod] = useState('');
+    const [message, setMessage] = useState('');
 
     const dispatch = useDispatch();
  
@@ -81,8 +92,10 @@ const ShippingScreen = ({ history }) => {
     const submitHandler = (e) => {
         if (address === '' || city === '' || postCode === '' || country === ''){
             setActiveStep(0)
+            setMessage('Missing required fields');
         } else if (paymentMethod === ''){
             setActiveStep(1);
+            setMessage('Missing Payment Method');
         } else {
             e.preventDefault();
             dispatch(saveShippingDetails({ address, city, postCode, country }));
@@ -106,7 +119,6 @@ const ShippingScreen = ({ history }) => {
     const addPaymentMethod = (e) => {
         setPaymentMethod(e.target.value);
     }
-    console.log(paymentMethod)
 
     function getStepContent(step) {
         switch (step) {
@@ -141,6 +153,10 @@ const ShippingScreen = ({ history }) => {
           <Typography component="h1" variant="h4" align="center">
             Shipping
           </Typography>
+          <IconButton edge="start" className={classes.backIcon} color="inherit" component={Link} to={'/cart'} aria-label="back">
+              <ArrowBackIcon />
+          </IconButton>
+          {message && <Message status="error" text={message} />}
           <Stepper activeStep={activeStep} className={classes.stepper}>
             {steps.map((label) => (
               <Step key={label}>

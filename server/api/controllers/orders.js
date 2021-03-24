@@ -4,37 +4,13 @@ import Product from '../models/product.js';
 
 const getResponse = (order, type, desc, id) => {
     return {
-        _id: order._id,
-        currency: order.currency,
-        quantity: order.quantity,
-        amount: order.amount,
-        date: order.date,
-        shipping: order.shipping,
-        products: order.products,
-        payment: {
-            method: order.method
-        },
-        complete: order.complete,
+        order,
         request: {
             type: type,
             description: desc,
             url: `http://localhost:3000/api/orders/${id}`
         }
     }
-};
-
-const createOrder = (req) =>  {
-    return {
-        _id: mongoose.Types.ObjectId(),
-        products: req.body.productId,
-        currency: req.body.currency,
-        quantity: req.body.quantity,
-        amount: req.body.amount,
-        method: req.body.method,
-        date: req.body.date,
-        complete: req.body.complete,
-        shipping: req.body.userId
-    }    
 };
 
 // @desc Fetch all orders
@@ -76,11 +52,21 @@ const orders_get_order = async (req, res) => {
     try {
         const order = await Order
         .findById(req.params.orderId)
-        .populate('products', 'name price quantity')
-        .populate('shipping', 'email fullName street city country stat postcode');
+        .select('user shippingDetails orderItems paymentMethod currency itemsPrice taxPrice totalPrice shippingPrice isPaid isComplete')
+        .populate('user', '_id firstName lastName email');
         if (order){
-            console.log(order);
-            res.status(200).json(getResponse(order, 'GET', 'Get all orders', ''));
+            // if (req.userData.userId == order.user._id){
+                res.status(200).json({
+                    order: order,
+                    request: {
+                        type: 'GET',
+                        description: 'Fetch all orders',
+                        url: 'http://localhost:8080/api/orders'
+                    }
+                });
+            // } else {
+                // res.status(401).json({ message: 'Unauthorized'});
+            // }
         } else {
             res.status(404).json({ message: 'order not found' });
         }
@@ -90,29 +76,34 @@ const orders_get_order = async (req, res) => {
     }
 };
 
+// https://www.udemy.com/course/mern-ecommerce/learn/lecture/22495586?start=150#questions
 // @desc Create an order
 // @route POST /api/odrders
 // @access Public
-const orders_create_order = (req, res) => {
-    Product.findById(req.body.productId)
-        .then(product => {
-            if(!product){
-                return res.status(404).json({ message: 'Product not found' });
-            }
-            const order = new Order(createOrder(req));
-            return order.save();
-        })
-        .then(result => {
-            console.log(result);
-            res.status(201).json({
-                message: 'Order created successfully',
-                createdOrder: getResponse(result, 'GET', 'Get created order', result._id)
+const orders_create_order = async (req, res) => {
+   try {
+        const { orderItems, shippingDetails, paymentMethod, itemsPrice, taxPrice, shippingPrice, totalPrice } = req.body;
+        if (orderItems.length >= 1){
+            const order = new Order({
+                _id: new mongoose.Types.ObjectId(),
+                user: req.userData.userId,
+                orderItems, shippingDetails, paymentMethod, itemsPrice, taxPrice, shippingPrice, totalPrice
             });
-        })
-        .catch(err => {
-            console.log(err);
-            res.status(500).json({ error: err });
-        })
+            await order.save();
+            res.status(201).json({order,
+                message: 'Order created successfully',
+                request: {
+                    type: 'GET',
+                    description: 'Get Created Order',
+                    url: `http://localhost:8080/api/orders/${order._id}`
+                }
+            });
+        } else {
+            res.status(400).json({ message: "No items in cart"})
+        }
+   } catch (err){
+       res.status(500).json({ error: err });
+   }
 };
 
 // @desc Delete an order
