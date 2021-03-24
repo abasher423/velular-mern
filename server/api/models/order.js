@@ -27,11 +27,13 @@ const orderSchema = new Schema({
         email: { type: String }
     },
     paymentMethod: { type: String, required: true},
+    itemsPrice: { type: Number, required: true, default: 0.00},
     taxPrice: { type: Number, required: true, default: 0.00 },
     totalPrice: { type: Number, required: true, default: 0.00 },
     shippingPrice: { type: Number, required: true, default: false},
     isPaid: { type: Boolean, required: true, default: false },
     paidAt: { type: Date },
+    isDelivered: {type: Boolean, required: true, default: false},
     DeliveredAt: { type: Date },
     isComplete: { type: Boolean, default: false }
 });
