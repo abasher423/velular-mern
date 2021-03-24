@@ -17,6 +17,9 @@ import { useDispatch, useSelector } from 'react-redux';
 import { saveShippingDetails } from '../actions/cartActions';
 import { savePaymentMethod } from '../actions/cartActions';
 import ReviewForm from '../components/ReviewForm';
+import { IconButton } from '@material-ui/core';
+import ArrowBackIcon from '@material-ui/icons/ArrowBack';
+import { Link } from 'react-router-dom';
 
 const useStyles = makeStyles((theme) => ({
     appBar: {
@@ -53,6 +56,13 @@ const useStyles = makeStyles((theme) => ({
       marginTop: theme.spacing(3),
       marginLeft: theme.spacing(1),
     },
+    backIcon: {
+        "&:hover": {
+            backgroundColor: "black"
+        },
+        backgroundColor: theme.palette.text.secondary,
+        color: "white"
+    }
   }));
 
 const steps = ['Shipping Address', 'Payment Details', 'Review Your Order'];
@@ -143,6 +153,9 @@ const ShippingScreen = ({ history }) => {
           <Typography component="h1" variant="h4" align="center">
             Shipping
           </Typography>
+          <IconButton edge="start" className={classes.backIcon} color="inherit" component={Link} to={'/cart'} aria-label="back">
+              <ArrowBackIcon />
+          </IconButton>
           {message && <Message status="error" text={message} />}
           <Stepper activeStep={activeStep} className={classes.stepper}>
             {steps.map((label) => (

@@ -19,7 +19,7 @@ const SlideShow = () => {
         }} >
             <div style={{
                 textAlign: "center",
-                marginTop: "150px",
+                // marginTop: "150px",
                 height: "500px"
                 }}>
                 <Link to={'/products'}>
@@ -28,7 +28,7 @@ const SlideShow = () => {
             </div>
             <div style={{
                 textAlign: "center",
-                marginTop: "150px",
+                // marginTop: "150px",
                 height: "500px"
                 }}>
                 <Link to={'/products'}>
@@ -37,7 +37,7 @@ const SlideShow = () => {
             </div>
             <div style={{
                 textAlign: "center",
-                marginTop: "150px",
+                // marginTop: "150px",
                 height: "500px"
                 }}>
                 <Link to={'/products'}>

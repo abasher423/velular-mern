@@ -7,6 +7,8 @@ import ArrowBackIcon from '@material-ui/icons/ArrowBack';
 import { Link } from 'react-router-dom';
 import { createOrder } from '../actions/orderActions';
 import Message from '../components/Message';
+import { USER_DETAILS_RESET } from '../constants/userConstants';
+import { ORDER_CREATE_RESET } from '../constants/orderConstants';
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -71,7 +73,7 @@ const PlaceOrderScreen = ({ history }) => {
     }
     cart.itemsPrice = addDecimals(cart.cartItems.reduce((acc, item) => acc + item.price * item.quantity, 0));
     // shipping price (if total is < £100 then its £10 shipping fee)
-    cart.shippingPrice = addDecimals(cart.itemsPrice > 100 ? 0 : 100);
+    cart.shippingPrice = addDecimals(cart.itemsPrice > 100 ? 0 : 20);
     // 15% tax
     cart.taxPrice = addDecimals(Number((0.05 * cart.itemsPrice).toFixed(2)));
     // total price
@@ -81,10 +83,13 @@ const PlaceOrderScreen = ({ history }) => {
     const { order, success, error } = orderCreate;
 
     useEffect(() => {
-        if (success){
-            history.push(`/orders/${order._id}`);
+        if (success) {
+          history.push(`/orders/${order._id}`)
+          dispatch({ type: USER_DETAILS_RESET });
+          dispatch({ type: ORDER_CREATE_RESET });
         }
-    }, [history, success])
+        // eslint-disable-next-line
+      }, [history, success])
 
     const placeOrderHandler = () => {
         dispatch(createOrder({
