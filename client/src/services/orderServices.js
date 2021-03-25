@@ -7,8 +7,12 @@ const indexOne = (orderId, token) => {
 const create = (orderData, token) => {
     return api().post('/orders', orderData, token);
 }
+const updateToPaid = (orderId, orderData, token) => {
+    return api().put(`/orders/${orderId}/pay`, orderData, token);
+}
 
 export default{
     indexOne,
-    create
+    create,
+    updateToPaid
 }
