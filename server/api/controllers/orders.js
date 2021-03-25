@@ -52,7 +52,7 @@ const orders_get_order = async (req, res) => {
     try {
         const order = await Order
         .findById(req.params.orderId)
-        .select('user shippingDetails orderItems paymentMethod currency itemsPrice taxPrice totalPrice shippingPrice isPaid isComplete')
+        .select('user shippingDetails orderItems paymentMethod currency itemsPrice taxPrice totalPrice shippingPrice isPaid paidAt isComplete')
         .populate('user', '_id firstName lastName email');
         if (order){
             // if (req.userData.userId == order.user._id){
@@ -106,6 +106,35 @@ const orders_create_order = async (req, res) => {
    }
 };
 
+// @desc Update an order to paid
+// @route PATCH /api/odrders
+// @access Private
+// https://github.com/bradtraversy/proshop_mern/blob/master/backend/controllers/orderController.js
+const order_update_paid = async (req, res) => {
+    try {
+        const order = await Order.findById(req.params.orderId);
+        console.log(order)
+        if (order){
+            // set order to paid
+            let date = new Date( Date.now() );
+            order.isPaid = true;
+            order.paidAt = date.toUTCString();
+            order.paymentResuslt = {
+                id: req.body.id,
+                status: req.body.status,
+                update_time: req.body.update_time,
+                email_address: req.body.payer.email_address
+            };
+            const updatedOrder = await order.save();
+            res.status(200).json(order);
+        } else {
+            res.status(400).json({ message: 'Invalid request'});
+        }
+    } catch (err){
+        res.status(500).json({ error: err });
+    }
+}
+
 // @desc Delete an order
 // @route DELETE /api/odrders
 // @access Private
@@ -149,5 +178,6 @@ export default {
     orders_get_all,
     orders_create_order,
     orders_get_order,
+    order_update_paid,
     orders_delete_order
 };

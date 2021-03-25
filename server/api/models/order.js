@@ -23,8 +23,8 @@ const orderSchema = new Schema({
     paymentResult: {
         _id: { type: String },
         status: { type: String },
-        updateTime: { type: String },
-        email: { type: String }
+        update_time: { type: String },
+        email_address: { type: String }
     },
     paymentMethod: { type: String, required: true},
     itemsPrice: { type: Number, required: true, default: 0.00},
