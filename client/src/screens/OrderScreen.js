@@ -2,14 +2,17 @@ import { Avatar, Button, Card, CardActions, CardContent, Container, Divider, Gri
 } from '@material-ui/core';
 import makeStyles from '@material-ui/core/styles/makeStyles';
 import React from 'react';
-import { useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import ArrowBackIcon from '@material-ui/icons/ArrowBack';
 import { Link } from 'react-router-dom';
-import { getOrderDetails } from '../actions/orderActions';
+import { getOrderDetails, payOrder } from '../actions/orderActions';
 import Message from '../components/Message';
 import Loader from '../components/Loader';
 import Alert from '@material-ui/lab/Alert';
+import { PayPalButton } from 'react-paypal-button-v2';
+import AuthenticationServices from '../services/AuthenticationServices';
+import { ORDER_PAY_RESET } from '../constants/orderConstants';
 
 
 const useStyles = makeStyles((theme) => ({
@@ -63,6 +66,7 @@ const useStyles = makeStyles((theme) => ({
 
 const OrderScreen = ({ match }) => {
     const orderId = match.params.orderId;
+    const [sdkReady, setSdkReady] = useState(false);
     
     const dispatch = useDispatch();
     const classes = useStyles();
@@ -70,14 +74,42 @@ const OrderScreen = ({ match }) => {
     const orderDetails = useSelector(state => state.orderDetails);
     const { order, loading, error } = orderDetails;
 
+    const orderPay = useSelector(state => state.orderPay);
+    const { loading:loadingPay, success:successPay } = orderPay;
+
     useEffect(() => {
-        if(!order || order._id !== orderId) {
-            dispatch(getOrderDetails(orderId))
+        const addPayPalScript = async () => {
+            const { data: clientId } = await AuthenticationServices.paypal();
+            const script = document.createElement('script');
+            script.type = 'text/javascript';
+            script.src = `https://www.paypal.com/sdk/js?client-id=${clientId}`;
+            script.async = true;
+            script.onload = () => {
+                setSdkReady(true);
+            };
+            document.body.appendChild(script);
         }
-    }, [order, orderId]);
+        
+
+        if(!order || order._id !== orderId || successPay) {
+            dispatch({ type: ORDER_PAY_RESET });
+            dispatch(getOrderDetails(orderId));
+        } else if(!order.isPaid){
+            if(!window.paypal){
+                addPayPalScript();
+            } else {
+                setSdkReady(true);
+            }
+        }
+    }, [dispatch, order, orderId, successPay]);
     
     const addDecimals = (num) => {
         return (Math.round(num * 100) / 100).toFixed(2);
+    }
+    
+    const successPaymentHandler = (paymentResult) => {
+        console.log(paymentResult);
+        dispatch(payOrder(orderId, paymentResult));
     }
 
     return loading ? <Loader /> : error ? <Message status="error" text={error} /> : <>
@@ -186,9 +218,17 @@ const OrderScreen = ({ match }) => {
                             <Typography>£{addDecimals(order.totalPrice)}</Typography>
                         </div>
                     </CardContent>
-                    <CardActions>
-                    {/* Button */}
-                    </CardActions>
+                    {!order.isPaid && (
+                        <CardContent>
+                            {loadingPay && <Loader />}
+                            {!sdkReady ? <Loader /> : (
+                                <PayPalButton 
+                                    amount={order.totalPrice} 
+                                    onSuccess={successPaymentHandler}
+                                />
+                            )}
+                        </CardContent>
+                    )}
                 </Card>
             </Grid>
         </Grid>

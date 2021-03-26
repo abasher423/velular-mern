@@ -54,6 +54,9 @@ app.use('/api/cart', cartRoutes);
 app.use('/api/users', userRoutes);
 app.use('/api/reviews', reviewRoutes);
 
+// paypal route to fetch client ID
+app.get('/api/config/paypal', (req, res) => res.send(process.env.PAYPAL_CLIENT_ID));
+
 app.use((req,res,next) => {
     const error = new Error('Incorrect URL Page Not Found');
     error.status = 404;

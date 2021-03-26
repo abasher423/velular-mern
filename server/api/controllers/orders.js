@@ -52,7 +52,7 @@ const orders_get_order = async (req, res) => {
     try {
         const order = await Order
         .findById(req.params.orderId)
-        .select('user shippingDetails orderItems paymentMethod currency itemsPrice taxPrice totalPrice shippingPrice isPaid isComplete')
+        .select('user shippingDetails orderItems paymentMethod currency itemsPrice taxPrice totalPrice shippingPrice isPaid paidAt isComplete')
         .populate('user', '_id firstName lastName email');
         if (order){
             // if (req.userData.userId == order.user._id){
@@ -106,6 +106,74 @@ const orders_create_order = async (req, res) => {
    }
 };
 
+const orders_get_user = async (req, res) => {
+    try {
+        if (req.userData.userId === req.params.userId){
+            const orders = await Order.find({ user: req.params.userId}); // find orders with matching userId
+            console.log(orders)
+            if (orders.length >= 1){
+                res.status(200).json({
+                    count: orders.length,
+                    orders: orders.map(order => {
+                        return {
+                            _id: order._id,
+                            user: order.user,
+                            shippingDetails: order.shippingDetails,
+                            orderItems: order.orderItems,
+                            date: order.date,
+                            currency: order.currency,
+                            itemsPrice: order.itemsPrice,
+                            taxPrice: order.taxPrice,
+                            totalPrice: order.totalPrice,
+                            shippingPrice: order.shippingPrice,
+                            paymentMethod: order.paymentMethod,
+                            paidAt: order.paidAt,
+                            isPaid: order.isPaid,
+                            isDelivered: order.isDelivered,
+                            isComplete: order.isComplete
+                        }
+                    })
+                })
+            } else {
+                res.status(400).json({ message: 'No entry exists' });
+            }
+        } else {
+            res.status(401).json({ message: 'Authentication Failed' });
+        }
+    } catch (err){
+        res.status(500).json({ error: err });
+    }
+}
+
+// @desc Update an order to paid
+// @route PATCH /api/odrders
+// @access Private
+// https://github.com/bradtraversy/proshop_mern/blob/master/backend/controllers/orderController.js
+const order_update_paid = async (req, res) => {
+    try {
+        const order = await Order.findById(req.params.orderId);
+        console.log(order)
+        if (order){
+            // set order to paid
+            let date = new Date( Date.now() );
+            order.isPaid = true;
+            order.paidAt = date.toUTCString();
+            order.paymentResuslt = {
+                id: req.body.id,
+                status: req.body.status,
+                update_time: req.body.update_time,
+                email_address: req.body.payer.email_address
+            };
+            const updatedOrder = await order.save();
+            res.status(200).json(order);
+        } else {
+            res.status(400).json({ message: 'Invalid request'});
+        }
+    } catch (err){
+        res.status(500).json({ error: err });
+    }
+}
+
 // @desc Delete an order
 // @route DELETE /api/odrders
 // @access Private
@@ -149,5 +217,7 @@ export default {
     orders_get_all,
     orders_create_order,
     orders_get_order,
+    orders_get_user,
+    order_update_paid,
     orders_delete_order
 };

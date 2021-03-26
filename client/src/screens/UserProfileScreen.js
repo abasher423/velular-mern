@@ -1,10 +1,12 @@
-import { Button, Checkbox, Container, FormControlLabel, Grid, makeStyles, TextField, Typography } from '@material-ui/core';
+import { Button, Checkbox, Container, FormControlLabel, Grid, makeStyles, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TextField, Typography, withStyles } from '@material-ui/core';
 import React from 'react';
 import { useState, useEffect } from 'react';
+import ClearIcon from '@material-ui/icons/Clear';
 import { useDispatch, useSelector } from 'react-redux';
 import Message from '../components/Message';
 import Loader from '../components/Loader';
 import { getUserDetails, updateUserProfile } from '../actions/userActions';
+import { listUserOrder } from '../actions/orderActions';
 import jwt from 'jwt-decode'
 import { USER_LOGIN, USER_LOGOUT, USER_UPDATE_RESET } from '../constants/userConstants';
 
@@ -20,10 +22,37 @@ const useStyles = makeStyles(theme => ({
             backgroundColor: theme.palette.success.main,
           }
       },
+      clear: {
+          color: "red"
+      },
+      table: {
+        minWidth: 700,
+      },
+      title: {
+        marginBottom: "4rem"
+      },
       checkbox: {
         //   marginTop: "2rem"
       }
 }));
+
+const StyledTableCell = withStyles((theme) => ({
+    head: {
+      backgroundColor: theme.palette.common.black,
+      color: theme.palette.common.white,
+    },
+    body: {
+      fontSize: 14,
+    },
+  }))(TableCell);
+
+  const StyledTableRow = withStyles((theme) => ({
+    root: {
+      '&:nth-of-type(odd)': {
+        backgroundColor: theme.palette.action.hover,
+      },
+    },
+  }))(TableRow);
 
 const UserProfileScreen = ({ history }) => {
     const classes = useStyles();
@@ -46,6 +75,9 @@ const UserProfileScreen = ({ history }) => {
     const userUpdate = useSelector(state => state.userUpdate);
     const { success } = userUpdate;
 
+    const orderListUser = useSelector(state => state.orderListUser);
+    const { loading: loadingOrders, error: errorOrders, orders } = orderListUser;
+
     useEffect(() => {
         if (!userInfo){
             history.push('/login');
@@ -53,6 +85,7 @@ const UserProfileScreen = ({ history }) => {
             if (!user || success){
                 dispatch({ type: USER_UPDATE_RESET });
                 dispatch(getUserDetails(jwt(userInfo.token).userId));
+                dispatch(listUserOrder(jwt(userInfo.token).userId));
                 
             } else {
                 setFirstName(user.firstName);
@@ -62,8 +95,8 @@ const UserProfileScreen = ({ history }) => {
             }
         }
         
-    }, [dispatch, history, userInfo, user]) // we want to set variables when user changes
-console.log(4)
+    }, [dispatch, history, userInfo, user, success]) // we want to set variables when user changes
+
     const userData = [
         {propName: "firstName", value: null},
         {propName: "lastName", value: null},
@@ -113,100 +146,147 @@ console.log(4)
 
     return (
         <Container component="main" >
-            <Typography component="h1" variant="h3">Profile</Typography>
-            <Grid container>
-            {success && <Message status="success" text={"Profile Updated"}/>}
-            {message && <Message status="info" text={message}/>}
-            {error && <Message status="error" text={error} />}
-            {loading && <Loader />}
-            <form className={classes.form}>
-                <Grid item xs={5}>
-                    <Grid item xs={12}>
-                        <TextField 
-                            variant="standard"
-                            margin="normal"
-                            autoComplete="true"
-                            fullWidth
-                            id="firstName"
-                            label="First Name"
-                            value={firstName}
-                            onChange={firstNameHandler}
-                            name="firstName"
-                        />
+            <Typography variant="h3" component="h2" allign="center" className={classes.title}>Profile</Typography>
+            <Grid container spacing={4}>
+                <form className={classes.form}>
+                    <Grid container spacing={4}>
+                        <Grid item xs={4}>
+                            <Grid item xs={12}>
+                                <Typography component="h1" variant="h3">Edit</Typography>
+                                {success && <Message status="success" text={"Profile Updated"}/>}
+                                {message && <Message status="info" text={message}/>}
+                                {error && <Message status="error" text={error} />}
+                                {loading && <Loader />}
+                            </Grid>
+                            <Grid item xs={12}>
+                                <TextField 
+                                    variant="standard"
+                                    margin="normal"
+                                    autoComplete="true"
+                                    fullWidth
+                                    id="firstName"
+                                    label="First Name"
+                                    value={firstName}
+                                    onChange={firstNameHandler}
+                                    name="firstName"
+                                />
+                            </Grid>
+                            <Grid item xs={12}>
+                                <TextField 
+                                    variant="standard"
+                                    margin="normal"
+                                    autoComplete="true"
+                                    fullWidth
+                                    id="lastName"
+                                    label="Last Name"
+                                    value={lastName}
+                                    onChange={lastNameHandler}
+                                    name="lastName"
+                                />
+                            </Grid>
+                            <Grid item xs={12}>
+                                <TextField 
+                                    variant="standard"
+                                    margin="normal"
+                                    autoComplete="true"
+                                    fullWidth
+                                    id="email"
+                                    label="Email Address"
+                                    value={email}
+                                    onChange={emailHandler}
+                                    name="email"
+                                />
+                            </Grid>
+                            <Grid item xs={12}>
+                            <FormControlLabel
+                                className={classes.checkbox}
+                                control={<Checkbox 
+                                    onChange={roleHandler} 
+                                    checked={role === 'artist'? true : false}
+                                    color="primary" />}
+                                label="I am an artist"
+                            />
+                            </Grid>
+                            <Grid item xs={12}>
+                                <TextField 
+                                    variant="standard"
+                                    margin="normal"
+                                    fullWidth
+                                    id="password"
+                                    label="New Password"
+                                    value={password}
+                                    onChange={passwordHandler}
+                                    name="password"
+                                />
+                            </Grid>
+                            <Grid item xs={12}>
+                                <TextField 
+                                    variant="standard"
+                                    margin="normal"
+                                    fullWidth
+                                    id="confirmPassword"
+                                    label="Confirm Password"
+                                    value={confirmPassword}
+                                    onChange={confirmPasswordHandler}
+                                    name="confirmPassword"
+                                />
+                            </Grid>
+                            <Grid item xs={12}>
+                                <Button
+                                    type="submit"
+                                    variant="contained"
+                                    fullWidth
+                                    onClick={submitHandler}
+                                    className={classes.submit}
+                                >
+                                    update
+                                </Button>
+                            </Grid>
+                        </Grid>
+                        <Grid item xs={8}>
+                            <Grid item xs={12}>
+                                <Typography variant="h3" component="h1">My Orders</Typography>
+                                {loadingOrders ? <Loader /> : errorOrders 
+                                ? <Message status="error" text={errorOrders}/> : (
+                                    <TableContainer component={Paper}>
+                                        <Table classNAme={classes.table} aria-label="orders table">
+                                            <TableHead>
+                                                <StyledTableRow>
+                                                   <StyledTableCell allign="right">Order ID</StyledTableCell> 
+                                                   <StyledTableCell allign="right">Date</StyledTableCell> 
+                                                   <StyledTableCell allign="right">Total</StyledTableCell> 
+                                                   <StyledTableCell allign="right">paid</StyledTableCell> 
+                                                   <StyledTableCell allign="right">Delivered</StyledTableCell> 
+                                                   <StyledTableCell allign="right"></StyledTableCell> 
+                                                </StyledTableRow>
+                                            </TableHead>
+                                            <TableBody>
+                                                {orders.map(order => (
+                                                    <StyledTableRow key={order._id}>
+                                                        <StyledTableCell component="th" scope="row">
+                                                            {order._id}    
+                                                        </StyledTableCell>
+                                                        <StyledTableCell>{order.date.substring(0, 10)}</StyledTableCell>
+                                                        <StyledTableCell>{order.totalPrice}</StyledTableCell> 
+                                                        <StyledTableCell>{order.isPaid ? order.paidAt.substring(0, 10) : (
+                                                            <ClearIcon className={classes.clear}/>
+                                                        )}</StyledTableCell> 
+                                                        <StyledTableCell>{order.isDelivered ? order.deliveredAt.substring(0, 10) : (
+                                                            <ClearIcon className={classes.clear}/>
+                                                        )}</StyledTableCell>
+                                                        <StyledTableCell>
+                                                              <Button variant="contained">Details</Button>  
+                                                        </StyledTableCell> 
+                                                    </StyledTableRow>
+                                                ))}
+                                            </TableBody>
+                                        </Table>
+                                    </TableContainer>
+                                )}
+                            </Grid>
+                        </Grid>
                     </Grid>
-                    <Grid item xs={12}>
-                        <TextField 
-                            variant="standard"
-                            margin="normal"
-                            autoComplete="true"
-                            fullWidth
-                            id="lastName"
-                            label="Last Name"
-                            value={lastName}
-                            onChange={lastNameHandler}
-                            name="lastName"
-                        />
-                    </Grid>
-                    <Grid item xs={12}>
-                        <TextField 
-                            variant="standard"
-                            margin="normal"
-                            autoComplete="true"
-                            fullWidth
-                            id="email"
-                            label="Email Address"
-                            value={email}
-                            onChange={emailHandler}
-                            name="email"
-                        />
-                    </Grid>
-                    <Grid item xs={12}>
-                    <FormControlLabel
-                        className={classes.checkbox}
-                        control={<Checkbox 
-                            onChange={roleHandler} 
-                            checked={role === 'artist'? true : false}
-                            color="primary" />}
-                        label="I am an artist"
-                    />
-                    </Grid>
-                    <Grid item xs={12}>
-                        <TextField 
-                            variant="standard"
-                            margin="normal"
-                            fullWidth
-                            id="password"
-                            label="New Password"
-                            value={password}
-                            onChange={passwordHandler}
-                            name="password"
-                        />
-                    </Grid>
-                    <Grid item xs={12}>
-                        <TextField 
-                            variant="standard"
-                            margin="normal"
-                            fullWidth
-                            id="confirmPassword"
-                            label="Confirm Password"
-                            value={confirmPassword}
-                            onChange={confirmPasswordHandler}
-                            name="confirmPassword"
-                        />
-                    </Grid>
-                    <Grid item xs={12}>
-                        <Button
-                            type="submit"
-                            variant="contained"
-                            fullWidth
-                            onClick={submitHandler}
-                            className={classes.submit}
-                        >
-                            update
-                        </Button>
-                    </Grid>
-                </Grid>
-            </form>
+                </form>
             </Grid>
         </Container>
     );
