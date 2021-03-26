@@ -106,6 +106,45 @@ const orders_create_order = async (req, res) => {
    }
 };
 
+const orders_get_user = async (req, res) => {
+    try {
+        if (req.userData.userId === req.params.userId){
+            const orders = await Order.find({ user: req.params.userId}); // find orders with matching userId
+            console.log(orders)
+            if (orders.length >= 1){
+                res.status(200).json({
+                    count: orders.length,
+                    orders: orders.map(order => {
+                        return {
+                            _id: order._id,
+                            user: order.user,
+                            shippingDetails: order.shippingDetails,
+                            orderItems: order.orderItems,
+                            date: order.date,
+                            currency: order.currency,
+                            itemsPrice: order.itemsPrice,
+                            taxPrice: order.taxPrice,
+                            totalPrice: order.totalPrice,
+                            shippingPrice: order.shippingPrice,
+                            paymentMethod: order.paymentMethod,
+                            paidAt: order.paidAt,
+                            isPaid: order.isPaid,
+                            isDelivered: order.isDelivered,
+                            isComplete: order.isComplete
+                        }
+                    })
+                })
+            } else {
+                res.status(400).json({ message: 'No entry exists' });
+            }
+        } else {
+            res.status(401).json({ message: 'Authentication Failed' });
+        }
+    } catch (err){
+        res.status(500).json({ error: err });
+    }
+}
+
 // @desc Update an order to paid
 // @route PATCH /api/odrders
 // @access Private
@@ -178,6 +217,7 @@ export default {
     orders_get_all,
     orders_create_order,
     orders_get_order,
+    orders_get_user,
     order_update_paid,
     orders_delete_order
 };
