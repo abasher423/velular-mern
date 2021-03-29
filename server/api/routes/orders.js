@@ -14,6 +14,6 @@ router.put('/:orderId/pay', checkAuth(), OrdersController.order_update_paid);
 
 router.post('/', checkAuth(), OrdersController.orders_create_order);
 
-router.delete('/:orderId', checkAuth('admin'), OrdersController.orders_delete_order);
+router.delete('/:orderId', OrdersController.orders_delete_order);
 
 export default router;

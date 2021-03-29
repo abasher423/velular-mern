@@ -4,7 +4,7 @@ const { Schema } = mongoose;
 const orderSchema = new Schema({
     _id: { type: mongoose.Schema.ObjectId, required: true },
     currency: { type: String, default: 'GBP'},
-    date: { type: Date, default: Date.now },
+    date: { type: String, default: (new Date (Date.now())).toUTCString() },
     user: { type: mongoose.Schema.ObjectId, ref: 'User', requireD: true },
     orderItems: [{
         productId: { type: mongoose.Schema.ObjectId, ref: 'Product', required: true },
@@ -32,7 +32,7 @@ const orderSchema = new Schema({
     totalPrice: { type: Number, required: true, default: 0.00 },
     shippingPrice: { type: Number, required: true, default: false},
     isPaid: { type: Boolean, required: true, default: false },
-    paidAt: { type: Date },
+    paidAt: { type: String },
     isDelivered: {type: Boolean, required: true, default: false},
     DeliveredAt: { type: Date },
     isComplete: { type: Boolean, default: false }
