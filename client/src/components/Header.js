@@ -63,6 +63,7 @@ const Header = ({ history }) => {
     const dispatch = useDispatch();
 
     const [anchorEl, setAnchorEl] = useState(null);
+    const [anchrolEl2, setAnchorEl2] = useState(null);
 
 
 
@@ -72,10 +73,18 @@ const Header = ({ history }) => {
     const handleClick = (event) => {
         setAnchorEl(event.currentTarget);
       };
+
+    const adminHandleClick = (e) => {
+        setAnchorEl2(e.currentTarget);
+    }
     
     const handleClose = () => {
         setAnchorEl(null);
     };
+
+    const adminHandleClose = () => {
+        setAnchorEl2(null);
+    }
     const logoutHandler = () => {
         dispatch(logout());
         setAnchorEl(null);
@@ -124,9 +133,6 @@ const Header = ({ history }) => {
                                 onClose={handleClose}
                             >
                                 <MenuItem component={Link} to={'/profile'} onClick={handleClose}>Profile</MenuItem>
-                                <MenuItem component={Link} to={'/account'} onClick={handleClose}>Account</MenuItem>
-                                <MenuItem component={Link} to={'/orders'} onClick={handleClose}>Orders</MenuItem>
-                                <MenuItem component={Link} to={'/help'} onClick={handleClose}>Help</MenuItem>
                                 <MenuItem component={Link} to={'/login'} onClick={logoutHandler}>Logout</MenuItem>
                             </Menu>
                         </div>
@@ -134,6 +140,25 @@ const Header = ({ history }) => {
                     <IconButton edge="start" className={classes.icons} component={Link} to={'/login'} color="inherit" aria-label="login">
                         <PersonOutlineOutlinedIcon />
                     </IconButton>}
+                    {userInfo && userInfo.role === 'admin' && (
+                        <div style={{margin: "0 1rem"}}>
+                        <Button 
+                            onClick={adminHandleClick}>
+                                Admin
+                            </Button>
+                        <Menu
+                            id="admin menu"
+                            anchorEl={anchrolEl2}
+                            keepMounted
+                            open={Boolean(anchrolEl2)}
+                            onClose={adminHandleClose}
+                        >
+                            <MenuItem component={Link} to={'/users-list'} onClick={adminHandleClose}>Users</MenuItem>
+                            <MenuItem component={Link} to={'/users-list'} onClick={adminHandleClose}>Products</MenuItem>
+                            <MenuItem component={Link} to={'/users-list'} onClick={adminHandleClose}>Orders</MenuItem>
+                        </Menu>
+                    </div>
+                    )}
                 </Toolbar>
                 </Container>
             </AppBar>

@@ -13,6 +13,7 @@ import Alert from '@material-ui/lab/Alert';
 import { PayPalButton } from 'react-paypal-button-v2';
 import AuthenticationServices from '../services/AuthenticationServices';
 import { ORDER_PAY_RESET } from '../constants/orderConstants';
+import { CART_ITEMS_RESET } from '../constants/cartConstants';
 
 
 const useStyles = makeStyles((theme) => ({
@@ -220,6 +221,7 @@ const OrderScreen = ({ match }) => {
                     </CardContent>
                     {!order.isPaid && (
                         <CardContent>
+                             {/* ADD CART CHECK TO SEE QUANTITY AVAILABILITY  */}
                             {loadingPay && <Loader />}
                             {!sdkReady ? <Loader /> : (
                                 <PayPalButton 

@@ -3,12 +3,15 @@ import React from 'react';
 import { useState, useEffect } from 'react';
 import ClearIcon from '@material-ui/icons/Clear';
 import { useDispatch, useSelector } from 'react-redux';
+import { Link } from 'react-router-dom';
 import Message from '../components/Message';
 import Loader from '../components/Loader';
 import { getUserDetails, updateUserProfile } from '../actions/userActions';
 import { listUserOrder } from '../actions/orderActions';
 import jwt from 'jwt-decode'
 import { USER_LOGIN, USER_LOGOUT, USER_UPDATE_RESET } from '../constants/userConstants';
+import Alert from '@material-ui/lab/Alert';
+import { ORDER_LIST_USER_RESET } from '../constants/orderConstants';
 
 const useStyles = makeStyles(theme => ({
     form: {
@@ -29,7 +32,7 @@ const useStyles = makeStyles(theme => ({
         minWidth: 700,
       },
       title: {
-        marginBottom: "4rem"
+        marginBottom: "2rem"
       },
       checkbox: {
         //   marginTop: "2rem"
@@ -84,6 +87,7 @@ const UserProfileScreen = ({ history }) => {
         } else {
             if (!user || success){
                 dispatch({ type: USER_UPDATE_RESET });
+                dispatch({ type: ORDER_LIST_USER_RESET });
                 dispatch(getUserDetails(jwt(userInfo.token).userId));
                 dispatch(listUserOrder(jwt(userInfo.token).userId));
                 
@@ -142,17 +146,15 @@ const UserProfileScreen = ({ history }) => {
     const confirmPasswordHandler = (e) => {
         setConfirmPassword(e.target.value);
     }
-   console.log(role)
 
     return (
         <Container component="main" >
-            <Typography variant="h3" component="h2" allign="center" className={classes.title}>Profile</Typography>
             <Grid container spacing={4}>
                 <form className={classes.form}>
                     <Grid container spacing={4}>
                         <Grid item xs={4}>
                             <Grid item xs={12}>
-                                <Typography component="h1" variant="h3">Edit</Typography>
+                                <Typography component="h1" variant="h4" className={classes.title}>Edit Profile</Typography>
                                 {success && <Message status="success" text={"Profile Updated"}/>}
                                 {message && <Message status="info" text={message}/>}
                                 {error && <Message status="error" text={error} />}
@@ -245,17 +247,18 @@ const UserProfileScreen = ({ history }) => {
                         </Grid>
                         <Grid item xs={8}>
                             <Grid item xs={12}>
-                                <Typography variant="h3" component="h1">My Orders</Typography>
+                                <Typography variant="h4" component="h1" className={classes.title}>My Orders ({orders ? orders.length : '0'})</Typography>
+                                {!orders && <Alert severity="info">Order list is empty</Alert>}
                                 {loadingOrders ? <Loader /> : errorOrders 
                                 ? <Message status="error" text={errorOrders}/> : (
                                     <TableContainer component={Paper}>
                                         <Table classNAme={classes.table} aria-label="orders table">
                                             <TableHead>
                                                 <StyledTableRow>
-                                                   <StyledTableCell allign="right">Order ID</StyledTableCell> 
+                                                   <StyledTableCell>Order ID</StyledTableCell> 
                                                    <StyledTableCell allign="right">Date</StyledTableCell> 
                                                    <StyledTableCell allign="right">Total</StyledTableCell> 
-                                                   <StyledTableCell allign="right">paid</StyledTableCell> 
+                                                   <StyledTableCell allign="right">Paid</StyledTableCell> 
                                                    <StyledTableCell allign="right">Delivered</StyledTableCell> 
                                                    <StyledTableCell allign="right"></StyledTableCell> 
                                                 </StyledTableRow>
@@ -266,16 +269,22 @@ const UserProfileScreen = ({ history }) => {
                                                         <StyledTableCell component="th" scope="row">
                                                             {order._id}    
                                                         </StyledTableCell>
-                                                        <StyledTableCell>{order.date.substring(0, 10)}</StyledTableCell>
-                                                        <StyledTableCell>{order.totalPrice}</StyledTableCell> 
-                                                        <StyledTableCell>{order.isPaid ? order.paidAt.substring(0, 10) : (
+                                                        <StyledTableCell>{order.date}</StyledTableCell>
+                                                        <StyledTableCell>£{order.totalPrice}</StyledTableCell> 
+                                                        <StyledTableCell>{order.isPaid ? order.paidAt.substring(0, 26) : (
                                                             <ClearIcon className={classes.clear}/>
                                                         )}</StyledTableCell> 
-                                                        <StyledTableCell>{order.isDelivered ? order.deliveredAt.substring(0, 10) : (
+                                                        <StyledTableCell>{order.isDelivered ? order.deliveredAt.substring(0, 11) : (
                                                             <ClearIcon className={classes.clear}/>
                                                         )}</StyledTableCell>
                                                         <StyledTableCell>
-                                                              <Button variant="contained">Details</Button>  
+                                                              <Button 
+                                                                variant="contained"
+                                                                component={Link}
+                                                                to={`/orders/${order._id}`}
+                                                            >
+                                                                Details
+                                                            </Button>  
                                                         </StyledTableCell> 
                                                     </StyledTableRow>
                                                 ))}
