@@ -8,7 +8,7 @@ const getResponse = (order, type, desc, id) => {
         request: {
             type: type,
             description: desc,
-            url: `http://localhost:3000/api/orders/${id}`
+            url: `http://localhost:8080/api/orders/${id}`
         }
     }
 };
@@ -154,8 +154,13 @@ const order_update_paid = async (req, res) => {
         const order = await Order.findById(req.params.orderId);
         console.log(order)
         if (order){
+            for (const idx in order.orderItems){
+                const item = order.orderItems[idx];
+                const product = await Product.findById(item.productId);
+                product.quantityInStock -= item.quantity;
+            }
             // set order to paid
-            let date = new Date( Date.now() );
+            let date = new Date(Date.now());
             order.isPaid = true;
             order.paidAt = date.toUTCString();
             order.paymentResuslt = {
@@ -165,7 +170,7 @@ const order_update_paid = async (req, res) => {
                 email_address: req.body.payer.email_address
             };
             const updatedOrder = await order.save();
-            res.status(200).json(order);
+            res.status(200).json(updatedOrder);
         } else {
             res.status(400).json({ message: 'Invalid request'});
         }

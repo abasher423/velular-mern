@@ -17,13 +17,14 @@ const users_get_all = async (req, res) => {
                         userId: user._id,
                         firstName: user.firstName,
                         lastName: user.lastName,
+                        email: user.email,
                         password: user.password,
                         role: user.role,
                         verified: user.verified,
                         request: {
                             type: 'GET',
                             description: 'Get current  user',
-                            url: `http://localhost:3000/api/users/${user._id}`
+                            url: `http://localhost:8080/api/users/${user._id}`
                         }
                     }
                 })
@@ -206,7 +207,7 @@ const users_update_user = async (req, res) => {
 // @access Private
 const users_delete_user = async (req, res) => {
     try {
-        const result = await User.deleteOne({ _id: req.params._id });
+        const result = await User.deleteOne({ _id: req.params.userId });
         if (result.n > 0){
             res.status(200).json({ message: 'User deleted' });
         } else {
