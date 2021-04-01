@@ -151,7 +151,7 @@ const products_update_product = async (req, res) => {
         updateOps[ops.propName] = ops.value;
         }
         
-        const result = await Product.updateOne({_id: req.params.productId}, {$set: updateOps});
+        const result = await Product.updateOne({ _id: req.params.productId }, { $set: updateOps });
         res.status(201).json({
             message: 'Product Successfully Updated',
             request: {

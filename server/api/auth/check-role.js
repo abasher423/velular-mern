@@ -5,7 +5,6 @@ const checkRole = (role) => {
         try {
             const token = req.headers.authorization.split(' ')[1];
             if (jwt.decode(token).role === role){
-                console.log(jwt.decode(token))
                 const decoded = jwt.verify(token, process.env.JWT_KEY);
                 req.userData = decoded;
             } else {
