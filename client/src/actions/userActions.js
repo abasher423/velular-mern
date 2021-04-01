@@ -1,5 +1,8 @@
 import { ORDER_LIST_USER_RESET } from "../constants/orderConstants";
 import { 
+    USER_DELETE_FAILURE,
+    USER_DELETE_REQUEST,
+    USER_DELETE_SUCCESS,
     USER_DETAILS_FAILURE,
     USER_DETAILS_REQUEST,
     USER_DETAILS_RESET,
@@ -196,6 +199,35 @@ export const updateUserProfile = (userId, userData) => async (dispatch, getState
     } catch (error){
         dispatch({
             type: USER_UPDATE_FAILURE,
+            payload: 
+            error.response && error.response.data.message 
+                ? error.response.data.message 
+                : error.message
+        })
+    }
+}
+
+export const deleteUser = (userId) => async (dispatch, getState) => {
+    try {
+        dispatch({
+            type: USER_DELETE_REQUEST
+        });
+
+        const { userLogin: { userInfo } } = getState();
+  
+        const token = {
+            headers: {
+                Authorization: `Bearer ${userInfo.token}`
+            }
+        }
+
+        const {data} = await userServices.deleteUser(userId, token);
+
+        dispatch({ type: USER_DELETE_SUCCESS })
+        
+    } catch (error){
+        dispatch({
+            type: USER_DELETE_FAILURE,
             payload: 
             error.response && error.response.data.message 
                 ? error.response.data.message 
