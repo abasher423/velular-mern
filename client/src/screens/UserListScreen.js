@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { listUsers } from '../actions/userActions';
+import { listUsers, deleteUser } from '../actions/userActions';
 import { Container, IconButton, Typography } from '@material-ui/core';
 import { Link } from 'react-router-dom';
 import Loader from '../components/Loader';
@@ -50,6 +50,9 @@ const UserListScreen = ({ history }) => {
     const usersList = useSelector(state => state.usersList);
     const { loading, error, users } = usersList;
 
+    const userDelete = useSelector(state => state.userDelete);
+    const { successDelete } = userDelete;
+    
     const userLogin = useSelector(state => state.userLogin);
     const { userInfo } = userLogin;
 
@@ -59,10 +62,10 @@ const UserListScreen = ({ history }) => {
         } else {
           history.push('/login');
         }
-    }, [dispatch, history, userInfo]);
+    }, [dispatch, history, userInfo, successDelete]);
 
-    const deleteHandler = () => {
-      console.log('deleted')
+    const deleteHandler = (userId) => {
+      dispatch(deleteUser(userId));
     }
 
     return (
@@ -86,7 +89,7 @@ const UserListScreen = ({ history }) => {
                           <StyledTableCell component="th" scope="row">{user.userId}</StyledTableCell>
                           <StyledTableCell>{user.firstName} {user.lastName}</StyledTableCell>
                           <StyledTableCell>
-                            <Link component={Link} to={`mailto:${user.email}`} style={{color: 'blueviolet'}}>{user.email}</Link>
+                            <Link href={`mailto:${user.email}`} style={{color: 'blueviolet'}}>{user.email}</Link>
                           </StyledTableCell>
                           <StyledTableCell>
                             {user.role === 'admin' ? (
@@ -98,7 +101,7 @@ const UserListScreen = ({ history }) => {
                             <IconButton edge="start" component={Link} to={`/users/${user.userId}`}>
                                 <EditIcon />
                             </IconButton>
-                            <IconButton edge="start" onClick={deleteHandler}>
+                            <IconButton edge="start" onClick={() => deleteHandler(user.userId)}>
                                 <DeleteIcon />
                             </IconButton>
                           </StyledTableCell>
