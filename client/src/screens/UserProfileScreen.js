@@ -252,7 +252,7 @@ const UserProfileScreen = ({ history }) => {
                                 {loadingOrders ? <Loader /> : errorOrders 
                                 ? <Message status="error" text={errorOrders}/> : (
                                     <TableContainer component={Paper}>
-                                        <Table classNAme={classes.table} aria-label="orders table">
+                                        <Table className={classes.table} aria-label="orders table">
                                             <TableHead>
                                                 <StyledTableRow>
                                                    <StyledTableCell>Order ID</StyledTableCell> 

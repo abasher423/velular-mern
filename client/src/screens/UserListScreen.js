@@ -70,10 +70,10 @@ const UserListScreen = ({ history }) => {
 
     return (
         <Container>
-            <Typography variant="h3" component="h1" className={classes.title}>Users</Typography>
+            <Typography variant="h3" component="h1" className={classes.title}>Manage Users</Typography>
             { loading ? <Loader /> : error ? <Message status="error" text={error} /> : (
                 <TableContainer component={Paper}>
-                  <Table>
+                  <Table className={classes.table} aria-label="users table">
                     <TableHead>
                       <TableRow>
                         <StyledTableCell>User ID</StyledTableCell>

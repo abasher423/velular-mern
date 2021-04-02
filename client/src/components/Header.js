@@ -153,8 +153,8 @@ const Header = ({ history }) => {
                             open={Boolean(anchrolEl2)}
                             onClose={adminHandleClose}
                         >
-                            <MenuItem component={Link} to={'/users-list'} onClick={adminHandleClose}>Users</MenuItem>
-                            <MenuItem component={Link} to={'/users-list'} onClick={adminHandleClose}>Products</MenuItem>
+                            <MenuItem component={Link} to={'/admin/users-list'} onClick={adminHandleClose}>Users</MenuItem>
+                            <MenuItem component={Link} to={'/admin/customs-list'} onClick={adminHandleClose}>Customs</MenuItem>
                             <MenuItem component={Link} to={'/users-list'} onClick={adminHandleClose}>Orders</MenuItem>
                         </Menu>
                     </div>

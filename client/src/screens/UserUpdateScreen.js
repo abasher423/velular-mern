@@ -3,8 +3,7 @@ import React, { useEffect, useState } from 'react';
 import makeStyles from '@material-ui/core/styles/makeStyles';
 import ArrowBackIcon from '@material-ui/icons/ArrowBack';
 import { Link } from 'react-router-dom';
-import { getUserDetails } from '../actions/userActions';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import userServices from '../services/userServices';
 
 const useStyles = makeStyles(theme => ({
@@ -103,7 +102,7 @@ const UserUpdateScreen = ({ match, history }) => {
     };
     return (
         <>
-        <IconButton edge="start" className={classes.backIcon} color="inherit" component={Link} to={'/users-list'} aria-label="back">
+        <IconButton edge="start" className={classes.backIcon} color="inherit" component={Link} to={'/admin/users-list'} aria-label="back">
             <ArrowBackIcon />
         </IconButton>
         <Container component="main" maxWidth="xs">
