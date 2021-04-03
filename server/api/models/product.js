@@ -14,7 +14,7 @@ const reviewSchema = mongoose.Schema({
 
 const productSchema = new Schema({
     _id: mongoose.Schema.ObjectId,
-    // user: { type: mongoose.Schema.Types.ObjectId, required: true, ref: 'User'},
+    artist: { type: mongoose.Schema.Types.ObjectId, required: true, ref: 'User'},
     name: { type: String, required: true },
     description: { type: String, required: true },
     category: { type: String, required: true },

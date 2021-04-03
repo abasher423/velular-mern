@@ -44,7 +44,7 @@ router.put('/customs/:customId/reject', ProductsController.custom_update_reject)
 
 router.post('/', upload.single('productImage'), ProductsController.products_create_product);
 
-router.patch('/:productId', checkAuth(), checkRole('admin'), ProductsController.products_update_product);
+router.patch('/:productId', ProductsController.products_update_product);
 
 router.delete('/:productId', ProductsController.products_delete_product);
 
