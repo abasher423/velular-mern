@@ -9,6 +9,7 @@ export const addToCart = (productId, quantity) => async (dispatch, getState) => 
         type: CART_ADD_ITEM,
         payload: {
             productId: data._id,
+            artist: data.artist,
             name: data.name,
             brand: data.brand,
             productImage: data.productImage,
@@ -17,6 +18,7 @@ export const addToCart = (productId, quantity) => async (dispatch, getState) => 
             quantity
         }
     })
+    console.log(data)
 
     // saving to local storage (using localstorage API)
     localStorage.setItem('cartItems', JSON.stringify(getState().cart.cartItems));

@@ -17,13 +17,14 @@ const users_get_all = async (req, res) => {
                         userId: user._id,
                         firstName: user.firstName,
                         lastName: user.lastName,
+                        email: user.email,
                         password: user.password,
                         role: user.role,
                         verified: user.verified,
                         request: {
                             type: 'GET',
                             description: 'Get current  user',
-                            url: `http://localhost:3000/api/users/${user._id}`
+                            url: `http://localhost:8080/api/users/${user._id}`
                         }
                     }
                 })
@@ -58,11 +59,32 @@ const users_get_user = async (req, res) => {
             }
         } else {
             res.status(401).json({ message: "userId does not match" })
-        }
-        
-        
+        } 
     } catch (err){
         console.log(err);
+        res.status(500).json({ error: err });
+    }
+};
+
+const admin_get_user = async (req, res) => {
+    try {
+        const admin = await User.findById(req.userData.userId);
+        if (admin && (req.userData.userId == admin._id)){ 
+            const user = await User.findById(req.params.userId);
+            if (user){
+                res.status(200).json({
+                    email: user.email,
+                    firstName: user.firstName,
+                    lastName: user.lastName,
+                    role: user.role
+                });
+            } else {
+                res.status(404).json({ message: 'No entry exists' });
+            }
+        } else {
+            res.status(401).json({ message: "userId does not match" })
+        }
+    } catch (err){
         res.status(500).json({ error: err });
     }
 };
@@ -163,35 +185,26 @@ const users_update_user = async (req, res) => {
             updateItems[item.propName] = item.value;
         }
         const password = updateItems.password
-        if (req.userData.userId === req.params.userId){ // if password exists
+        if (req.userData.userId === req.params.userId){
             if (password === '' || password === null){ // if new password set to null, set password to existing password
                 updateItems.password = user.password
-                await User.updateOne({_id: req.params.userId}, {$set: updateItems});
-                res.status(200).json({ 
-                    message: 'User updated successfully',
-                    firstName: user.firstName, 
-                    lastName: user.lastName, 
-                    email: user.email,
-                    role: user.role
-            });
             } else {
-                bcrypt.hash(password, 10, async (err, hash) => { // if new password exists, ncrypt it and then update
+                bcrypt.hash(password, 10, async (err, hash) => { // if new password exists, encrypt it and then update
                     if (err){
                         res.status(500).json({ error: err });
                     } else {
-                        console.log('hash', hash)
-                        updateItems.password = hash;
-                        await User.updateOne({_id: req.params.userId}, {$set: updateItems});
-                        res.status(200).json({ 
-                            message: 'User updated successfully',
-                            firstName: user.firstName, 
-                            lastName: user.lastName, 
-                            email: user.email,
-                            role: user.role
-                    });
+                        updateItems.password = hash;                        
                     }
                 });
             }
+            await User.updateOne({_id: req.params.userId}, {$set: updateItems});
+            res.status(200).json({ 
+                message: 'User updated successfully',
+                firstName: user.firstName, 
+                lastName: user.lastName, 
+                email: user.email,
+                role: user.role
+            });
         } else {
             res.status(401).json({ message: 'Authentication Failed'})
         }
@@ -201,14 +214,54 @@ const users_update_user = async (req, res) => {
     }
 };
 
+const admin_update_user = async (req, res) => {
+    try {
+        const updateItems = {};
+        for (const item of req.body){
+            updateItems[item.propName] = item.value;
+        }
+        
+        if (!updateItems.hasOwnProperty('password')){
+            await User.updateOne({ _id: req.params.userId }, { $set: updateItems });
+            res.status(200).json({
+                message: 'User updated Successfully',
+                request: {
+                    type: 'GET',
+                    description: 'Fetch all users',
+                    url: 'http://localhost:8080/users'
+                }
+            });
+        } else {
+            res.status(401).json({ message: 'Invalid request'})
+        }
+        
+    } catch (err){
+        res.status(500).json({ error: err });
+    }
+}
+
 // @desc Delete a user
 // @route DELETE /api/users/userId
 // @access Private
 const users_delete_user = async (req, res) => {
     try {
-        const result = await User.deleteOne({ _id: req.params._id });
+        const result = await User.deleteOne({ _id: req.params.userId });
         if (result.n > 0){
-            res.status(200).json({ message: 'User deleted' });
+            res.status(200).json({ 
+                message: 'User deleted successfully',
+                request: {
+                    type: 'POST',
+                    description: 'Register a user',
+                    body: {
+                        email: 'String',
+                        firstName: 'String',
+                        lastName: 'String',
+                        password: 'String',
+                        role: 'String'
+                    },
+                    url: 'http://localhost:8080/users'
+                } 
+            });
         } else {
             res.status(404).json({ message: 'User already deleted' });
         }
@@ -221,8 +274,10 @@ const users_delete_user = async (req, res) => {
 export default {
     users_get_all,
     users_get_user,
+    admin_get_user,
     user_register,
     user_login,
     users_update_user,
-    users_delete_user
+    admin_update_user,
+    users_delete_user,
 };

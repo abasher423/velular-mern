@@ -1,9 +1,15 @@
 import { ORDER_LIST_USER_RESET } from "../constants/orderConstants";
 import { 
+    USER_DELETE_FAILURE,
+    USER_DELETE_REQUEST,
+    USER_DELETE_SUCCESS,
     USER_DETAILS_FAILURE,
     USER_DETAILS_REQUEST,
     USER_DETAILS_RESET,
     USER_DETAILS_SUCCESS,
+    USER_LIST_FAILURE,
+    USER_LIST_REQUEST,
+    USER_LIST_SUCCESS,
     USER_LOGIN_FAILURE, 
     USER_LOGIN_REQUEST, 
     USER_LOGIN_SUCCESS, 
@@ -100,6 +106,38 @@ export const register = (firstName, lastName, email, password, role) => async (d
     }
 }
 
+export const listUsers = () => async (dispatch, getState) => {
+    try {
+        dispatch({
+            type: USER_LIST_REQUEST
+        });
+
+        const { userLogin: { userInfo } } = getState();
+  
+        const token = {
+            headers: {
+                Authorization: `Bearer ${userInfo.token}`
+            }
+        }
+
+        const { data } = await userServices.index(token);
+
+        dispatch({
+            type: USER_LIST_SUCCESS,
+            payload: data.users
+        })
+        
+    } catch (error){
+        dispatch({
+            type: USER_LIST_FAILURE,
+            payload: 
+            error.response && error.response.data.message 
+                ? error.response.data.message 
+                : error.message
+        })
+    }
+}
+
 export const getUserDetails = (userId) => async (dispatch, getState) => {
     try {
         dispatch({
@@ -140,13 +178,13 @@ export const updateUserProfile = (userId, userData) => async (dispatch, getState
 
         const { userLogin: { userInfo } } = getState();
   
-        const config = {
+        const token = {
             headers: {
                 Authorization: `Bearer ${userInfo.token}`
             }
         }
 
-        const { data } = await userServices.update(userId, userData, config);
+        const { data } = await userServices.update(userId, userData, token);
      
         dispatch({
             type: USER_UPDATE_SUCCESS,
@@ -161,6 +199,35 @@ export const updateUserProfile = (userId, userData) => async (dispatch, getState
     } catch (error){
         dispatch({
             type: USER_UPDATE_FAILURE,
+            payload: 
+            error.response && error.response.data.message 
+                ? error.response.data.message 
+                : error.message
+        })
+    }
+}
+
+export const deleteUser = (userId) => async (dispatch, getState) => {
+    try {
+        dispatch({
+            type: USER_DELETE_REQUEST
+        });
+
+        const { userLogin: { userInfo } } = getState();
+  
+        const token = {
+            headers: {
+                Authorization: `Bearer ${userInfo.token}`
+            }
+        }
+
+        const {data} = await userServices.deleteUser(userId, token);
+
+        dispatch({ type: USER_DELETE_SUCCESS })
+        
+    } catch (error){
+        dispatch({
+            type: USER_DELETE_FAILURE,
             payload: 
             error.response && error.response.data.message 
                 ? error.response.data.message 

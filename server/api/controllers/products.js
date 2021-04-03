@@ -6,13 +6,17 @@ import Product from '../models/product.js';
 // @access Public
 const products_get_all = async (req, res) => {
     try {
-        const products = await Product.find().select('_id name description brand size quantityInStock initialPrice price status reason productImage');
+        const products = await Product
+            .find()
+            .select('_id name artist description brand size quantityInStock initialPrice price status reason productImage')
+            .populate('artist', '_id firstName lastName')
         if (products.length > 0){ //.where to add conditions or .limit for pagination
             const response = {
                 count: products.length,
                 products: products.map(product => {
                     return {
                         _id: product._id,
+                        artist: product.artist,
                         name: product.name,
                         description: product.description,
                         brand: product.brand,
@@ -50,19 +54,83 @@ const products_get_all = async (req, res) => {
     }
 }
 
+const customs_get_all = async (req, res) => {
+    try {
+        const customs = await Product
+            .find({ status: 'Pending' })
+            .select('_id name  artist price category brand status reason')
+            .populate('artist', '_id, firstName, lastName');
+        if (customs.length > 0){
+            res.status(200).json({
+                count: customs.length,
+                customs: customs.map(custom => {
+                    return {
+                        _id: custom._id,
+                        name: custom.name,
+                        artist: custom.artist,
+                        price: custom.price,
+                        category: custom.category,
+                        brand: custom.brand,
+                        status: custom.status,
+                        reason: custom.reason
+                    }
+                })
+            })
+        } else {
+            res.status(400).json({ message: 'No entry exists for customs' })
+        }
+    } catch (err){
+        res.status(500).json({ error: err });
+    }
+};
+
+const customs_get_all_artist = async (req, res) => {
+    try {
+        const customs = await Product
+            .find({ status: 'Pending' })
+            .select('_id name artist price category brand status reason')
+            .populate('artist', '_id firstName lastName')
+        if (customs.length > 0){
+            res.status(200).json({
+                count: customs.length,
+                customs: customs.map(custom => {
+                    return {
+                        _id: custom._id,
+                        name: custom.name,
+                        price: custom.price,
+                        category: custom.category,
+                        brand: custom.brand,
+                        status: custom.status,
+                        reason: custom.reason
+                    }
+                })
+            })
+        } else {
+            res.status(400).json({ message: 'No entry exists for customs' })
+        }
+    } catch (err){
+        res.status(500).json({ error: err });
+    }
+};
+
 // @desc Fetch single product
 // @route GET /api/products/:productId
 // @access Public
 const products_get_product = async (req, res) => {
     try {
-        const product = await Product.findById(req.params.productId).select('_id name description brand size quantityInStock initialPrice price status reason productImage');
+        const product = await Product
+            .findById(req.params.productId)
+            .select('_id artist name description brand size quantityInStock initialPrice price status reason productImage category')
+            .populate('artistId', '_id firstName lastName email');
         if (product){ // checks if the product exists
             console.log(product);
             res.status(200).json({
                 _id: product._id,
+                artist: product.artist,
                 name: product.name,
                 description: product.description,
                 brand: product.brand,
+                category: product.category,
                 size: product.size,
                 quantityInStock: product.quantityInStock,
                 productImage: product.productImage,
@@ -100,11 +168,13 @@ const products_create_product = async (req, res) => {
         const product = new Product({
             _id: new mongoose.Types.ObjectId(),
             name: req.body.name,
+            artist: req.body.artistId,
             description: req.body.description,
             brand: req.body.brand,
             category: req.body.category,
             productImage: `/images/${req.file.originalname}`,
             size: req.body.size,
+            artist: req.body.artist,
             quantityInStock: req.body.quantityInStock,
             initialPrice: req.body.initialPrice,
             price: req.body.price,
@@ -118,6 +188,7 @@ const products_create_product = async (req, res) => {
             createdPoduct: {
                 _id: result._id,
                 name: result.name,
+                artist: result.artist,
                 description: result.description,
                 brand: result.brand,
                 size: result.size,
@@ -141,9 +212,36 @@ const products_create_product = async (req, res) => {
     }
 };
 
-// @desc Update single product
-// @route PATCH /api/products/:productId
-// @access Private
+const custom_update_accept = async (req, res) => {
+    try {
+        const custom = await Product.findById(req.params.customId);
+        if (custom){
+            custom.status = 'Accepted';
+            const updatedCustom = await custom.save();
+            res.status(201).json(updatedCustom);
+        } else {
+            res.status(400).json({ message: 'Invalid Request' });
+        }
+    } catch (err){
+        res.status(500).json({ error: err });
+    }
+}
+
+const custom_update_reject = async (req, res) => {
+    try {
+        const custom = await Product.findById(req.params.customId);
+        if (custom){
+            custom.status = 'Rejected';
+            const updatedCustom = await custom.save();
+            res.status(201).json(updatedCustom);
+        } else {
+            res.status(400).json({ message: 'Invalid Request' });
+        }
+    } catch (err){
+        res.status(500).json({ error: err });
+    }
+}
+
 const products_update_product = async (req, res) => { 
     try {
         const updateOps = {}; // objct so if we want to only update certain values we can (change)
@@ -151,7 +249,7 @@ const products_update_product = async (req, res) => {
         updateOps[ops.propName] = ops.value;
         }
         
-        const result = await Product.updateOne({_id: req.params.productId}, {$set: updateOps});
+        const result = await Product.updateOne({ _id: req.params.productId }, { $set: updateOps });
         res.status(201).json({
             message: 'Product Successfully Updated',
             request: {
@@ -182,6 +280,7 @@ const products_delete_product = async (req, res) => {
                     url: 'http://localhost:3000/api/products',
                     body: {    
                         name: 'String',
+                        artist: 'ObjectId',
                         description: 'String',
                         productImage: 'String',
                         brand: 'String',
@@ -211,8 +310,11 @@ const products_delete_product = async (req, res) => {
 
 export default {
     products_get_all,
+    customs_get_all,
     products_get_product,
     products_create_product,
+    custom_update_accept,
+    custom_update_reject,
     products_update_product,
     products_delete_product
 };

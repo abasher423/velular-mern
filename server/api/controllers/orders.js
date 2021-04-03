@@ -8,19 +8,15 @@ const getResponse = (order, type, desc, id) => {
         request: {
             type: type,
             description: desc,
-            url: `http://localhost:3000/api/orders/${id}`
+            url: `http://localhost:8080/api/orders/${id}`
         }
     }
 };
 
-// @desc Fetch all orders
-// @route GET /api/orders
-// @access Private
 const orders_get_all = async (req, res) => {
     try {
         const orders = await Order.find()
-        .populate('products', 'name price quantity')
-        .populate('shipping', 'email fullName street city country stat postcode');
+        .populate('user', '_id firstName lastName email');
         if (orders.length > 0){
             const response = {
                 count: orders.length,
@@ -45,14 +41,10 @@ const orders_get_all = async (req, res) => {
     }
 }
 
-// @desc Fetch single product
-// @route GET /api/orders/:orderId
-// @access Public
 const orders_get_order = async (req, res) => {
     try {
         const order = await Order
         .findById(req.params.orderId)
-        .select('user shippingDetails orderItems paymentMethod currency itemsPrice taxPrice totalPrice shippingPrice isPaid paidAt isComplete')
         .populate('user', '_id firstName lastName email');
         if (order){
             // if (req.userData.userId == order.user._id){
@@ -77,9 +69,6 @@ const orders_get_order = async (req, res) => {
 };
 
 // https://www.udemy.com/course/mern-ecommerce/learn/lecture/22495586?start=150#questions
-// @desc Create an order
-// @route POST /api/odrders
-// @access Public
 const orders_create_order = async (req, res) => {
    try {
         const { orderItems, shippingDetails, paymentMethod, itemsPrice, taxPrice, shippingPrice, totalPrice } = req.body;
@@ -128,6 +117,7 @@ const orders_get_user = async (req, res) => {
                             shippingPrice: order.shippingPrice,
                             paymentMethod: order.paymentMethod,
                             paidAt: order.paidAt,
+                            deliveredAt: order.deliveredAt,
                             isPaid: order.isPaid,
                             isDelivered: order.isDelivered,
                             isComplete: order.isComplete
@@ -154,8 +144,13 @@ const order_update_paid = async (req, res) => {
         const order = await Order.findById(req.params.orderId);
         console.log(order)
         if (order){
+            for (const idx in order.orderItems){
+                const item = order.orderItems[idx];
+                const product = await Product.findById(item.productId);
+                product.quantityInStock -= item.quantity;
+            }
             // set order to paid
-            let date = new Date( Date.now() );
+            let date = new Date(Date.now());
             order.isPaid = true;
             order.paidAt = date.toUTCString();
             order.paymentResuslt = {
@@ -165,7 +160,7 @@ const order_update_paid = async (req, res) => {
                 email_address: req.body.payer.email_address
             };
             const updatedOrder = await order.save();
-            res.status(200).json(order);
+            res.status(200).json(updatedOrder);
         } else {
             res.status(400).json({ message: 'Invalid request'});
         }
@@ -173,6 +168,24 @@ const order_update_paid = async (req, res) => {
         res.status(500).json({ error: err });
     }
 }
+
+const order_update_delivered = async (req, res) => {
+    try {
+        const order = await Order.findById(req.params.orderId);
+        if (order){
+            // set to delivered
+            let date = new Date(Date.now());
+            order.isDelivered = true;
+            order.deliveredAt = date.toUTCString();
+            await order.save();
+            res.status(200).json({ message: 'Order set to Delivered' });
+        } else {
+            res.status(400).json({ message: 'No entry found for provided Order ID' });
+        }
+    } catch (err){
+        res.status(500).json({ error: err });
+    }
+};
 
 // @desc Delete an order
 // @route DELETE /api/odrders
@@ -219,5 +232,6 @@ export default {
     orders_get_order,
     orders_get_user,
     order_update_paid,
+    order_update_delivered,
     orders_delete_order
 };
