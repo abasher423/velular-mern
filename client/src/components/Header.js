@@ -64,18 +64,23 @@ const Header = ({ history }) => {
 
     const [anchorEl, setAnchorEl] = useState(null);
     const [anchrolEl2, setAnchorEl2] = useState(null);
+    const [anchorEl3, setAnchorEl3] = useState(null);
 
 
 
     const userLogin = useSelector(state => state.userLogin);
     const { userInfo } = userLogin;
 
-    const handleClick = (event) => {
-        setAnchorEl(event.currentTarget);
+    const handleClick = (e) => {
+        setAnchorEl(e.currentTarget);
       };
 
     const adminHandleClick = (e) => {
         setAnchorEl2(e.currentTarget);
+    }
+
+    const artistHandleClick = (e) => {
+        setAnchorEl3(e.currentTarget);
     }
     
     const handleClose = () => {
@@ -84,7 +89,12 @@ const Header = ({ history }) => {
 
     const adminHandleClose = () => {
         setAnchorEl2(null);
-    }
+    };
+
+    const artistHandleClose = () => {
+        setAnchorEl3(null);
+    };
+
     const logoutHandler = () => {
         dispatch(logout());
         setAnchorEl(null);
@@ -132,6 +142,7 @@ const Header = ({ history }) => {
                                 open={Boolean(anchorEl)}
                                 onClose={handleClose}
                             >
+                                <MenuItem component={Link} to={'/'} onClick={handleClose}>Home</MenuItem>
                                 <MenuItem component={Link} to={'/profile'} onClick={handleClose}>Profile</MenuItem>
                                 <MenuItem component={Link} to={'/login'} onClick={logoutHandler}>Logout</MenuItem>
                             </Menu>
@@ -142,22 +153,40 @@ const Header = ({ history }) => {
                     </IconButton>}
                     {userInfo && userInfo.role === 'admin' && (
                         <div style={{margin: "0 1rem"}}>
-                        <Button 
-                            onClick={adminHandleClick}>
-                                Admin
+                            <Button 
+                                onClick={adminHandleClick}>
+                                    Admin
                             </Button>
-                        <Menu
-                            id="admin menu"
-                            anchorEl={anchrolEl2}
-                            keepMounted
-                            open={Boolean(anchrolEl2)}
-                            onClose={adminHandleClose}
-                        >
-                            <MenuItem component={Link} to={'/admin/users-list'} onClick={adminHandleClose}>Users</MenuItem>
-                            <MenuItem component={Link} to={'/admin/customs-list'} onClick={adminHandleClose}>Customs</MenuItem>
-                            <MenuItem component={Link} to={'/users-list'} onClick={adminHandleClose}>Orders</MenuItem>
-                        </Menu>
-                    </div>
+                            <Menu
+                                id="admin menu"
+                                anchorEl={anchrolEl2}
+                                keepMounted
+                                open={Boolean(anchrolEl2)}
+                                onClose={adminHandleClose}
+                            >
+                                <MenuItem component={Link} to={'/admin/users-list'} onClick={adminHandleClose}>Users</MenuItem>
+                                <MenuItem component={Link} to={'/admin/customs-list'} onClick={adminHandleClose}>Customs</MenuItem>
+                                <MenuItem component={Link} to={'/admin/orders-list'} onClick={adminHandleClose}>Orders</MenuItem>
+                            </Menu>
+                        </div>
+                    )}
+                    {userInfo && userInfo.role === 'artist' && (
+                        <div style={{margin: "0 1rem"}}>
+                            <Button 
+                                onClick={artistHandleClick}>
+                                    Artist
+                            </Button>
+                            <Menu
+                                id="admin menu"
+                                anchorEl={anchorEl3}
+                                keepMounted
+                                open={Boolean(anchorEl3)}
+                                onClose={artistHandleClose}
+                            >
+                                <MenuItem component={Link} to={'/artist/customs-list'} onClick={adminHandleClose}>Customs</MenuItem>
+                                <MenuItem component={Link} to={'/artist/orders-list'} onClick={adminHandleClose}>Orders</MenuItem>
+                            </Menu>
+                        </div>
                     )}
                 </Toolbar>
                 </Container>

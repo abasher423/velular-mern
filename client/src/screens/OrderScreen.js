@@ -14,6 +14,7 @@ import { PayPalButton } from 'react-paypal-button-v2';
 import AuthenticationServices from '../services/AuthenticationServices';
 import { ORDER_PAY_RESET } from '../constants/orderConstants';
 import { CART_ITEMS_RESET } from '../constants/cartConstants';
+import orderServices from '../services/orderServices';
 
 
 const useStyles = makeStyles((theme) => ({
@@ -60,17 +61,26 @@ const useStyles = makeStyles((theme) => ({
         backgroundColor: theme.palette.text.secondary,
         color: "white"
     },
+    delivered: {
+        "&:hover": {
+            backgroundColor: theme.palette.success.main
+        },
+        backgroundColor: 'black'
+    },
     main: {
         // marginTop: "2rem"
     }
 }));
 
-const OrderScreen = ({ match }) => {
+const OrderScreen = ({ match, history }) => {
     const orderId = match.params.orderId;
     const [sdkReady, setSdkReady] = useState(false);
     
     const dispatch = useDispatch();
     const classes = useStyles();
+
+    const userLogin = useSelector(state => state.userLogin);
+    const { userInfo } = userLogin;
 
     const orderDetails = useSelector(state => state.orderDetails);
     const { order, loading, error } = orderDetails;
@@ -106,13 +116,22 @@ const OrderScreen = ({ match }) => {
     
     const addDecimals = (num) => {
         return (Math.round(num * 100) / 100).toFixed(2);
-    }
+    };
     
     const successPaymentHandler = (paymentResult) => {
-        console.log(paymentResult);
         dispatch(payOrder(orderId, paymentResult));
-    }
+    };
 
+    const deliveredHandler = async (orderId) => {
+        const token = {
+            headers: {
+                Authorization: `Bearer ${userInfo.token}`
+            }
+        }
+        await orderServices.updateToDelivered(orderId, token);
+        history.push('/admin/orders-list');
+    };
+    
     return loading ? <Loader /> : error ? <Message status="error" text={error} /> : <>
         <Grid container spacing={1}>
             <Grid item xs={12}>
@@ -172,7 +191,7 @@ const OrderScreen = ({ match }) => {
                     <List dense className={classes.root}>
                     {order.orderItems.map((item, idx) => {
                         return (
-                            <Paper className={classes.drawerPaper}>
+                            <Paper key={idx} className={classes.drawerPaper}>
                                 <ListItem key={idx}>
                                 <ListItemAvatar style={{margin: "0.5rem 0"}}>
                                     <Avatar alt="product image" src={item.productImage}  className={classes.large}/>
@@ -229,6 +248,19 @@ const OrderScreen = ({ match }) => {
                                     onSuccess={successPaymentHandler}
                                 />
                             )}
+                        </CardContent>
+                    )}
+                    { userInfo.role === 'admin' && order.isPaid && !order.isDelivered && (
+                        <CardContent>
+                            <Button
+                            variant="contained"
+                            color="primary"
+                            className={classes.delivered}
+                            onClick={() => deliveredHandler(order._id)}
+                            fullWidth
+                        >
+                            Mark as Delivered
+                        </Button>
                         </CardContent>
                     )}
                 </Card>

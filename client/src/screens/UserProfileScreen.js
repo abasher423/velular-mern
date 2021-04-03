@@ -271,10 +271,10 @@ const UserProfileScreen = ({ history }) => {
                                                         </StyledTableCell>
                                                         <StyledTableCell>{order.date}</StyledTableCell>
                                                         <StyledTableCell>£{order.totalPrice}</StyledTableCell> 
-                                                        <StyledTableCell>{order.isPaid ? order.paidAt.substring(0, 26) : (
+                                                        <StyledTableCell>{order.isPaid ? order.paidAt.substring(0, 25) : (
                                                             <ClearIcon className={classes.clear}/>
                                                         )}</StyledTableCell> 
-                                                        <StyledTableCell>{order.isDelivered ? order.deliveredAt.substring(0, 11) : (
+                                                        <StyledTableCell>{order.isDelivered ? order.deliveredAt.substring(0, 25) : (
                                                             <ClearIcon className={classes.clear}/>
                                                         )}</StyledTableCell>
                                                         <StyledTableCell>

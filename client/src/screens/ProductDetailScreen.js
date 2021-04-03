@@ -65,9 +65,9 @@ const ProductDetailScreen = ({ history, match }) => {
 
     const addToCartHandler = (e) => {
         dispatch(addToCart(product._id, quantity))
-        history.push('/cart')
-        // history.push(`/cart/${product._id}?qty=${quantity}`);
-    }
+        history.push('/cart');
+    };
+
     return (
         <>
             <Container>
@@ -153,7 +153,6 @@ const ProductDetailScreen = ({ history, match }) => {
                     </Grid>
                 </Grid>
                 )}
-                
             </Container>
         </>
     );

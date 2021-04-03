@@ -122,7 +122,7 @@ const CustomListScreen = () => {
                     </TableHead>
                     <TableBody>
                       {customsList.map(custom => (
-                        <StyledTableRow key={custom.customId}>
+                        <StyledTableRow key={custom._id}>
                           <StyledTableCell component="th" scope="row">{custom._id}</StyledTableCell>
                           <StyledTableCell>{custom.name}</StyledTableCell>
                           <StyledTableCell>£{custom.price}</StyledTableCell>
