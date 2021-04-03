@@ -13,7 +13,7 @@ const checkRole = (role) => {
             
             next();
         } catch (err){
-            return res.status(401).json({ message: 'Authentication Failed'});
+            return res.status(402).json({ message: 'Authentication Failed'});
         }
     };
 };

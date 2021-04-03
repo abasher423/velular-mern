@@ -17,11 +17,3 @@ const userSchema = new Schema({
 });
 
 export default mongoose.model('User', userSchema);
-
-// shipping: {
-//     street: { type: String, required: true},
-//     city: { type: String, required: true},
-//     country: { type: String, required: true },
-//     state: {type: String, required: true },
-//     postcode: { type: String, required: true },
-// }
