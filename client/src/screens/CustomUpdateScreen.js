@@ -6,6 +6,7 @@ import ArrowBackIcon from '@material-ui/icons/ArrowBack';
 import { Link } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import productServices from '../services/productServices';
+
 const useStyles = makeStyles(theme => ({
     backIcon: {
         margin: theme.spacing(1),
@@ -35,7 +36,7 @@ const useStyles = makeStyles(theme => ({
         minWidth: 185,
     },
     categoryFormControl: {
-        marginBottom: '2rem',
+        // marginBottom: '2rem',
         minWidth: 400
     },
     brandFormControl: {
@@ -64,6 +65,7 @@ const CustomUpdateScreen = ({ match, history }) => {
     const [brand, setBrand] = useState(customDetails.brand || '');
     const [category, setCategory] = useState(customDetails.category || '');
     const [description, setDescription] = useState(customDetails.description || '');
+    const [reason, setReason] = useState(customDetails.reason || '');
 
     const userLogin = useSelector(state => state.userLogin);
     const { userInfo } = userLogin;
@@ -86,6 +88,7 @@ const CustomUpdateScreen = ({ match, history }) => {
                 setBrand(customDetails.brand);
                 setCategory(customDetails.category);
                 setDescription(customDetails.description);
+                setReason(customDetails.reason);
             }
         }
 
@@ -99,7 +102,8 @@ const CustomUpdateScreen = ({ match, history }) => {
         {propName: "quantityInStock", value: null},
         {propName: "brand", value: null},
         {propName: "description", value: null},
-        {propName: "category", value: null}
+        {propName: "category", value: null},
+        {propName: "reason", value: null}
     ]
     customData[0].value = productName;
     customData[1].value = price;
@@ -108,6 +112,7 @@ const CustomUpdateScreen = ({ match, history }) => {
     customData[4].value = brand;
     customData[5].value = description;
     customData[6].value = category;
+    customData[7].value = reason;
     
     // HANDLERS
     const updateHandler = async () => {
@@ -137,7 +142,7 @@ const CustomUpdateScreen = ({ match, history }) => {
     };
 
     const handleCloseBrand = () => {
-        setOpenSize(false);
+        setOpenBrand(false);
     };
 
     const handleOpenBrand = () => {
@@ -172,11 +177,15 @@ const CustomUpdateScreen = ({ match, history }) => {
         setDescription(e.target.value);
     };
 
+    const reasonHandler = (e) => {
+        setReason(e.target.value);
+    };
+
     const menuItems = [];
     for (let i=2; i<14; i+=0.5){
         menuItems.push(<MenuItem value={i}>{i}</MenuItem>);
     }
-    console.log(size)
+    console.log(customDetails)
     return (
         <>
             <IconButton edge="start" className={classes.backIcon} color="inherit" component={Link} to={'/admin/customs-list'} aria-label="back">
@@ -296,6 +305,19 @@ const CustomUpdateScreen = ({ match, history }) => {
                                             <MenuItem value="Slippers">Slippers</MenuItem>
                                             </Select>
                                         </FormControl>
+                                    </Grid>
+                                    <Grid item xs={12}>
+                                    <TextField
+                                        id="outlined-multiline-static"
+                                        label="Note"
+                                        margin="normal"
+                                        multiline
+                                        fullWidth
+                                        rows={4}
+                                        variant="outlined"
+                                        value={reason}
+                                        onChange={reasonHandler}
+                                    />
                                     </Grid>
                                     <Grid item xs={12}>
                                         <Button

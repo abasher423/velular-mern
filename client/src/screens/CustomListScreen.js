@@ -18,7 +18,7 @@ import DeleteIcon from '@material-ui/icons/Delete';
 import { useState } from 'react';
 import { useSelector } from 'react-redux';
 import productServices from '../services/productServices';
-
+import LoopIcon from '@material-ui/icons/Loop';
 const useStyles = makeStyles(theme => ({
     title: {
         textAlign: 'center',
@@ -94,15 +94,18 @@ const CustomListScreen = () => {
 
     const acceptHandler = async (customId) => {
         await productServices.acceptCustom(customId, token);
-        const response = await productServices.fetchCustomsList(token);
-        setCustomsList(response.data.customs);
+        setCustomsList([]);
     };
 
     const rejectHandler = async (customId) => {
         await productServices.rejectCustom(customId, token);
-        const response = await productServices.fetchCustomsList(token);
-        setCustomsList(response.data.customs);
+        setCustomsList([]);
     };
+
+    const pendingHandler = async (customId) => {
+      await productServices.pendingCustom(customId, token);
+      setCustomsList([]);
+    }
 
     return (
         <Container>
@@ -131,6 +134,9 @@ const CustomListScreen = () => {
                           <StyledTableCell>
                             <IconButton edge="start" component={Link} to={`/customs/${custom._id}`}>
                                 <EditIcon />
+                            </IconButton>
+                            <IconButton edge="start" onClick={() => pendingHandler(custom._id)}>
+                                <LoopIcon />
                             </IconButton>
                             <IconButton edge="start"  className={classes.accept} onClick={() => acceptHandler(custom._id)}>
                                 <CheckIcon />

@@ -85,7 +85,7 @@ const UserProfileScreen = ({ history }) => {
         if (!userInfo){
             history.push('/login');
         } else {
-            if (!user || success){
+            if (!user || !orders || success){
                 dispatch({ type: USER_UPDATE_RESET });
                 dispatch({ type: ORDER_LIST_USER_RESET });
                 dispatch(getUserDetails(jwt(userInfo.token).userId));
@@ -99,7 +99,7 @@ const UserProfileScreen = ({ history }) => {
             }
         }
         
-    }, [dispatch, history, userInfo, user, success]) // we want to set variables when user changes
+    }, [dispatch, history, userInfo, user, success, orders]) // we want to set variables when user changes
 
     const userData = [
         {propName: "firstName", value: null},
