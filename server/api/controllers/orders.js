@@ -165,6 +165,7 @@ const order_update_paid = async (req, res) => {
             res.status(400).json({ message: 'Invalid request'});
         }
     } catch (err){
+        console.log(err)
         res.status(500).json({ error: err });
     }
 }
