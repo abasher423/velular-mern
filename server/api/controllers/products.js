@@ -8,8 +8,7 @@ const products_get_all = async (req, res) => {
     try {
         const products = await Product
             .find()
-            .select('_id name artist description brand size quantityInStock initialPrice price status reason productImage')
-            .populate('artist', '_id firstName lastName')
+            .select('_id name artist reason description brand size quantityInStock initialPrice price status reason productImage');
         if (products.length > 0){ //.where to add conditions or .limit for pagination
             const response = {
                 count: products.length,
@@ -57,9 +56,8 @@ const products_get_all = async (req, res) => {
 const customs_get_all = async (req, res) => {
     try {
         const customs = await Product
-            .find({ status: 'Pending' })
+            .find({ status: 'Submitted' })
             .select('_id name  artist price category brand status reason')
-            .populate('artist', '_id, firstName, lastName');
         if (customs.length > 0){
             res.status(200).json({
                 count: customs.length,
@@ -87,9 +85,8 @@ const customs_get_all = async (req, res) => {
 const customs_get_all_artist = async (req, res) => {
     try {
         const customs = await Product
-            .find({ status: 'Pending' })
-            .select('_id name artist price category brand status reason')
-            .populate('artist', '_id firstName lastName')
+            .find({ artist: req.userData.userId})
+            .select('_id name productImage size description artist price category brand status reason')
         if (customs.length > 0){
             res.status(200).json({
                 count: customs.length,
@@ -97,6 +94,9 @@ const customs_get_all_artist = async (req, res) => {
                     return {
                         _id: custom._id,
                         name: custom.name,
+                        size: custom.size,
+                        productImage: custom.productImage,
+                        description: custom.description,
                         price: custom.price,
                         category: custom.category,
                         brand: custom.brand,
@@ -121,7 +121,6 @@ const products_get_product = async (req, res) => {
         const product = await Product
             .findById(req.params.productId)
             .select('_id artist name description brand size quantityInStock initialPrice price status reason productImage category')
-            .populate('artistId', '_id firstName lastName email');
         if (product){ // checks if the product exists
             console.log(product);
             res.status(200).json({
@@ -223,6 +222,7 @@ const custom_update_accept = async (req, res) => {
             res.status(400).json({ message: 'Invalid Request' });
         }
     } catch (err){
+        console.log(err)
         res.status(500).json({ error: err });
     }
 }
@@ -232,6 +232,36 @@ const custom_update_reject = async (req, res) => {
         const custom = await Product.findById(req.params.customId);
         if (custom){
             custom.status = 'Rejected';
+            const updatedCustom = await custom.save();
+            res.status(201).json(updatedCustom);
+        } else {
+            res.status(400).json({ message: 'Invalid Request' });
+        }
+    } catch (err){
+        res.status(500).json({ error: err });
+    }
+}
+
+const custom_update_pending = async (req, res) => {
+    try {
+        const custom = await Product.findById(req.params.customId);
+        if (custom){
+            custom.status = 'Pending';
+            const updatedCustom = await custom.save();
+            res.status(201).json(updatedCustom);
+        } else {
+            res.status(400).json({ message: 'Invalid Request' });
+        }
+    } catch (err){
+        res.status(500).json({ error: err });
+    }
+}
+
+const custom_update_submitted = async (req, res) => {
+    try {
+        const custom = await Product.findById(req.params.customId);
+        if (custom){
+            custom.status = 'Submitted';
             const updatedCustom = await custom.save();
             res.status(201).json(updatedCustom);
         } else {
@@ -311,10 +341,13 @@ const products_delete_product = async (req, res) => {
 export default {
     products_get_all,
     customs_get_all,
+    customs_get_all_artist,
     products_get_product,
     products_create_product,
     custom_update_accept,
     custom_update_reject,
+    custom_update_pending,
+    custom_update_submitted,
     products_update_product,
     products_delete_product
 };
