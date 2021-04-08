@@ -28,17 +28,38 @@ const useStyles = makeStyles(theme => ({
         minWidth: 700
     },
     accept: {
-        color: theme.palette.success.main
+      "&:hover": {
+        backgroundColor: theme.palette.success.main,
+        color: 'white'
+      },
+        color: theme.palette.success.dark,
+        backgroundColor: '#deffe8',
+        marginLeft: '0.25rem',
+        marginRight: '1rem'
     },
     reject: {
-        color: theme.palette.error.main
+      "&:hover": {
+        backgroundColor: theme.palette.error.main,
+        color: 'white'
+      },
+        color: theme.palette.error.main,
+        backgroundColor: '#ffdede'
+    },
+    editBtn: {
+      backgroundColor: '#ededed',
+      marginRight: '1rem'
+    },
+    pendingBtn: {
+      backgroundColor: '#d9e8ff',
+      color: '#1b2082',
     }
 }));
 
 const StyledTableCell = withStyles((theme) => ({
     head: {
-      backgroundColor: theme.palette.common.white,
-      color: theme.palette.common.black,
+      backgroundColor: '#d9e8ff',
+      color: '#1b2082',
+      fontWeight: '700'
     },
     body: {
       fontSize: 14,
@@ -48,8 +69,8 @@ const StyledTableCell = withStyles((theme) => ({
   const StyledTableRow = withStyles((theme) => ({
     root: {
       '&:nth-of-type(odd)': {
-        backgroundColor: theme.palette.action.hover,
-      },
+        // backgroundColor: '#d9e8ff',
+      }
     },
   }))(TableRow);
 
@@ -132,10 +153,10 @@ const CustomListScreen = () => {
                           <StyledTableCell>{custom.category}</StyledTableCell>
                           <StyledTableCell>{custom.brand}</StyledTableCell>
                           <StyledTableCell>
-                            <IconButton edge="start" component={Link} to={`/customs/${custom._id}`}>
+                            <IconButton edge="start" component={Link} className={classes.editBtn} to={`/customs/${custom._id}`}>
                                 <EditIcon />
                             </IconButton>
-                            <IconButton edge="start" onClick={() => pendingHandler(custom._id)}>
+                            <IconButton edge="start" className={classes.pendingBtn} onClick={() => pendingHandler(custom._id)}>
                                 <LoopIcon />
                             </IconButton>
                             <IconButton edge="start"  className={classes.accept} onClick={() => acceptHandler(custom._id)}>
