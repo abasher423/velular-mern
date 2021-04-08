@@ -28,7 +28,7 @@ const productSchema = new Schema({
     quantityInStock: { type: Number, required: true },
     initialPrice: { type: Number, default: 0 },
     price: { type: Number, required: true },
-    status: { type: String,  enum: ['Accepted', 'Rejected', 'Pending'], default: 'Rejected' },
+    status: { type: String,  enum: ['Pending', 'Submitted', 'Accepted', 'Rejected'], default: 'Pending' },
     reason: { type: String }
 }, {
     timestamps: true

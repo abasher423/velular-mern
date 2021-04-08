@@ -12,7 +12,7 @@ import Loader from '../components/Loader';
 import Alert from '@material-ui/lab/Alert';
 import { PayPalButton } from 'react-paypal-button-v2';
 import AuthenticationServices from '../services/AuthenticationServices';
-import { ORDER_PAY_RESET } from '../constants/orderConstants';
+import { ORDER_LIST_USER_RESET, ORDER_PAY_RESET } from '../constants/orderConstants';
 import { CART_ITEMS_RESET } from '../constants/cartConstants';
 import orderServices from '../services/orderServices';
 
@@ -120,6 +120,7 @@ const OrderScreen = ({ match, history }) => {
     
     const successPaymentHandler = (paymentResult) => {
         dispatch(payOrder(orderId, paymentResult));
+        dispatch({ type: ORDER_LIST_USER_RESET });
     };
 
     const deliveredHandler = async (orderId) => {

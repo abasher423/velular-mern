@@ -177,14 +177,14 @@ const Header = ({ history }) => {
                                     Artist
                             </Button>
                             <Menu
-                                id="admin menu"
+                                id="artist menu"
                                 anchorEl={anchorEl3}
                                 keepMounted
                                 open={Boolean(anchorEl3)}
                                 onClose={artistHandleClose}
                             >
-                                <MenuItem component={Link} to={'/artist/customs-list'} onClick={adminHandleClose}>Customs</MenuItem>
-                                <MenuItem component={Link} to={'/artist/orders-list'} onClick={adminHandleClose}>Orders</MenuItem>
+                                <MenuItem component={Link} to={'/artist/customs'} onClick={artistHandleClose}>Customs</MenuItem>
+                                <MenuItem component={Link} to={'/artist/orders-list'} onClick={artistHandleClose}>Orders</MenuItem>
                             </Menu>
                         </div>
                     )}
