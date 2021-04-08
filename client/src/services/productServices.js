@@ -37,6 +37,11 @@ const updateCustom = (customData, customId, token) => {
     return api().patch(`/products/${customId}`, customData, token);
 };
 
+const createCustom = (customData) => {
+    return api().post('/products', customData, {headers: { "Content-Type": "multipart/form-data" }});
+    
+}
+
 const deleteCustom = (customId, token) => {
     return api().delete(`/products/${customId}`, token);
 }
@@ -50,6 +55,7 @@ export default{
     rejectCustom,
     pendingCustom,
     submitCustom,
+    createCustom,
     updateCustom,
     deleteCustom
 };

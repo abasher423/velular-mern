@@ -14,6 +14,7 @@ import AddIcon from '@material-ui/icons/Add';
 import productServices from '../services/productServices';
 import { Link } from 'react-router-dom';
 import Message from '../components/Message';
+import PopupDialog from '../components/PopupDialog';
 
 
 const useStyles = makeStyles(theme => ({
@@ -72,6 +73,7 @@ const useStyles = makeStyles(theme => ({
 // https://material-ui.com/components/accordion/
 const CustomCreateScreen = () => {
     const classes = useStyles();
+    const [openForm, setOpenForm] = useState(false);
     const [error, setError] = useState(null);
     const [expanded, setExpanded] = useState(false);
     const [customDetails, setCustomDetails] = useState([]);
@@ -120,6 +122,10 @@ const CustomCreateScreen = () => {
         setExpanded(isExpanded ? panel : false);
     };
 
+    const handleClickOpen = () => {
+        setOpenForm(true);
+    };
+
     const submitHandler = async (customId) => {
         await productServices.submitCustom(customId, token);
         setCustomDetails([]);
@@ -143,10 +149,17 @@ const CustomCreateScreen = () => {
                     variant="contained"
                     color="primary"
                     className={classes.createBtn}
+                    onClick={handleClickOpen}
                     startIcon={<AddIcon />}
                 >
                     Create New
                 </Button>
+                <PopupDialog 
+                    openForm={openForm}
+                    setOpenForm={setOpenForm}
+                    setCustomDetails={setCustomDetails}
+                    onClick={() => setOpenForm(true)}
+                />
                 </Grid>
                 <Grid item xs={12}>
                     {error && <Message status="error" text={error} />}
@@ -178,7 +191,10 @@ const CustomCreateScreen = () => {
                                 <div className={clsx(classes.column, classes.helper)}>
                                     <Typography variant="body2" component="p">Product Name: <b>{custom.name}</b></Typography>
                                     <br />
-                                    <Typography variant="body2" component="p">Proposed Price: <b>£{custom.price}</b></Typography>
+                                    <Typography variant="body2" component="p">
+                                        {custom.status === 'Accepted' ? 'Price: ' : 'Proposed Price: '}
+                                        <b>£{custom.price}</b>
+                                    </Typography>
                                     <br />
                                     <Typography variant="body2" component="p">Size: <b>( 3 - {custom.size} )</b></Typography>
                                     <br />
