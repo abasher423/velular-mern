@@ -50,8 +50,10 @@ router.put('/customs/:customId/submitted', ProductsController.custom_update_subm
 
 router.post('/', upload.single('productImage'), ProductsController.products_create_product);
 
+router.post('/:productId/reviews', checkAuth(), ProductsController.products_create_review);
+
 router.patch('/:productId', ProductsController.products_update_product);
 
-router.delete('/:productId', checkAuth(), ProductsController.products_delete_product);
+router.delete('/:productId',  ProductsController.products_delete_product);
 
 export default router;
