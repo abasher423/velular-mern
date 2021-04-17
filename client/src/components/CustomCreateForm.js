@@ -244,7 +244,6 @@ const CustomCreateForm = ({ setOpenForm, setCustomDetails }) => {
                 <TextField 
                     variant="outlined"
                     margin="normal"
-                    autoComplete="true"
                     id="description"
                     label="Description"
                     fullWidth

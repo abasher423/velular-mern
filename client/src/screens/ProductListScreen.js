@@ -5,24 +5,30 @@ import Card from '../components/Product';
 import Grid from '@material-ui/core/Grid'
 import Loader from '../components/Loader';
 import Message from '../components/Message';
-import { listProducts }from '../actions/productActions';
 import { Typography } from '@material-ui/core';
+import productServices from '../services/productServices';
+import { useState } from 'react';
 
 const ListedProducts = () => {
-    const dispatch = useDispatch();
-
-    const productList = useSelector(state => state.productList);
-
-    const { loading, error, products} =  productList;
+    const [products, setProducts] = useState([]);
+    const [error, setError] = useState('');
     
     useEffect(() => {
-        dispatch(listProducts());
-    }, [dispatch]);
+        const fetchProductList = async () => {
+            try {
+                const response = await productServices.index();
+                setProducts(response.data.products)
+            } catch(error){
+                setError(error.response && error.response.data.message);
+            }
+        }
+        fetchProductList()
+    }, []);
 
     return (
         <>
         <Typography variant="h2" component="h2" style={{ marginBottom: "3rem" }}>Latest Products</Typography>
-        { loading ? <Loader /> : error ? <Message status="error" text={error} />
+        { error ? <Message status="error" text={error} />
             : <Grid container spacing={2} alignItems="stretch">
             {products.map(product => {
                 return <Grid item xs={3} key={product._id} >
