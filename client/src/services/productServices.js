@@ -40,11 +40,15 @@ const updateCustom = (customData, customId, token) => {
 const createCustom = (customData) => {
     return api().post('/products', customData, {headers: { "Content-Type": "multipart/form-data" }});
     
-}
+};
+
+const writeReview = (productId, reviewData ,token) => {
+    return api().post(`/products/${productId}/reviews`, reviewData, token);
+};
 
 const deleteCustom = (customId, token) => {
     return api().delete(`/products/${customId}`, token);
-}
+};
 
 export default{
     index,
@@ -56,6 +60,7 @@ export default{
     pendingCustom,
     submitCustom,
     createCustom,
+    writeReview,
     updateCustom,
     deleteCustom
 };
