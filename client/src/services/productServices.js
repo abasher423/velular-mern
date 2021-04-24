@@ -17,16 +17,8 @@ const fetchArtistCustoms = (token) => {
     return api().get('/products/customs/artist', token);
 }
 
-const acceptCustom = (customId, token) => {
-    return api().put(`/products/customs/${customId}/accept`, token);
-};
-
-const rejectCustom = (customId, token) => {
-    return api().put(`/products/customs/${customId}/reject`, token);
-};
-
-const pendingCustom = (customId, token) => {
-    return api().put(`/products/customs/${customId}/pending`, token);
+const updateCustomStatus = (customId, status, token) => {
+    return api().put(`/products/customs/${customId}`, status, token);
 };
 
 const submitCustom = (customId, token) => {
@@ -55,9 +47,7 @@ export default{
     indexOne,
     fetchCustomsList,
     fetchArtistCustoms,
-    acceptCustom,
-    rejectCustom,
-    pendingCustom,
+    updateCustomStatus,
     submitCustom,
     createCustom,
     writeReview,

@@ -71,6 +71,7 @@ const useStyles = makeStyles( theme => ({
 const ProductDetailScreen = ({ history, match }) => {
     const productId = match.params.productId;
     const [quantity, setQuantity] = useState(1);
+    const [size, setSize] = useState(5);
     const [product, setProduct] = useState('');
     const [error, setError] = useState('');
     const [reviewError, setReviewError] = useState('');
@@ -102,6 +103,10 @@ const ProductDetailScreen = ({ history, match }) => {
 
     const handleQtyChange = e => {
         setQuantity(e.target.value)
+    };
+
+    const handleSizeChange = e => {
+        setSize(e.target.value)
     };
 
     const addToCartHandler = (e) => {
@@ -195,15 +200,39 @@ const ProductDetailScreen = ({ history, match }) => {
                                     <Typography gutterBottom>Quantity</Typography>
                                     <FormControl className={classes.formControl}>
                                         <Select
-                                        labelId="demo-simple-select-label"
-                                        id="demo-simple-select"
+                                        labelId="quantity-select-label"
+                                        id="quantity-select"
                                         value={quantity}
                                         onChange={handleQtyChange}
                                         >
                                         {
-                                            [...Array(product.quantityInStock).keys()].map(x => (
-                                                <MenuItem key={x + 1} value={x + 1}>{x + 1}</MenuItem>
+                                            [...Array(product.quantityInStock).keys()].map(k => (
+                                                <MenuItem key={k + 1} value={k + 1}>{k + 1}</MenuItem>
                                             ))
+                                        }
+                                        </Select>
+                                    </FormControl>
+                                </div>
+                                <Divider style={{margin: "0.5rem 0"}}/>
+
+                                <div className={classes.box}>
+                                    <Typography gutterBottom>Size</Typography>
+                                    <FormControl className={classes.formControl}>
+                                        <Select
+                                        labelId="size-select-label"
+                                        id="size-select"
+                                        value={size}
+                                        onChange={handleSizeChange}
+                                        >
+                                        { product.size % 1 === 0 ? (
+                                            [...Array(product.size).keys()].map(k => (
+                                                <MenuItem key={k} value={k}>{k}</MenuItem>
+                                            ))
+                                        ) : (
+                                            [...Array(product.size + 0.5).keys()].map(k => (
+                                                <MenuItem key={k} value={k}>{k}</MenuItem>
+                                            ))
+                                        )
                                         }
                                         </Select>
                                     </FormControl>
