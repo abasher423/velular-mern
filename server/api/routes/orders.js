@@ -7,13 +7,13 @@ const router = express.Router();
 
 router.get('/', OrdersController.orders_get_all);
 
-router.get('/:orderId', OrdersController.orders_get_order);
+router.get('/:orderId', checkAuth(), OrdersController.orders_get_order);
 
 router.get('/:userId/orders', checkAuth(), OrdersController.orders_get_user);
 
 router.put('/:orderId/pay', checkAuth(), OrdersController.order_update_paid);
 
-router.put('/:orderId/delivered', OrdersController.order_update_delivered);
+router.put('/:orderId/deliver', OrdersController.order_update_delivered);
 
 router.post('/', checkAuth(), OrdersController.orders_create_order);
 

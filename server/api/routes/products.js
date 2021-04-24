@@ -5,7 +5,7 @@ import checkRole from '../auth/check-role.js';
 import ProductsController from '../controllers/products.js';
 
 const router = express.Router();
-
+// file type constraints
 const fileFilter = (req, file, cb) => {
     if (file.mimetype === 'image/jpeg' || file.mimetype === 'image/jpg' || file.mimetype === 'image/png'){
         // accept a file
@@ -16,14 +16,14 @@ const fileFilter = (req, file, cb) => {
     }
 }
 const storage = multer.diskStorage({
-    destination: (req, file, cb) => {
+    destination: (req, file, cb) => { //where to store file
         cb(null, 'uploads/');
     },
     filename: (req, file, cb) => {
-        cb(null, new Date().toISOString().replace(/:/g, '-') + file.originalname);
+        cb(null, new Date().toISOString().replace(/:/g, '-') + file.originalname); // file name
     }
 });
-
+// file size constraints
 const upload = multer({
     storage: storage,
     limits: {
@@ -39,6 +39,8 @@ router.get('/customs', checkAuth(), checkRole('admin'), ProductsController.custo
 router.get('/customs/artist', checkAuth(), ProductsController.customs_get_all_artist);
 
 router.get('/:productId', ProductsController.products_get_product);
+
+router.put('/customs/:customId', checkAuth(), ProductsController.custom_update_status);
 
 router.put('/customs/:customId/accept', ProductsController.custom_update_accept);
 
