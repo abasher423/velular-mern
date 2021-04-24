@@ -2,11 +2,11 @@
   "name": "velular-server",
   "version": "1.0.0",
   "description": "A Node.js REST API E-Commerce Project (server)",
-  "main": "app.js",
+  "main": "index.js",
   "type": "module",
   "scripts": {
-    "start": "nodemon app.js",
-    "dev": "nodemon -r dotenv/config app.js"
+    "start": "nodemon index.js",
+    "dev": "nodemon -r dotenv/config index.js"
   },
   "author": "Abdifatah Basher",
   "license": "ISC",
