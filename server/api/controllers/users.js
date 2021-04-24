@@ -1,6 +1,6 @@
 import mongoose from 'mongoose';
 import jwt from 'jsonwebtoken';
-import bcrypt from 'bcrypt';
+import bcrypt, { hash } from 'bcrypt';
 import User from '../models/user.js';
 
 // @desc Fetch all users
@@ -89,90 +89,75 @@ const admin_get_user = async (req, res) => {
     }
 };
 
-// @desc Create a user
-// @route GET /api/users
-// @access Public
-const user_register = (req, res) => {
-    User.find({ email: req.body.email })
-        .exec()
-        .then(user => {
-            if (user.length > 0) { // if an email already exists
-                return res.status(422).json({ message: 'An account with the same email already exists' });
-            } else {
-                bcrypt.hash(req.body.password, 10, (err, hash) => {
-                    if (err) {
-                        return res.status(500).json({ error: err });
-                    } else {
-                        const { email, firstName, lastName, role, verified} = req.body;
-                        const user = new User({ 
-                            _id: mongoose.Types.ObjectId(),
-                            password: hash, 
-                            // orders: orderId,
-                            email, firstName, lastName, role, verified
-                        });
-                        user.save()
-                            .then(result => {
-                                console.log(result);
-                                res.status(201).json({ 
-                                    message: 'User created',
-                                    email: user.email,
-                                    password: user.password,
-                                    firstName: user.firstName,
-                                    lastName: user.lastName
-                                });
-                            })
-                            .catch(err => {
-                                console.log(err);
-                                res.status(500).json({ error: err });
-                            })
-                    }
+const user_register = async (req, res) => {
+    try {
+        // list of users with the same email address as the one provided
+        const users = await User.find({ email: req.body.email });
+        if (users.length === 0){
+            // hash password with 10 salt rounds
+            const hashedPassword = await bcrypt.hash(req.body.password, 10);
+            if (hashedPassword){
+                const { email, firstName, lastName, role, verified } = req.body;
+                const user = new User({
+                    _id: mongoose.Types.ObjectId(),
+                    password: hashedPassword, // store hashed password
+                    email, firstName, lastName, role, verified
                 });
-            }
-        })
+                await user.save();
+                res.status(201).json({
+                    message: 'User successfully created',
+                    email: user.email,
+                    password: user.password,
+                    firstName: user.firstName,
+                    lastName: user.lastName
+                });
+            } 
+        } else {
+            res.status(401).json({ message: 'An account with the same email address already exists' });
+        }
+    } catch (err){
+        console.log(err);
+        res.status(500).json({ error: err });
+    }
 };
 
-// @desc  Create user login
-// @route POST /api/users
-// @access Public
-const user_login = (req, res) => {
-    User.findOne({ email: req.body.email })
-        .exec()
-        .then(user => {
-            if (!user){ // if the user doesn't exist
-                return res.status(401).json({ message: 'Incorrect email or password' }); // if error with email
+const user_login = async (req, res) => {
+    try {
+        const user = await User.findOne({ email: req.body.email });
+        if (user){
+            const authenticated = await bcrypt.compare(req.body.password, user.password);
+            if (authenticated){
+                const token = jwt.sign({
+                    // data we want to pass to the client (payload)
+                    userId: user._id,
+                    email: user.email,
+                    firstName: user.firstName,
+                    lastName: user.lastName,
+                    role: user.role
+                }, 
+                process.env.JWT_KEY,
+                {
+                    expiresIn: "1h" // jwt will expire after 1 hour
+                });
+                res.status(200).json({ 
+                    message: 'Authentication Successfull',
+                    token: token, //jsonwebtoken,
+                    firstName: user.firstName,
+                    lastName: user.lastName,
+                    email: user.email,
+                    role: user.role
+                });
+            } else {
+                res.status(401).json({ message: 'Incorrect email address or password' });
             }
-            bcrypt.compare(req.body.password, user.password, (err, result) => {
-                if (result) {
-                    const token = jwt.sign({ // what we want to pass to the client (inside the token)
-                        userId: user._id,
-                        email: user.email,
-                        firstName: user.firstName,
-                        lastName: user.lastName,
-                        role: user.role,
-                        // password: user.password
-                    }, 
-                    process.env.JWT_KEY,
-                    {
-                        expiresIn: "1h"
-                    });
-                    res.status(200).json({ 
-                        message: 'Authentication Successfull',
-                        token: token, //jsonwebtoken,
-                        firstName: user.firstName,
-                        lastName: user.lastName,
-                        email: user.email,
-                        role: user.role
-                    })
-                } else { // if error with password
-                    res.status(401).json({ message: 'Incorrect  password' });
-                }
-            });
-        })
-        .catch(err => {
-            console.log(err);
-            res.status(500).json({ error: err });
-        })
-};
+        } else {
+            res.status(401).json({ message: 'Incorrect email address or password' });
+        }
+    } catch (err) {
+        console.log(err);
+        res.status(500).json({ error: err });
+    }
+}
 
 // @desc Update a user
 // @route PATCH /api/users/userId
@@ -189,13 +174,12 @@ const users_update_user = async (req, res) => {
             if (password === '' || password === null){ // if new password set to null, set password to existing password
                 updateItems.password = user.password
             } else {
-                bcrypt.hash(password, 10, async (err, hash) => { // if new password exists, encrypt it and then update
-                    if (err){
-                        res.status(500).json({ error: err });
-                    } else {
-                        updateItems.password = hash;                        
-                    }
-                });
+                const hashedPassword = await bcrypt.hash(password, 10);
+                if (hashedPassword){
+                    updateItems.password = hashedPassword;
+                } else {
+                    res.status(500).json({ error: err });
+                }
             }
             await User.updateOne({_id: req.params.userId}, {$set: updateItems});
             res.status(200).json({ 

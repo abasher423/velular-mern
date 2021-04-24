@@ -1,6 +1,7 @@
 import mongoose from 'mongoose';
 import Order from '../models/order.js';
 import Product from '../models/product.js';
+import sendmail from 'sendmail';
 
 const getResponse = (order, type, desc, id) => {
     return {
@@ -47,7 +48,7 @@ const orders_get_order = async (req, res) => {
         .findById(req.params.orderId)
         .populate('user', '_id firstName lastName email');
         if (order){
-            // if (req.userData.userId == order.user._id){
+            if (req.userData.userId === order.user._id.toString()){
                 res.status(200).json({
                     order: order,
                     request: {
@@ -56,9 +57,9 @@ const orders_get_order = async (req, res) => {
                         url: 'http://localhost:8080/api/orders'
                     }
                 });
-            // } else {
-                // res.status(401).json({ message: 'Unauthorized'});
-            // }
+            } else {
+                res.status(401).json({ message: 'Unauthorized'});
+            }
         } else {
             res.status(404).json({ message: 'order not found' });
         }
@@ -161,6 +162,7 @@ const order_update_paid = async (req, res) => {
             };
             const updatedOrder = await order.save();
             res.status(200).json(updatedOrder);
+            
         } else {
             res.status(400).json({ message: 'Invalid request'});
         }

@@ -103,11 +103,7 @@ const CustomCreateScreen = () => {
                         setCustomDetails(data);
                     
                 } catch (error){
-                    setError(
-                        error.response && error.response.data.message 
-                        ? error.response.data.message 
-                        : error.message
-                    );
+                    setError(error.response && error.response.data.message);
                 }
             };
     
@@ -127,7 +123,7 @@ const CustomCreateScreen = () => {
     };
 
     const submitHandler = async (customId) => {
-        await productServices.submitCustom(customId, token);
+        await productServices.updateCustomStatus(customId, { status: 'Submitted' }, token);
         setCustomDetails([]);
     };
 

@@ -102,11 +102,7 @@ const CustomListScreen = () => {
                     setCustomsList(response.data.customs)
                 }
             } catch (error){
-                setError(
-                    error.response && error.response.data.message 
-                    ? error.response.data.message 
-                    : error.message
-                );
+                setError(error.response && error.response.data.message);
             }
         }
 
@@ -114,17 +110,17 @@ const CustomListScreen = () => {
     }, [customsList, userInfo.token]);
 
     const acceptHandler = async (customId) => {
-        await productServices.acceptCustom(customId, token);
+        await productServices.updateCustomStatus(customId, { status: 'Accepted' }, token);
         setCustomsList([]);
     };
 
     const rejectHandler = async (customId) => {
-        await productServices.rejectCustom(customId, token);
+        await productServices.updateCustomStatus(customId, { status: 'Rejected' }, token);
         setCustomsList([]);
     };
 
     const pendingHandler = async (customId) => {
-      await productServices.pendingCustom(customId, token);
+      await productServices.updateCustomStatus(customId, { status: 'Pending' }, token);
       setCustomsList([]);
     }
 

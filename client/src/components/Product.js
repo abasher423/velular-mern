@@ -26,7 +26,7 @@ const useStyles = makeStyles({
 
 const Product = ({ product }) => {
   const classes = useStyles();
-
+  console.log(product, 'product')
   return (
         <Card className={classes.root}>
           <Link to={`/products/${product._id}`} style={{ textDecoration: "none", color: "black"}}>
@@ -54,7 +54,7 @@ const Product = ({ product }) => {
                   </Typography>
                   <Divider className={classes.divide}/>
                   <Typography gutterBottom variant="h6" component="h2">
-                    <Rating value={product.rating} text={`${product.numReviews} reviews`}/>
+                    <Rating value={product.averageRating} text={`${product.totalNumRating} reviews`}/>
                   </Typography>
                 </CardContent>
                 </CardActionArea>

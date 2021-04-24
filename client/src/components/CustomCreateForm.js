@@ -121,22 +121,12 @@ const CustomCreateForm = ({ setOpenForm, setCustomDetails }) => {
             data.append('artist', jwt(userInfo.token).userId);
             data.append('productImage', file);
 
-            // const config = {
-            //     headers: {
-            //         'Content-type': 'multipart/form-data'
-            //     }
-            // }
-
             await productServices.createCustom(data);
             setCustomDetails([]);
             setOpenForm(false);
         } catch (error){
-            setError(
-                error.response && error.response.data.message 
-                ? error.response.data.message 
-                : error.message
-            );
-            console.log(error)
+            setError(error.response && error.response.data.message);
+            console.log(error);
         }
     };
     
@@ -244,7 +234,6 @@ const CustomCreateForm = ({ setOpenForm, setCustomDetails }) => {
                 <TextField 
                     variant="outlined"
                     margin="normal"
-                    autoComplete="true"
                     id="description"
                     label="Description"
                     fullWidth
@@ -269,6 +258,7 @@ const CustomCreateForm = ({ setOpenForm, setCustomDetails }) => {
                     <input 
                         type="file"
                         id="file"
+                        accept="image/*"
                         onChange={fileHandler}
                         hidden
                     />

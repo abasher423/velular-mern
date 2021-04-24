@@ -5,8 +5,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import Rating from '../components/Rating';
 import Button from '@material-ui/core/Button';
 import Grid from '@material-ui/core/Grid';
-import { Container, Divider, IconButton, ThemeProvider } from '@material-ui/core';
-import Image from 'material-ui-image';
+import { Container, Divider, IconButton, InputLabel, TextField } from '@material-ui/core';
 import Typography from '@material-ui/core/Typography';
 import CardContent from '@material-ui/core/CardContent';
 import CardActions from '@material-ui/core/CardActions';
@@ -15,11 +14,11 @@ import FormControl from "@material-ui/core/FormControl";
 import Select from "@material-ui/core/Select";
 import makeStyles from '@material-ui/core/styles/makeStyles';
 import Card from '@material-ui/core/Card';
-import Loader from '../components/Loader';
 import Message from '../components/Message';
-import { listProductDetails } from '../actions/productActions';
 import { addToCart } from '../actions/cartActions';
 import ArrowBackIcon from '@material-ui/icons/ArrowBack';
+import productServices from '../services/productServices';
+import Alert from '@material-ui/lab/Alert';
 
 const useStyles = makeStyles( theme => ({
     root: {
@@ -36,6 +35,16 @@ const useStyles = makeStyles( theme => ({
         marginBottom: "0.5rem",
         backgroundColor: theme.palette.info.dark
     },
+    submitBtn: {
+        "&:hover": {
+            backgroundColor: theme.palette.success.main,
+            color: 'white'
+        },
+        backgroundColor: 'black',
+        color: 'white',
+        marginTop: '1rem',
+        marginBottom: '150px' //
+    },
     backIcon: {
         "&:hover": {
             backgroundColor: "black"
@@ -43,24 +52,61 @@ const useStyles = makeStyles( theme => ({
         backgroundColor: theme.palette.text.secondary,
         color: "white",
         marginBottom: "2rem"
+    },
+    divider: {
+        margin: theme.spacing(4)
+    },
+    image: {
+        width: '390px',
+        height: 'auto'
+    },
+    reviewDivider: {
+        margin: '2rem 0'
+    },
+    ratingDropDown: {
+        width: 400
     }
 }));
 
 const ProductDetailScreen = ({ history, match }) => {
+    const productId = match.params.productId;
     const [quantity, setQuantity] = useState(1);
+    const [size, setSize] = useState(5);
+    const [product, setProduct] = useState('');
+    const [error, setError] = useState('');
+    const [reviewError, setReviewError] = useState('');
+    const [open, setOpen] = useState(null);
+    const [rating, setRating] = useState(0);
+    const [comment, setComment] = useState('');
 
     const classes = useStyles();
     const dispatch = useDispatch();
 
-    const productDetails = useSelector(state => state.productDetails);
-    const { loading, error, product } = productDetails;
+    const userLogin = useSelector(state => state.userLogin);
+    const { userInfo } = userLogin;
     
     useEffect(() => {
-        dispatch(listProductDetails(match.params.productId));
-    }, [dispatch, match]);
+        if(!product){
+            const fetchProductDetails = async () => {
+                try {
+                    const response = await productServices.indexOne(productId)
+                    setProduct(response.data)
+                } catch(err){
+                    setError(err)
+                }
+            }
+    
+            fetchProductDetails();
+        }
+
+    }, [productId, product]);
 
     const handleQtyChange = e => {
         setQuantity(e.target.value)
+    };
+
+    const handleSizeChange = e => {
+        setSize(e.target.value)
     };
 
     const addToCartHandler = (e) => {
@@ -68,6 +114,40 @@ const ProductDetailScreen = ({ history, match }) => {
         history.push('/cart');
     };
 
+    // HANDLERS
+
+    const ratingHandler = (e) => {
+        setRating(e.target.value);
+    };
+
+    const commentHandler = (e) => {
+        setComment(e.target.value);
+    }
+
+    const submitHandler = async () => {
+        try {
+            const reviewData = { rating, comment };
+            const token = {
+                headers: {
+                    Authorization: `Bearer ${userInfo.token}`
+                }
+            };
+            await productServices.writeReview(productId, reviewData, token);
+            setProduct('');
+        } catch(error){
+            setReviewError(error.response && error.response.data.message);
+            setTimeout(() => setReviewError(''), 3000);
+        }
+    }
+
+    const handleClose = () => {
+        setOpen(false);
+    };
+
+    const handleOpen = () => {
+        setOpen(true);
+    };
+    console.log(product)
     return (
         <>
             <Container>
@@ -76,18 +156,18 @@ const ProductDetailScreen = ({ history, match }) => {
             </IconButton>
             </Container>
             <Container>
-                { loading ? <Loader /> : error ? <Message status="error" text={error} /> : (
+                {error ? <Message status="error" text={error} /> : (
                     <Grid container spacing={4}>
                     <Grid item xs={12} md={4}>
                         <div className={classes.image}>
-                            <Image src={product.productImage} />
+                            <img src={product.productImage} alt={product}/>
                         </div>
                     </Grid>
                     <Grid item xs={12} md={4}>
                         <div>
                             <Typography variant="h2" component="h2" >{product.name}</Typography>
                             <Divider style={{margin: "0.5rem 0"}}/>
-                            <Rating value={product.rating} text={`${product.numReviews} Reviews`} />
+                            <Rating value={product.averageRating} text={`${product.totalNumRating} Reviews`} />
                             <Divider style={{margin: "0.5rem 0"}}/>
                             <Typography variant="h4" component="h3">{product.brand}</Typography>
                             <Divider style={{margin: "0.5rem 0"}}/>
@@ -107,9 +187,8 @@ const ProductDetailScreen = ({ history, match }) => {
                                 <Divider style={{margin: "0.5rem 0"}}/>
                                 
                                 <div className={classes.box}>
-                                    <Typography color="success" gutterBottom>Status</Typography>
-                                    <Typography 
-                                    color="success" 
+                                    <Typography  gutterBottom>Status</Typography>
+                                    <Typography                                
                                     gutterBottom 
                                     style={product.quantityInStock > 0 ? {color: "#81c784"} : {color: "red"}}>
                                         {product.quantityInStock > 0 ? 'In Stock' : 'Out of Stock'}
@@ -118,18 +197,42 @@ const ProductDetailScreen = ({ history, match }) => {
                                 <Divider style={{margin: "0.5rem 0"}}/>
 
                                 <div className={classes.box}>
-                                    <Typography color="success" gutterBottom>Quantity</Typography>
+                                    <Typography gutterBottom>Quantity</Typography>
                                     <FormControl className={classes.formControl}>
                                         <Select
-                                        labelId="demo-simple-select-label"
-                                        id="demo-simple-select"
+                                        labelId="quantity-select-label"
+                                        id="quantity-select"
                                         value={quantity}
                                         onChange={handleQtyChange}
                                         >
                                         {
-                                            [...Array(product.quantityInStock).keys()].map(x => (
-                                                <MenuItem key={x + 1} value={x + 1}>{x + 1}</MenuItem>
+                                            [...Array(product.quantityInStock).keys()].map(k => (
+                                                <MenuItem key={k + 1} value={k + 1}>{k + 1}</MenuItem>
                                             ))
+                                        }
+                                        </Select>
+                                    </FormControl>
+                                </div>
+                                <Divider style={{margin: "0.5rem 0"}}/>
+
+                                <div className={classes.box}>
+                                    <Typography gutterBottom>Size</Typography>
+                                    <FormControl className={classes.formControl}>
+                                        <Select
+                                        labelId="size-select-label"
+                                        id="size-select"
+                                        value={size}
+                                        onChange={handleSizeChange}
+                                        >
+                                        { product.size % 1 === 0 ? (
+                                            [...Array(product.size).keys()].map(k => (
+                                                <MenuItem key={k} value={k}>{k}</MenuItem>
+                                            ))
+                                        ) : (
+                                            [...Array(product.size + 0.5).keys()].map(k => (
+                                                <MenuItem key={k} value={k}>{k}</MenuItem>
+                                            ))
+                                        )
                                         }
                                         </Select>
                                     </FormControl>
@@ -153,6 +256,87 @@ const ProductDetailScreen = ({ history, match }) => {
                     </Grid>
                 </Grid>
                 )}
+                <Grid container spacing={1}>
+                    <Grid item xs={12}>
+                        <Divider className={classes.divider}/>
+                    </Grid>
+                    {product && product.reviews && product.reviews.length > 0 && (<Grid item xs={12}>
+                        <Grid item xs={12}>
+                            <Typography variant="h4" component="h2">Reviews</Typography>
+                            <Divider />
+                        </Grid>
+                    </Grid>)}
+                    {reviewError && <Message status="error" text={reviewError}/>}
+                     {product && product.reviews && product.reviews.map((review, idx) => (
+                        <Grid item xs={12} key={idx}>
+                            <Typography>{review.firstName}</Typography>
+                                <Rating value={review.rating} />
+                            <Typography>{review.comment}</Typography>
+                            <Typography>
+                                {review.createdAt.substring(8,10)}/
+                                {review.createdAt.substring(5,7)}/
+                                {review.createdAt.substring(0,4)}
+                            </Typography>
+                            <Divider className={classes.reviewDivider}/>
+                         </Grid>
+                     ))}
+                     {userInfo && (
+                         <form>
+                        <Grid item xs={12}>
+                            <Typography variant="h4" component="h2" style={{margin: '2rem 0'}}>Write a Review</Typography>
+                            <Divider />
+                        </Grid>  
+                        <Grid item xs={12}>
+                            <Typography variant="h6" component="h2">Rating</Typography>
+                            <FormControl className={classes.ratingDropDown} margin="normal">
+                                <Select
+                                    labelId="rating-label"
+                                    id="rating-select"
+                                    variant="outlined"
+                                    open={open}
+                                    value={rating}
+                                    onClose={handleClose}
+                                    onOpen={handleOpen}
+                                    onChange={ratingHandler}
+                                    >
+                                    <MenuItem value="0">Select Rating</MenuItem>
+                                    <MenuItem value="1">1 - Very Poor</MenuItem>
+                                    <MenuItem value="2">2 - Poor</MenuItem>
+                                    <MenuItem value="3">3 - Ok</MenuItem>
+                                    <MenuItem value="4">4 - Good</MenuItem>
+                                    <MenuItem value="5">5 - Excellent</MenuItem>
+                                </Select>
+                            </FormControl>
+                        </Grid>
+                        <Grid item xs={12}>
+                            <Typography variant="h6" component="h2">Comment</Typography>
+                            <TextField 
+                                variant="outlined"
+                                margin="normal"
+                                label="Comment"
+                                id="comment"
+                                name="comment"
+                                rows={4}
+                                onChange={commentHandler}
+                                multiline
+                                fullWidth
+                                required
+                            />
+                        </Grid>
+                        <Grid item xs={12}>
+                            <Button 
+                                variant="contained"
+                                color="primary"
+                                className={classes.submitBtn}
+                                onClick={submitHandler}
+                                fullWidth
+                            >
+                                Submit
+                            </Button>
+                        </Grid>
+                        </form>
+                     )}
+                </Grid>
             </Container>
         </>
     );

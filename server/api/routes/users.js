@@ -19,6 +19,6 @@ router.patch('/:userId', checkAuth(), UsersController.users_update_user);
 
 router.patch('/:userId/admin-update', UsersController.admin_update_user);
 
-router.delete('/:userId', UsersController.users_delete_user);
+router.delete('/:userId', checkRole('admin'), UsersController.users_delete_user);
 
 export default router;

@@ -1,14 +1,13 @@
 import mongoose from 'mongoose';
 import Product from '../models/product.js';
+import User from '../models/user.js';
 
 // @desc Fetch all products
 // @route GET /api/products
 // @access Public
 const products_get_all = async (req, res) => {
     try {
-        const products = await Product
-            .find()
-            .select('_id name artist reason description brand size quantityInStock initialPrice price status reason productImage');
+        const products = await Product.find()
         if (products.length > 0){ //.where to add conditions or .limit for pagination
             const response = {
                 count: products.length,
@@ -19,6 +18,8 @@ const products_get_all = async (req, res) => {
                         name: product.name,
                         description: product.description,
                         brand: product.brand,
+                        averageRating: product.averageRating,
+                        totalNumRating: product.totalNumRating,
                         size: product.size,
                         quantityInStock: product.quantityInStock,
                         productImage: product.productImage,
@@ -120,7 +121,6 @@ const products_get_product = async (req, res) => {
     try {
         const product = await Product
             .findById(req.params.productId)
-            .select('_id artist name description brand size quantityInStock initialPrice price status reason productImage category')
         if (product){ // checks if the product exists
             console.log(product);
             res.status(200).json({
@@ -134,6 +134,9 @@ const products_get_product = async (req, res) => {
                 quantityInStock: product.quantityInStock,
                 productImage: product.productImage,
                 price: product.price,
+                reviews: product.reviews,
+                averageRating: product.averageRating,
+                totalNumRating: product.totalNumRating,
                 status: product.status,
                 reason: product.reason,
                 requests: {
@@ -158,9 +161,6 @@ const products_get_product = async (req, res) => {
     }
 };
 
-// @desc Create single product
-// @route POST /api/products
-// @access Private
 const products_create_product = async (req, res) => {
     try {
         console.log(req.file);
@@ -211,6 +211,22 @@ const products_create_product = async (req, res) => {
     }
 };
 
+const custom_update_status = async (req, res) => {
+    try {
+        const custom = await Product.findById(req.params.customId);
+        const user = await User.findById(req.userData.userId);
+        if (custom && user){
+            custom.status = req.body.status;
+            const updatedCustom = await custom.save();
+            res.status(201).json(updatedCustom);
+        } else {
+            res.status(400).json({ message: 'Invalid Request' });
+        }
+    } catch (err){
+        console.log(err)
+        res.status(500).json({ error: err });
+    }
+}
 const custom_update_accept = async (req, res) => {
     try {
         const custom = await Product.findById(req.params.customId);
@@ -295,6 +311,51 @@ const products_update_product = async (req, res) => {
 
 }
 
+const products_create_review = async (req, res) => {
+    try {
+        // product attempting to be reviewed
+        const product = await Product.findById(req.params.productId);
+        // user attempting to review product
+        const user = await User.findById(req.userData.userId);
+
+        // if product exists and user Id matches one in the jsonwebtoken
+        if (product && (req.userData.userId === user._id.toString())){
+            for (let i=0; i<product.reviews.length; i++){ // loop through reviews array
+                // if product Id is found in the reviews array
+                if (product.reviews[i].user.toString() === req.userData.userId){
+                   return res.status(500).json({ message: 'You have already reviewed this product' });
+                }
+            }
+            // review object
+            const review = {
+                rating: Number(req.body.rating),
+                comment: req.body.comment,
+                firstName: req.userData.firstName,
+                user: req.userData.userId
+            };
+            product.reviews.push(review); // push current review to reviews array
+
+            // calculating total rating inside reviews array
+            let total = 0;
+            for (let i=0; i<product.reviews.length; i++){
+                total += product.reviews[i].rating;
+            }
+            // calucalting average rating and total number of reviews
+            product.averageRating = total / product.reviews.length;
+            product.totalNumRating = product.reviews.length;
+
+            await product.save();
+            res.status(201).json({ message: 'Review Submitted' });
+
+        } else {
+            res.status(500).json({ message: 'Product not found' });
+        }
+    } catch (err){
+        console.log(err);
+        res.status(500).json({ error: err });
+    }
+};
+
 // @desc Delete single product
 // @route DELETE /api/products/:productId
 // @access Private
@@ -344,6 +405,8 @@ export default {
     customs_get_all_artist,
     products_get_product,
     products_create_product,
+    products_create_review,
+    custom_update_status,
     custom_update_accept,
     custom_update_reject,
     custom_update_pending,

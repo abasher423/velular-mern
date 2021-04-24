@@ -1,6 +1,5 @@
 import express from 'express';
 import morgan from 'morgan';
-import bodyParser from 'body-parser';
 import mongoose from 'mongoose';
 import productRoutes from './api/routes/products.js';
 import orderRoutes from './api/routes/orders.js';
@@ -63,8 +62,8 @@ app.use((req,res,next) => {
     next(error);
 });
 
-app.use((error, req, res, next) => {
-    res.status(error.status || 8080).json({
+app.use((error, req, res) => {
+    res.status(error.status || 404).json({
         error: {
             message: error.message // Not Found
         }

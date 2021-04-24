@@ -17,16 +17,8 @@ const fetchArtistCustoms = (token) => {
     return api().get('/products/customs/artist', token);
 }
 
-const acceptCustom = (customId, token) => {
-    return api().put(`/products/customs/${customId}/accept`, token);
-};
-
-const rejectCustom = (customId, token) => {
-    return api().put(`/products/customs/${customId}/reject`, token);
-};
-
-const pendingCustom = (customId, token) => {
-    return api().put(`/products/customs/${customId}/pending`, token);
+const updateCustomStatus = (customId, status, token) => {
+    return api().put(`/products/customs/${customId}`, status, token);
 };
 
 const submitCustom = (customId, token) => {
@@ -40,22 +32,25 @@ const updateCustom = (customData, customId, token) => {
 const createCustom = (customData) => {
     return api().post('/products', customData, {headers: { "Content-Type": "multipart/form-data" }});
     
-}
+};
+
+const writeReview = (productId, reviewData ,token) => {
+    return api().post(`/products/${productId}/reviews`, reviewData, token);
+};
 
 const deleteCustom = (customId, token) => {
     return api().delete(`/products/${customId}`, token);
-}
+};
 
 export default{
     index,
     indexOne,
     fetchCustomsList,
     fetchArtistCustoms,
-    acceptCustom,
-    rejectCustom,
-    pendingCustom,
+    updateCustomStatus,
     submitCustom,
     createCustom,
+    writeReview,
     updateCustom,
     deleteCustom
 };

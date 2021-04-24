@@ -22,7 +22,7 @@ const updateToPaid = (orderId, orderData, token) => {
 };
 
 const updateToDelivered = (orderId, token) => {
-    return api().put(`/orders/${orderId}/delivered`, token);
+    return api().put(`/orders/${orderId}/deliver`, token);
 }
 
 export default{
