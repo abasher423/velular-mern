@@ -9,7 +9,7 @@
     "server": "nodemon server/app.js",
     "client": "npm start --prefix client",
     "dev": "nodemon -r dotenv/config app.js",
-    "heroku-postbuild": "NPM_CONFIG_PRODUCTION=false npm install --prefix client && npm run build --prefix client"
+    "heroku-postbuild": "NPM_CONFIG_PRODUCTION=false npm install --prefix client && npm run build --prefix client && npm run server"
   },
   "author": "Abdifatah Basher",
   "license": "MIT",
