@@ -185,7 +185,7 @@ const CustomUpdateScreen = ({ match, history }) => {
     for (let i=2; i<14; i+=0.5){
         menuItems.push(<MenuItem value={i}>{i}</MenuItem>);
     }
-    console.log(customDetails)
+    
     return (
         <>
             <IconButton edge="start" className={classes.backIcon} color="inherit" component={Link} to={'/admin/customs-list'} aria-label="back">

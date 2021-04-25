@@ -2,7 +2,7 @@ import { CART_ADD_ITEM, CART_DELETE_ITEM, CART_SAVE_PAYMENT_METHOD, CART_SAVE_SH
 import productServices from '../services/productServices';
 
 // getState fetches the state tree (for local storage)
-export const addToCart = (productId, quantity) => async (dispatch, getState) => {
+export const addToCart = (productId, quantity, size) => async (dispatch, getState) => {
     const { data } = await productServices.indexOne(productId);
 
     dispatch({
@@ -15,10 +15,9 @@ export const addToCart = (productId, quantity) => async (dispatch, getState) => 
             productImage: data.productImage,
             quantityInStock: data.quantityInStock,
             price: data.price,
-            quantity
+            quantity, size
         }
     })
-    console.log(data)
 
     // saving to local storage (using localstorage API)
     localStorage.setItem('cartItems', JSON.stringify(getState().cart.cartItems));

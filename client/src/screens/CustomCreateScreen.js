@@ -131,8 +131,6 @@ const CustomCreateScreen = () => {
         await productServices.deleteCustom(customId, token);
         setCustomDetails([]);
     }
-
-    console.log(customDetails);
     
     return (
         <Container>

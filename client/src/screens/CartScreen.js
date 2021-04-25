@@ -121,15 +121,16 @@ const CartScreen = ({ match, location, history}) => {
                 </div>  
                 : (
                 <List dense className={classes.root}>
-                    {cartItems.map(item => {
+                    {cartItems.map((item, idx) => {
                         return (
-                            <Paper className={classes.drawerPaper}>
-                                <ListItem key={item.productId} Button>
+                            <Paper className={classes.drawerPaper} key={idx}>
+                                <ListItem key={item.productId}>
                                 <ListItemAvatar className={classes.item}>
                                     <Avatar alt="product image" src={item.productImage}  className={classes.large}/>
                                 </ListItemAvatar>
                                 <ListItemText primary={item.name}/>
-                                <ListItemText primary={`£${item.price}`} style={{margin: "0 10rem"}}/>
+                                <ListItemText primary={`£${item.price}`} style={{margin: "0 5rem"}}/>
+                                <ListItemText primary={`Size ${item.size}`}/>
                                 <ListItemText primary={
                                     <FormControl className={classes.formControl}>
                                     <Select

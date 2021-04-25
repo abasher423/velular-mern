@@ -202,6 +202,10 @@ const OrderScreen = ({ match, history }) => {
                                     style={{margin: "0 2rem"}}
                                 />
                                 <ListItemText 
+                                    primary={`Size ${item.size}`} 
+                                    style={{margin: "0 2rem"}}
+                                />
+                                <ListItemText 
                                     primary={`${item.quantity} x £${item.price} = £${item.quantity * item.price}`} 
                                     style={{margin: "0 2rem"}}
                                 />

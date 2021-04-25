@@ -73,8 +73,6 @@ const OrderListScreen = () => {
         fetchOrdersList();
     }, [userInfo.token])
 
-    console.log(ordersList)
-
     return (
         <>
         <Typography variant="h3" component="h1" className={classes.title}>Manage Orders ({ordersList ? ordersList.length : '0'})</Typography>

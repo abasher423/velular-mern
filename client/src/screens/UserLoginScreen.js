@@ -80,8 +80,8 @@ const UserLoginScreen = ({ location, history }) => {
                 {error && <Message status="error" text={error} />}
                 {loading && <Loader />}
                 <form className={classes.form}>
-                    <Grid container spacing={12}>
-                        <Grid itm xs={12} align="center">
+                    <Grid container>
+                        <Grid item xs={12} align="center">
                             <TextField 
                                 variant="outlined"
                                 margin="normal"
@@ -101,6 +101,7 @@ const UserLoginScreen = ({ location, history }) => {
                                 required
                                 className={classes.txtfield}
                                 id="password"
+                                type="password"
                                 label="Password"
                                 value={password}
                                 onChange={handlepasswordChange}

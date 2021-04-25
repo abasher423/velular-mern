@@ -102,7 +102,6 @@ const PlaceOrderScreen = ({ history }) => {
             totalPrice: cart.totalPrice
         }));
     };
-    console.log(cart.cartItems)
 
     return(
         <Grid container spacing={2}>
@@ -147,13 +146,17 @@ const PlaceOrderScreen = ({ history }) => {
                         <List dense className={classes.root}>
                         {cart.cartItems.map((item, idx) => {
                             return (
-                                <Paper className={classes.drawerPaper}>
-                                    <ListItem key={idx}>
+                                <Paper className={classes.drawerPaper} key={idx}>
+                                    <ListItem>
                                     <ListItemAvatar style={{margin: "0.5rem 0"}}>
                                         <Avatar alt="product image" src={item.productImage}  className={classes.large}/>
                                     </ListItemAvatar>
                                     <ListItemText 
                                         primary={item.name} 
+                                        style={{margin: "0 2rem"}}
+                                    />
+                                    <ListItemText 
+                                        primary={`Size ${item.size}`} 
                                         style={{margin: "0 2rem"}}
                                     />
                                     <ListItemText 

@@ -26,7 +26,7 @@ const useStyles = makeStyles({
 
 const Product = ({ product }) => {
   const classes = useStyles();
-  console.log(product, 'product')
+  
   return (
         <Card className={classes.root}>
           <Link to={`/products/${product._id}`} style={{ textDecoration: "none", color: "black"}}>

@@ -65,6 +65,9 @@ const useStyles = makeStyles( theme => ({
     },
     ratingDropDown: {
         width: 400
+    },
+    txtfield: {
+        width: '45px'
     }
 }));
 
@@ -110,7 +113,7 @@ const ProductDetailScreen = ({ history, match }) => {
     };
 
     const addToCartHandler = (e) => {
-        dispatch(addToCart(product._id, quantity))
+        dispatch(addToCart(product._id, quantity, size))
         history.push('/cart');
     };
 
@@ -147,7 +150,7 @@ const ProductDetailScreen = ({ history, match }) => {
     const handleOpen = () => {
         setOpen(true);
     };
-    console.log(product)
+    
     return (
         <>
             <Container>
@@ -216,26 +219,15 @@ const ProductDetailScreen = ({ history, match }) => {
                                 <Divider style={{margin: "0.5rem 0"}}/>
 
                                 <div className={classes.box}>
-                                    <Typography gutterBottom>Size</Typography>
-                                    <FormControl className={classes.formControl}>
-                                        <Select
-                                        labelId="size-select-label"
-                                        id="size-select"
+                                    <Typography gutterBottom>Size (3 - {product.size})</Typography>
+                                    <TextField 
+                                        variant="standard"
+                                        className={classes.txtfield}
+                                        id="size"
                                         value={size}
                                         onChange={handleSizeChange}
-                                        >
-                                        { product.size % 1 === 0 ? (
-                                            [...Array(product.size).keys()].map(k => (
-                                                <MenuItem key={k} value={k}>{k}</MenuItem>
-                                            ))
-                                        ) : (
-                                            [...Array(product.size + 0.5).keys()].map(k => (
-                                                <MenuItem key={k} value={k}>{k}</MenuItem>
-                                            ))
-                                        )
-                                        }
-                                        </Select>
-                                    </FormControl>
+                                        name="size"
+                                    />
                                 </div>
                                 <Divider style={{margin: "0.5rem 0"}}/>
                             </CardContent>
