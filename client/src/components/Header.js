@@ -112,9 +112,6 @@ const Header = ({ history }) => {
                         <img src={title} alt="logo" className={classes.logo}/>
                     </Link>
                     <Button className={classes.breadcrumbs} color="inherit" component={Link} to={'/products'} >Shop</Button>
-                    <Button className={classes.breadcrumbs} color="inherit" component={Link} to={'/products/brands'} >Brands</Button>
-                    <Button className={classes.breadcrumbs} color="inherit" component={Link} to={'/favourites'} >Favourites</Button>
-                    <Button className={classes.breadcrumbs} color="inherit" component={Link} to={'/services'} >services</Button>
                     </Typography>
                     
                     <IconButton edge="start" className={classes.icons} color="inherit" component={Link} to={'/search'} aria-label="search">

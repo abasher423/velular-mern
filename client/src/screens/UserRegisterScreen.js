@@ -74,6 +74,7 @@ const UserRegisterScreen = ({ history, location }) => {
             setMessage('Passwords do not match')
         } else {
             dispatch(register(firstName, lastName, email, password, role));
+            history.push('/login');
         }
     }
     const roleHandler = (e) => {

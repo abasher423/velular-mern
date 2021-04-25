@@ -63,7 +63,7 @@ const HomePageScreen = () => {
                             <Typography gutterBottom variant="h5" component="h2">
                                 Distinct Trainers for Distinct Individuals
                             </Typography>
-                            <Button>Shop Now</Button>
+                            <Button component={Link} to={'/products'}>Shop Now</Button>
                         </div>
                     </Paper>
                 </Container>
