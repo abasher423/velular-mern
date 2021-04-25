@@ -23,7 +23,7 @@ const SlideShow = () => {
                 height: "500px"
                 }}>
                 <Link to={'/products'}>
-                    <img className="center" src="/images/air force 1.jpg" alt="airmax"/>
+                    <img className="center" src="/images/air-max-1.jpg" alt="airmax"/>
                 </Link>
             </div>
             <div style={{
