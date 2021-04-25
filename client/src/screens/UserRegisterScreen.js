@@ -160,6 +160,7 @@ const UserRegisterScreen = ({ history, location }) => {
                                 required
                                 fullWidth
                                 id="password"
+                                type="password"
                                 label="Password"
                                 value={password}
                                 onChange={passwordHandler}
