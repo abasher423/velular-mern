@@ -11,6 +11,7 @@ const orderSchema = new Schema({
         artist: {type: mongoose.Schema.ObjectId, ref: 'User', required: true },
         name: { type: String, required: true},
         quantity: {type: Number, required: true },
+        size: {type: Number, required: true },
         price: {type: Number, requireD: true },
         productImage: { type: String, required: true },
         
