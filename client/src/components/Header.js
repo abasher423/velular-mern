@@ -10,13 +10,16 @@ import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
 import IconButton from '@material-ui/core/IconButton';
 import Container from '@material-ui/core/Container';
-import title from '../images/title.png';
 import Link from 'react-router-dom/Link'
 import SearchIcon from '@material-ui/icons/Search';
 import FavoriteBorderIcon from '@material-ui/icons/FavoriteBorder';
-import ShoppingBasketOutlinedIcon from '@material-ui/icons/ShoppingBasketOutlined';
+import ShoppingCartOutlinedIcon from '@material-ui/icons/ShoppingCartOutlined';
 import PersonOutlineOutlinedIcon from '@material-ui/icons/PersonOutlineOutlined';
+import HomeIcon from '@material-ui/icons/Home';
+import MenuIcon from '@material-ui/icons/Menu';
 import { logout } from '../actions/userActions';
+import { useHistory } from "react-router-dom";
+import { Divider, Drawer, Fade, List, ListItem, ListItemIcon, ListItemText, SwipeableDrawer, Tooltip, useMediaQuery, useTheme } from '@material-ui/core';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -25,7 +28,10 @@ const useStyles = makeStyles((theme) => ({
   },
   title: {
     flexGrow: 1,
-    fontWeight: '500'
+    fontWeight: '500',
+    textDecoration: 'none',
+    color: 'black',
+    fontFamily: 'New Century Schoolbook'
   },
   logo: {
       marginTop: '15px',
@@ -37,7 +43,7 @@ const useStyles = makeStyles((theme) => ({
       fontWeight: '500'
   },
   icons: {
-      margin: '5px 0',
+      margin: '5px 0'
   },
   cart: {
     margin: '5px 0',
@@ -58,22 +64,34 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
-const Header = ({ history }) => {
+const Header = () => {
     const classes = useStyles();
     const dispatch = useDispatch();
+    const history = useHistory();
+    const theme = useTheme();
+    const mobile = useMediaQuery(theme.breakpoints.down("sm"));
 
     const [anchorEl, setAnchorEl] = useState(null);
     const [anchrolEl2, setAnchorEl2] = useState(null);
     const [anchorEl3, setAnchorEl3] = useState(null);
+    const [openDrawer, setOpenDrawer] = useState(false);
 
 
 
     const userLogin = useSelector(state => state.userLogin);
     const { userInfo } = userLogin;
 
+    const handleDrawerOpen = () => {
+        setOpenDrawer(true);
+    };
+
+    const handleDrawerClose = () => {
+        setOpenDrawer(false);
+    };
+
     const handleClick = (e) => {
         setAnchorEl(e.currentTarget);
-      };
+    };
 
     const adminHandleClick = (e) => {
         setAnchorEl2(e.currentTarget);
@@ -100,6 +118,42 @@ const Header = ({ history }) => {
         setAnchorEl(null);
     };
 
+    const handleMenuOption = option => {
+        history.push(`/${option}`)
+    }
+
+    const menuItems = (
+        <div>
+            <div className={classes.toolbar}>
+                {userInfo && (
+                    <>
+                    <Divider />
+                    <List>
+                        {['Profile', 'Orders'].map(option => (
+                            <ListItem button key={option}>
+                                <ListItemText primary={option} />
+                            </ListItem>
+                        ))}
+                    </List>
+                    </>
+                )}
+                <Divider />
+                <List>
+                    {['Home', 'Favourites', 'Cart', 'Login'].map((option, idx) => (
+                        <ListItem button key={option} onClick={() => handleMenuOption(option[0].toLowerCase() + option.substring(1))}>
+                            <ListItemIcon>
+                                {idx === 0 ? <HomeIcon /> : idx === 1 ? <FavoriteBorderIcon /> : idx === 2 ? 
+                                <ShoppingCartOutlinedIcon /> : <PersonOutlineOutlinedIcon />}
+                            </ListItemIcon>
+                            <ListItemText>{option}</ListItemText>
+                        </ListItem>
+                    ))}
+                </List>
+            </div>
+        </div>
+    )
+
+    // https://material-ui.com/components/drawers/
     // https://material-ui.com/components/menus/
 
     return (
@@ -107,22 +161,55 @@ const Header = ({ history }) => {
             <AppBar position="static" color="default">
                 <Container>
                 <Toolbar>
-                    <Typography variant="h6" className={classes.title}>
-                    <Link to={'/'}>
-                        <img src={title} alt="logo" className={classes.logo}/>
-                    </Link>
-                    <Button className={classes.breadcrumbs} color="inherit" component={Link} to={'/products'} >Shop</Button>
+                    <Typography variant="h3" component={Link} to={'/'} className={classes.title}>
+                        Velular
                     </Typography>
+
+                    {mobile ? (
+                        <>
+                            {userInfo && (
+                                <Typography variant="h6" component="h1">
+                                {userInfo.firstName[0].toUpperCase() + userInfo.firstName.substring(1)}
+                                </Typography>
+                            )}
+                            <Tooltip TransitionComponent={Fade} TransitionProps={{ timeout: 600 }} title="Search">
+                                <IconButton edge="start" className={classes.icons} component={Link} to={'/search'} color="inherit" aria-label="login">
+                                    <SearchIcon />
+                                </IconButton>
+                            </Tooltip>
+                            <IconButton
+                                color="inherit"
+                                aria-label="open drawer"
+                                edge="start"
+                                onClick={handleDrawerOpen}
+                                className={classes.menuButton}
+                            >
+                                <MenuIcon />
+                            </IconButton>
+                            <Drawer anchor="right" open={openDrawer} onClose={handleDrawerClose}>
+                                {menuItems}
+                            </Drawer>
+                        </>
+                    ) : (
+                        <>
+                        <Tooltip TransitionComponent={Fade} TransitionProps={{ timeout: 600 }} title="Search">
+                        <IconButton edge="start" className={classes.icons} color="inherit" component={Link} to={'/search'} aria-label="search">
+                            <SearchIcon />
+                        </IconButton>
+                    </Tooltip>
+
+                    <Tooltip TransitionComponent={Fade} TransitionProps={{ timeout: 600 }} title="Favourites">
+                        <IconButton edge="start" className={classes.icons} color="inherit" component={Link} to={'/favourites'} aria-label="favorite">
+                            <FavoriteBorderIcon />
+                        </IconButton>
+                    </Tooltip>
+
+                    <Tooltip TransitionComponent={Fade} TransitionProps={{ timeout: 600 }} title="Cart">
+                        <IconButton edge="start" className={classes.icons} component={Link} to={'/cart'} color="inherit" aria-label="cart">
+                            <ShoppingCartOutlinedIcon />
+                        </IconButton>
+                    </Tooltip>
                     
-                    <IconButton edge="start" className={classes.icons} color="inherit" component={Link} to={'/search'} aria-label="search">
-                        <SearchIcon />
-                    </IconButton>
-                    <IconButton edge="start" className={classes.icons} color="inherit" component={Link} to={'/favourites'} aria-label="favorite">
-                        <FavoriteBorderIcon />
-                    </IconButton>
-                    <IconButton edge="start" className={classes.icons} component={Link} to={'/cart'} color="inherit" aria-label="cart">
-                        <ShoppingBasketOutlinedIcon />
-                    </IconButton>
                     { userInfo ? (
                         <div>
                             <Button 
@@ -131,7 +218,7 @@ const Header = ({ history }) => {
                                 color="primary"
                                 onClick={handleClick}>
                                     {userInfo.firstName}
-                                </Button>
+                            </Button>
                             <Menu
                                 id="simple-menu"
                                 anchorEl={anchorEl}
@@ -145,9 +232,11 @@ const Header = ({ history }) => {
                             </Menu>
                         </div>
                     ) :
-                    <IconButton edge="start" className={classes.icons} component={Link} to={'/login'} color="inherit" aria-label="login">
-                        <PersonOutlineOutlinedIcon />
-                    </IconButton>}
+                    <Tooltip TransitionComponent={Fade} TransitionProps={{ timeout: 600 }} title="Sign In">
+                        <IconButton edge="start" className={classes.icons} component={Link} to={'/login'} color="inherit" aria-label="login">
+                            <PersonOutlineOutlinedIcon />
+                        </IconButton>
+                    </Tooltip>}
                     {userInfo && userInfo.role === 'admin' && (
                         <div style={{margin: "0 1rem"}}>
                             <Button 
@@ -184,6 +273,8 @@ const Header = ({ history }) => {
                                 <MenuItem component={Link} to={'/artist/orders-list'} onClick={artistHandleClose}>Orders</MenuItem>
                             </Menu>
                         </div>
+                    )}
+                    </>
                     )}
                 </Toolbar>
                 </Container>

@@ -45,7 +45,7 @@ const App = () => {
             <Route path='/customs/:customId' component={CustomUpdateScreen} />
           </Container>
         </main>
-        {/* <Footer /> */}
+        <Footer />
         </Router>
     </>
   );

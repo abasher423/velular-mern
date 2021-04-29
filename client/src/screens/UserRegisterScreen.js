@@ -175,6 +175,7 @@ const UserRegisterScreen = ({ history, location }) => {
                                 required
                                 fullWidth
                                 id="confirmPassword"
+                                type="password"
                                 label="Confirm Password"
                                 value={confirmPassword}
                                 onChange={confirmPasswordHandler}
@@ -195,7 +196,7 @@ const UserRegisterScreen = ({ history, location }) => {
                                 onClick={submitHandler}
                                 className={classes.submit}
                             >
-                                Sign in
+                                Register
                             </Button>
                         </Grid>
                         <Grid item xs={12}>

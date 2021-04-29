@@ -1,21 +1,23 @@
 import React from 'react';
 import Grid from '@material-ui/core/Grid';
 import SlideShow from '../components/SlideShow'
-import { Button, Container } from '@material-ui/core';
+import { Button, Container, Tooltip } from '@material-ui/core';
 import makeStyles from '@material-ui/core/styles/makeStyles';
 import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
 import Image from 'material-ui-image';
 import NavigateNextIcon from '@material-ui/icons/NavigateNext';
 import { Link } from 'react-router-dom';
+import HelpIcon from '@material-ui/icons/Help';
 
-const useStyles = makeStyles({
+const useStyles = makeStyles(theme => ({
     slogan: {
-        marginTop: "150px",
-        textAlign: "center"
+        marginTop: "2rem",
+        textAlign: "center",
+        maxWidth: "100%"
     },
     sloganText: {
-        marginTop: "150px",
+        marginTop: "2rem",
         textAlign: "center",
         padding: "5px 0"
     },
@@ -24,34 +26,65 @@ const useStyles = makeStyles({
         justifyContent: "center",
         flexDirection: "column",
         alignItems: "center",
-        height: "550px",
-        marginTop: "150px"
+        height: "568px",
+        width: "auto",
+        [theme.breakpoints.down('sm')] : {
+            height: "311px",
+            width: "auto"
+        },
+        marginTop: "2rem"
     },
     image: {
-        marginTop: "150px",
-        padding: "1rem"
+        textAlign: "center",
+        marginTop: "2rem",
+        padding: "1rem",
+        height: "300px",
+        width: "auto"
     },
     root: {
         justifyContent: "center"
+    },
+    carouselPaper: {
+        maxWidth: "1280px",
+        padding: "0.5rem",
+        [theme.breakpoints.up('sm')] : {
+            padding: "2rem"
+        },
+        margin: "0 1.5rem"
+    },
+    nikeImage: {
+        marginTop: "2rem",
+        maxWidth: "100%",
+        height: "auto"
+    },
+    cardPaper: {
+        height: "500px"
     }
-});
+}));
 
 const HomePageScreen = () => {
     const classes = useStyles();
 
+    const sloganInfo = 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed malesuada consectetur nibh vitae porta. Morbi ullamcorper, odio vel fringilla luctus, purus lacus euismod neque, sed laoreet nisl enim eu nisl'
+
     return (
-        <Grid container spacing={2}>
+        <Grid container>
             <Grid item xs={12}>
-                <SlideShow />
+                <Paper className={classes.carouselPaper}>
+                    <SlideShow />
+                </Paper>
             </Grid>
 
             {/* Slogan */}
             <Grid item xs={12} md={6}>
                 <Container>
                     <Paper>
-                    <div className={classes.slogan}>
-                        <img src="/images/slogan.png" alt="slogan"/>
-                    </div>
+                        <div className={classes.slogan}>
+                            <img src="/images/slogan.png" alt="slogan"/>
+                            <Tooltip title={sloganInfo}>
+                                <HelpIcon />
+                            </Tooltip>
+                        </div>
                     </Paper>
                 </Container>
             </Grid>
@@ -72,7 +105,7 @@ const HomePageScreen = () => {
              {/* ------------- Nike Air 1s ----------------- */}
              <Grid item xs={12} md={6}>
                     <Container>
-                        <div style={{ marginTop: "150px"}}>
+                        <div className={classes.nikeImage}>
                             <Image src="/images/Air force 2.jpg" />
                         </div>        
                     </Container>
@@ -80,6 +113,7 @@ const HomePageScreen = () => {
 
                 <Grid item xs={12} md={6}>
                     <Container>
+                        <Paper>
                         <div className={classes.text}>
                             <Typography variant="h5" component="h2">
                                 Sophisticated Design
@@ -89,15 +123,16 @@ const HomePageScreen = () => {
                             </Typography>
                             <Button variant="outlined" component={Link} to={'/products'}>Continue</Button>
                         </div>
+                        </Paper>
                     </Container>
                 </Grid>
 
                 {/* --------------- Cards ------------------- */}
                 <Grid item xs={12} md={4}>
                     <Container>
-                        <Paper>
+                        <Paper className={classes.cardPaper}>
                         <div className={classes.image}>
-                            <img src="/images/airforce-3.jpeg" alt="airmax3" height="400px" width="340px"/>
+                            <img src="/images/air-force-01.jpg" alt="airmax3"/>
                             <Typography variant="h4" component="h2" style={{margin: "1rem 0"}}>
                                 Nike Air 1s
                             </Typography>
@@ -109,9 +144,9 @@ const HomePageScreen = () => {
                 
                 <Grid item xs={12} md={4}>
                     <Container>
-                        <Paper>
+                        <Paper className={classes.cardPaper}>
                         <div className={classes.image}>
-                                <img src="/images/vans-2.jpg" alt="airmax4" height="400px" width="340px"/>
+                                <img src="/images/vans-1.jpg" alt="airmax4"/>
                                 <Typography variant="h4" component="h2" style={{margin: "1rem 0"}}>
                                 Vans
                                 </Typography>
@@ -123,13 +158,15 @@ const HomePageScreen = () => {
 
                 <Grid item xs={12} md={4}>
                     <Container>
-                        <Paper>
+                        <Paper className={classes.cardPaper}>
                         <div className={classes.image}>
-                            <img src="/images/air-max-5.jpg" alt="airmax5" height="400px" width="340px"/>
-                            <Typography variant="h4" component="h2" style={{margin: "1rem 0"}}>
-                                Air Max
-                            </Typography>
-                            <Button variant="contained">Learn More <NavigateNextIcon /></Button>
+                            <img src="/images/air-max-2.jpg" alt="airmax5"/>
+                            <div style={{marginTop: "3.3rem"}}>
+                                <Typography variant="h4" component="h2" style={{margin: "1.5rem 0"}}>
+                                    Air Max
+                                </Typography>
+                                <Button variant="contained">Learn More <NavigateNextIcon /></Button>
+                            </div>
                         </div>
                         </Paper>
                     </Container>

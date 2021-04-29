@@ -1,8 +1,27 @@
+import { makeStyles } from '@material-ui/core';
 import React from 'react';
 import Carousel from 'react-material-ui-carousel';
 import Link from 'react-router-dom/Link';
+
+const useStyles = makeStyles(theme => ({
+    image: {
+        textAlign: "center",
+        height: "500px",
+        width: 'auto',
+        [theme.breakpoints.down('lg')] : {
+            height: "400px"
+        },
+        [theme.breakpoints.down('sm')] : {
+            height: "300px"
+        }
+    },
+    carouselBtn: {}
+}))
+
 // code from https://www.npmjs.com/package/react-material-ui-carousel
 const SlideShow = () => {
+    const classes = useStyles();
+
     return(
         <Carousel 
         fullHeightHover={false}     // We want the nav buttons wrapper to only be as big as the button element is
@@ -11,37 +30,23 @@ const SlideShow = () => {
         }} 
         navButtonsWrapperProps={{   // Move the buttons to the bottom. Unsetting top here to override default style.
             style: {
-                
-                marginLeft: '150px',
-                marginRight: '150px',
-                marginTop: "75px"
+                bottom: '0',
+                top: 'unset'
             }
         }} >
-            <div style={{
-                textAlign: "center",
-                // marginTop: "150px",
-                height: "500px"
-                }}>
+            <div className={classes.image}>
                 <Link to={'/products'}>
-                    <img className="center" src="/images/air-max-1.jpg" alt="airmax"/>
+                    <img className="center" src="/images/air-max-5.jpg" alt="airmax"/>
                 </Link>
             </div>
-            <div style={{
-                textAlign: "center",
-                // marginTop: "150px",
-                height: "500px"
-                }}>
+            <div className={classes.image}>
                 <Link to={'/products'}>
-                    <img src="/images/airforce-2.jpeg" alt="airmax2" />
+                    <img src="/images/air-max-2.jpg" alt="airmax2" />
                 </Link>
             </div>
-            <div style={{
-                textAlign: "center",
-                // marginTop: "150px",
-                height: "500px"
-                }}>
+            <div className={classes.image}>
                 <Link to={'/products'}>
-                    <img src="/images/airforce-1.jpeg" alt="airforce" />
+                    <img src="/images/air-max-4.jpg" alt="airforce" />
                 </Link>
             </div>
         </Carousel>

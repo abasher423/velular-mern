@@ -27,11 +27,11 @@ const ListedProducts = () => {
 
     return (
         <>
-        <Typography variant="h2" component="h2" style={{ marginBottom: "3rem" }}>Latest Products</Typography>
+        <Typography variant="h2" component="h2" style={{ marginBottom: "3rem", textAlign: "center" }}>Latest Products</Typography>
         { error ? <Message status="error" text={error} />
             : <Grid container spacing={2} alignItems="stretch">
             {products.map(product => {
-                return <Grid item xs={3} key={product._id} >
+                return <Grid item  xs={12} md={3} key={product._id} >
                             <Card 
                                 product={product}
                             />

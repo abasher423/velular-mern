@@ -17,7 +17,8 @@ const useStyles = makeStyles({
     height: "100%"
   },
   media: {
-    height: 200,
+    height: "270px",
+    width: "auto"
   },
   divide: {
     margin: "0.25rem 0"
