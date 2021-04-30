@@ -17,10 +17,10 @@ const fileFilter = (req, file, cb) => {
 }
 const storage = multer.diskStorage({
     destination: (req, file, cb) => { //where to store file
-        cb(null, 'uploads/');
+        cb(null, 'client/public/images');
     },
     filename: (req, file, cb) => {
-        cb(null, new Date().toISOString().replace(/:/g, '-') + file.originalname); // file name
+        cb(null, file.originalname); // file name
     }
 });
 // file size constraints
@@ -41,14 +41,6 @@ router.get('/customs/artist', checkAuth(), ProductsController.customs_get_all_ar
 router.get('/:productId', ProductsController.products_get_product);
 
 router.put('/customs/:customId', checkAuth(), ProductsController.custom_update_status);
-
-router.put('/customs/:customId/accept', ProductsController.custom_update_accept);
-
-router.put('/customs/:customId/reject', ProductsController.custom_update_reject);
-
-router.put('/customs/:customId/pending', ProductsController.custom_update_pending);
-
-router.put('/customs/:customId/submitted', ProductsController.custom_update_submitted);
 
 router.post('/', upload.single('productImage'), ProductsController.products_create_product);
 

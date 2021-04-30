@@ -227,66 +227,6 @@ const custom_update_status = async (req, res) => {
         res.status(500).json({ error: err });
     }
 }
-const custom_update_accept = async (req, res) => {
-    try {
-        const custom = await Product.findById(req.params.customId);
-        if (custom){
-            custom.status = 'Accepted';
-            const updatedCustom = await custom.save();
-            res.status(201).json(updatedCustom);
-        } else {
-            res.status(400).json({ message: 'Invalid Request' });
-        }
-    } catch (err){
-        console.log(err)
-        res.status(500).json({ error: err });
-    }
-}
-
-const custom_update_reject = async (req, res) => {
-    try {
-        const custom = await Product.findById(req.params.customId);
-        if (custom){
-            custom.status = 'Rejected';
-            const updatedCustom = await custom.save();
-            res.status(201).json(updatedCustom);
-        } else {
-            res.status(400).json({ message: 'Invalid Request' });
-        }
-    } catch (err){
-        res.status(500).json({ error: err });
-    }
-}
-
-const custom_update_pending = async (req, res) => {
-    try {
-        const custom = await Product.findById(req.params.customId);
-        if (custom){
-            custom.status = 'Pending';
-            const updatedCustom = await custom.save();
-            res.status(201).json(updatedCustom);
-        } else {
-            res.status(400).json({ message: 'Invalid Request' });
-        }
-    } catch (err){
-        res.status(500).json({ error: err });
-    }
-}
-
-const custom_update_submitted = async (req, res) => {
-    try {
-        const custom = await Product.findById(req.params.customId);
-        if (custom){
-            custom.status = 'Submitted';
-            const updatedCustom = await custom.save();
-            res.status(201).json(updatedCustom);
-        } else {
-            res.status(400).json({ message: 'Invalid Request' });
-        }
-    } catch (err){
-        res.status(500).json({ error: err });
-    }
-}
 
 const products_update_product = async (req, res) => { 
     try {
@@ -407,10 +347,6 @@ export default {
     products_create_product,
     products_create_review,
     custom_update_status,
-    custom_update_accept,
-    custom_update_reject,
-    custom_update_pending,
-    custom_update_submitted,
     products_update_product,
     products_delete_product
 };
