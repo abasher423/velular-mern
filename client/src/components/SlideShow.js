@@ -6,13 +6,13 @@ import Link from 'react-router-dom/Link';
 const useStyles = makeStyles(theme => ({
     image: {
         textAlign: "center",
-        height: "500px",
-        width: 'auto',
+        height: "45rem",
+        width: "auto",
         [theme.breakpoints.down('lg')] : {
-            height: "400px"
+            // height: "400px"
         },
         [theme.breakpoints.down('sm')] : {
-            height: "300px"
+            height: "200px"
         }
     },
     carouselBtn: {}
@@ -24,7 +24,7 @@ const SlideShow = () => {
 
     return(
         <Carousel 
-        fullHeightHover={false}     // We want the nav buttons wrapper to only be as big as the button element is
+        // fullHeightHover={false}     // We want the nav buttons wrapper to only be as big as the button element is
         navButtonsProps={{          // Change the colors and radius of the actual buttons. THIS STYLES BOTH BUTTONS
             
         }} 

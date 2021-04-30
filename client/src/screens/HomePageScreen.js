@@ -39,7 +39,11 @@ const useStyles = makeStyles(theme => ({
         marginTop: "2rem",
         padding: "1rem",
         height: "300px",
-        width: "auto"
+        width: "auto",
+        position: "relative",
+        backgroundSize: "cover",
+        backgroundRepeat: "no-repeat",
+        backgroundPosition: "center"
     },
     root: {
         justifyContent: "center"
@@ -58,7 +62,20 @@ const useStyles = makeStyles(theme => ({
         height: "auto"
     },
     cardPaper: {
-        height: "500px"
+        // height: "500px"
+    },
+    cardText: {
+        display: "flex",
+        flexDirection: "column",
+        justifyContent: "center",
+        alignItems: "center",
+        position: "absolute",
+        bottom: 50,
+        right: 125,
+        color: "white",
+        [theme.breakpoints.down('sm')] : {
+            right: 100
+        }
     }
 }));
 
@@ -68,7 +85,7 @@ const HomePageScreen = () => {
     const sloganInfo = 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed malesuada consectetur nibh vitae porta. Morbi ullamcorper, odio vel fringilla luctus, purus lacus euismod neque, sed laoreet nisl enim eu nisl'
 
     return (
-        <Grid container>
+        <Grid container spacing={0}>
             <Grid item xs={12}>
                 <Paper className={classes.carouselPaper}>
                     <SlideShow />
@@ -106,7 +123,9 @@ const HomePageScreen = () => {
              <Grid item xs={12} md={6}>
                     <Container>
                         <div className={classes.nikeImage}>
-                            <Image src="/images/Air force 2.jpg" />
+                            <Link to={'/products'}>
+                                <Image src="/images/vans p3.jpg" />
+                            </Link>
                         </div>        
                     </Container>
                 </Grid>
@@ -128,50 +147,61 @@ const HomePageScreen = () => {
                 </Grid>
 
                 {/* --------------- Cards ------------------- */}
+                <Grid container justify="center" spacing={0}>
                 <Grid item xs={12} md={4}>
-                    <Container>
-                        <Paper className={classes.cardPaper}>
-                        <div className={classes.image}>
-                            <img src="/images/air-force-01.jpg" alt="airmax3"/>
-                            <Typography variant="h4" component="h2" style={{margin: "1rem 0"}}>
-                                Nike Air 1s
-                            </Typography>
-                            <Button variant="contained" className={classes.root}>learn more <NavigateNextIcon /></Button>
+                    <Paper className={classes.cardPaper}>
+                    <div className={classes.image} style={{backgroundImage: `url(${"/images/air-force-01.jpg"})`}}>
+                        <div className={classes.cardText}>
+                            {/* <Typography variant="h4" component="h2" style={{margin: "1rem 0"}}>
+                            Nike Air 1s
+                            </Typography> */}
+                            <Button 
+                                variant="contained" 
+                                component={Link} 
+                                to={'/products'} 
+                                className={classes.root}
+                            >
+                                learn more 
+                            <NavigateNextIcon />
+                            </Button>
                         </div>
-                        </Paper>
-                    </Container>
+                    </div>
+                    </Paper>
                 </Grid>
                 
                 <Grid item xs={12} md={4}>
-                    <Container>
-                        <Paper className={classes.cardPaper}>
-                        <div className={classes.image}>
-                                <img src="/images/vans-1.jpg" alt="airmax4"/>
-                                <Typography variant="h4" component="h2" style={{margin: "1rem 0"}}>
-                                Vans
-                                </Typography>
-                                <Button variant="contained" >Learn More <NavigateNextIcon /></Button>
-                        </div>
-                        </Paper>
-                    </Container>
+                    <Paper className={classes.cardPaper}>
+                    <div className={classes.image} style={{backgroundImage: `url(${"/images/vans-1.jpg"})`}}>
+                            <div className={classes.cardText}>
+                                {/* <Typography variant="h4" component="h2" style={{margin: "1rem 0"}}> */}
+                                {/* Vans */}
+                                {/* </Typography> */}
+                                <Button variant="contained" component={Link} to={'/products'} >Learn More <NavigateNextIcon /></Button>
+                            </div>
+                    </div>
+                    </Paper>
                 </Grid>
 
                 <Grid item xs={12} md={4}>
-                    <Container>
-                        <Paper className={classes.cardPaper}>
-                        <div className={classes.image}>
-                            <img src="/images/air-max-2.jpg" alt="airmax5"/>
-                            <div style={{marginTop: "3.3rem"}}>
-                                <Typography variant="h4" component="h2" style={{margin: "1.5rem 0"}}>
-                                    Air Max
-                                </Typography>
-                                <Button variant="contained">Learn More <NavigateNextIcon /></Button>
-                            </div>
+                    <Paper className={classes.cardPaper}>
+                    <div className={classes.image} style={{backgroundImage: `url(${"/images/air-max-2.jpg"})`}}>
+                        <div className={classes.cardText}>
+                            {/* <Typography variant="h4" component="h2">
+                                Air Max
+                            </Typography> */}
+                            <Button 
+                                variant="contained" 
+                                component={Link} 
+                                to={'/products'} 
+                            >
+                                Learn More 
+                            <NavigateNextIcon />
+                            </Button>                                
                         </div>
-                        </Paper>
-                    </Container>
+                    </div>
+                    </Paper>
                 </Grid>
-
+                </Grid>
         </Grid>
     );
 };

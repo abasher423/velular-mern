@@ -5,7 +5,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import Message from '../components/Message';
 import Loader from '../components/Loader';
 import { login } from '../actions/userActions';
-import { Container, Grid, Typography, FormGroup, makeStyles, TextField, Button, Avatar, Link } from '@material-ui/core';
+import { Container, Grid, Typography, FormGroup, makeStyles, TextField, Button, Avatar, Link, Paper, useMediaQuery, useTheme } from '@material-ui/core';
 
 const useStyles = makeStyles(theme => ({
     form: {
@@ -13,7 +13,10 @@ const useStyles = makeStyles(theme => ({
         marginTop: theme.spacing(1),
       },
       txtfield: {
-          width: "400px"
+          width: "400px",
+          [theme.breakpoints.down('sm')] : {
+              width: "200px"
+          }
       },
       submit: {
           "&:hover": {
@@ -22,17 +25,26 @@ const useStyles = makeStyles(theme => ({
         backgroundColor: theme.palette.info.dark,
         color: "white",
         margin: theme.spacing(3, 0, 2),
-        width: "400px"
+        width: "400px",
+        [theme.breakpoints.down('sm')] : {
+            width: "200px"
+        }
       },
       avatar: {
           backgroundColor: "white",
           width: theme.spacing(15),
           height: theme.spacing(15),
+      },
+      paper: {
+          height: "600px",
+          padding: "2rem"
       }
 }));
 
 const UserLoginScreen = ({ location, history }) => {
     const classes = useStyles();
+    const theme = useTheme();
+    const mobile = useMediaQuery(theme.breakpoints.down("sm"));
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
 
@@ -67,7 +79,7 @@ const UserLoginScreen = ({ location, history }) => {
     }
 
     return (
-        // <Grid container spacing={2}>
+        <Paper className={classes.paper}>
             <Container component="main" maxWidth="xs">
                 <Grid item xs={12} align="center">
                 <Avatar className={classes.avatar}>
@@ -126,7 +138,7 @@ const UserLoginScreen = ({ location, history }) => {
                     </Grid>
                 </form>
             </Container>
-        // </Grid>
+         </Paper>
     );
 };
 

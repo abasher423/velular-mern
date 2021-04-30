@@ -20,6 +20,7 @@ import MenuIcon from '@material-ui/icons/Menu';
 import { logout } from '../actions/userActions';
 import { useHistory } from "react-router-dom";
 import { Divider, Drawer, Fade, List, ListItem, ListItemIcon, ListItemText, SwipeableDrawer, Tooltip, useMediaQuery, useTheme } from '@material-ui/core';
+import { USER_LOGOUT } from '../constants/userConstants';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -75,8 +76,6 @@ const Header = () => {
     const [anchrolEl2, setAnchorEl2] = useState(null);
     const [anchorEl3, setAnchorEl3] = useState(null);
     const [openDrawer, setOpenDrawer] = useState(false);
-
-
 
     const userLogin = useSelector(state => state.userLogin);
     const { userInfo } = userLogin;
@@ -139,7 +138,7 @@ const Header = () => {
                 )}
                 <Divider />
                 <List>
-                    {['Home', 'Favourites', 'Cart', 'Login'].map((option, idx) => (
+                    {['Home', 'Favourites', 'Cart'].map((option, idx) => (
                         <ListItem button key={option} onClick={() => handleMenuOption(option[0].toLowerCase() + option.substring(1))}>
                             <ListItemIcon>
                                 {idx === 0 ? <HomeIcon /> : idx === 1 ? <FavoriteBorderIcon /> : idx === 2 ? 
@@ -148,6 +147,19 @@ const Header = () => {
                             <ListItemText>{option}</ListItemText>
                         </ListItem>
                     ))}
+                    {userInfo ? 
+                        <ListItem button onClick={() => {dispatch({ type: USER_LOGOUT })}}>
+                        <ListItemIcon>
+                            <PersonOutlineOutlinedIcon />
+                        </ListItemIcon>
+                        <ListItemText>Logout</ListItemText>
+                        </ListItem> :
+                        <ListItem button onClick={() => handleMenuOption('login')} >
+                        <ListItemIcon>
+                            <PersonOutlineOutlinedIcon />
+                        </ListItemIcon>
+                        <ListItemText>Login</ListItemText>
+                        </ListItem>}
                 </List>
             </div>
         </div>

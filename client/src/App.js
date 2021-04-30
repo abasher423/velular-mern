@@ -19,6 +19,7 @@ import CustomListScreen from './screens/CustomListScreen';
 import CustomUpdateScreen from './screens/CustomUpdateScreen';
 import OrderListScreen from './screens/OrderListScreen';
 import CustomCreateScreen from './screens/CustomCreateScreen';
+import UserOrdersScreen from './screens/UserOrdersScreen';
 
 const App = () => {
   return (
@@ -34,6 +35,7 @@ const App = () => {
             <Route path='/register' component={UserRegisterScreen} exact />
             <Route path='/login' component={UserLoginScreen} exact />
             <Route path='/profile' component={UserProfileScreen} exact />
+            <Route path='/orders' component={UserOrdersScreen} exact />
             <Route path='/admin/users-list' component={UserListScreen} exact />
             <Route path='/users/:userId' component={UserUpdateScreen} />
             <Route path='/shipping' component={ShippingScreen} exact />

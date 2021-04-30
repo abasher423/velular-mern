@@ -10,7 +10,7 @@ const useStyles = makeStyles((theme) => ({
         backgroundColor: "grey",
         height: "200px",
         marginBottom: "1rem",
-        marginTop: "150px"
+        marginTop: "4rem"
     }
   }));
 
