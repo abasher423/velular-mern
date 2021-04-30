@@ -17,6 +17,7 @@ import Container from '@material-ui/core/Container';
 import { register } from '../actions/userActions';
 import Message from '../components/Message';
 import Loader from '../components/Loader';
+import { Paper } from '@material-ui/core';
 
 const useStyles = makeStyles((theme) => ({
     paper: {
@@ -43,6 +44,10 @@ const useStyles = makeStyles((theme) => ({
           backgroundColor: theme.palette.success.main,
         }
     },
+    paper: {
+        height: "800px",
+        padding: "2rem"
+    }
 }));
 
 const UserRegisterScreen = ({ history, location }) => {
@@ -101,6 +106,7 @@ const UserRegisterScreen = ({ history, location }) => {
     }
 
     return (
+        <Paper className={classes.paper}>
         <Container component="main" maxWidth="xs">
             <Grid container>
             <Grid item xs={12} align="center">
@@ -119,7 +125,7 @@ const UserRegisterScreen = ({ history, location }) => {
                         <Grid item xs={12} md={6} align="center">
                             <TextField 
                                 variant="outlined"
-                                margin="normal"
+                                fullWidth
                                 required
                                 id="firstName"
                                 label="First Name"
@@ -131,7 +137,7 @@ const UserRegisterScreen = ({ history, location }) => {
                         <Grid item xs={12} md={6} align="center">
                             <TextField 
                                 variant="outlined"
-                                margin="normal"
+                                fullWidth
                                 required
                                 id="lastName"
                                 label="Last Name"
@@ -205,6 +211,7 @@ const UserRegisterScreen = ({ history, location }) => {
                 </form>
             </Grid>
         </Container>
+        </Paper>
     );
 }
 

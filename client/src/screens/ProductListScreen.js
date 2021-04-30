@@ -17,21 +17,24 @@ const ListedProducts = () => {
         const fetchProductList = async () => {
             try {
                 const response = await productServices.index();
-                setProducts(response.data.products)
+                const acceptedCustoms = response.data.products.filter(product => {
+                    return product.status === 'Accepted'
+                })
+                setProducts(acceptedCustoms);
             } catch(error){
                 setError(error.response && error.response.data.message);
             }
         }
         fetchProductList()
     }, []);
-
+  
     return (
         <>
         <Typography variant="h2" component="h2" style={{ marginBottom: "3rem", textAlign: "center" }}>Latest Products</Typography>
         { error ? <Message status="error" text={error} />
             : <Grid container spacing={2} alignItems="stretch">
             {products.map(product => {
-                return <Grid item  xs={12} md={3} key={product._id} >
+                return <Grid item  xs={12} md={3} key={product._id} style={{ flexGrow: 1 }}>
                             <Card 
                                 product={product}
                             />

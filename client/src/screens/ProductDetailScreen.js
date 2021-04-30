@@ -5,7 +5,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import Rating from '../components/Rating';
 import Button from '@material-ui/core/Button';
 import Grid from '@material-ui/core/Grid';
-import { Container, Divider, IconButton, InputLabel, TextField } from '@material-ui/core';
+import { Container, Divider, IconButton, InputLabel, Paper, TextField } from '@material-ui/core';
 import Typography from '@material-ui/core/Typography';
 import CardContent from '@material-ui/core/CardContent';
 import CardActions from '@material-ui/core/CardActions';
@@ -43,9 +43,10 @@ const useStyles = makeStyles( theme => ({
         backgroundColor: 'black',
         color: 'white',
         marginTop: '1rem',
-        marginBottom: '150px' //
+        marginBottom: '2rem'
     },
     backIcon: {
+        marginTop: "1rem",
         "&:hover": {
             backgroundColor: "black"
         },
@@ -57,18 +58,21 @@ const useStyles = makeStyles( theme => ({
         margin: theme.spacing(4)
     },
     image: {
-        width: '390px',
-        height: 'auto',
-        [theme.breakpoints.down('sm')] : {
-            width: "300px",
-            height: "auto"
-        }
+        flexGrow: 1
     },
     reviewDivider: {
         margin: '2rem 0'
     },
+    ratingDivider: {
+        [theme.breakpoints.down('sm')] : {
+            width: "315px"
+        }
+    },
     ratingDropDown: {
-        width: 400
+        width: 400,
+        [theme.breakpoints.down('sm')] : {
+            width: 315
+        }
     },
     txtfield: {
         width: '45px'
@@ -158,9 +162,27 @@ const ProductDetailScreen = ({ history, match }) => {
     const handleOpen = () => {
         setOpen(true);
     };
+
+    const handleSizeList = () => {
+        let sizeList;
+        if (product.size %1 === 0.5){
+            sizeList = product.size - 0.5;
+        } else {
+            sizeList = product.size;
+        }
+        let array = [...Array(sizeList).keys()]
+        let results = [];
+        for (let i=2; i<array.length; i++){
+            results.push(array[i]);
+            if (array[i] !== (array.length - 1)){
+              results.push(array[i]+0.5)
+            }
+        }
+        return results;
+    }
     
     return (
-        <>
+        <Paper>
             <Container>
             <IconButton edge="start" className={classes.backIcon} color="inherit" component={Link} to={'/products'} aria-label="back">
                 <ArrowBackIcon />
@@ -169,12 +191,12 @@ const ProductDetailScreen = ({ history, match }) => {
             <Container>
                 {error ? <Message status="error" text={error} /> : (
                     <Grid container spacing={4}>
-                    <Grid item xs={12} md={4}>
+                    <Grid item xs={12} md={6} lg={4}>
                         <div className={classes.image}>
                             <img src={product.productImage} alt={product}/>
                         </div>
                     </Grid>
-                    <Grid item xs={12} md={4}>
+                    <Grid item xs={12} md={6} lg={4}>
                         <div>
                             <Typography variant="h2" component="h2" >{product.name}</Typography>
                             <Divider style={{margin: "0.5rem 0"}}/>
@@ -187,7 +209,7 @@ const ProductDetailScreen = ({ history, match }) => {
                             <Typography variant="h6" color="textSecondary" component="p">{product.description}</Typography> 
                         </div>
                     </Grid>
-                    <Grid item xs={12} md={4}>
+                    <Grid item xs={12} lg={4}>
                         <div>
                         <Card className={classes.root} variant="outlined">
                             <CardContent justify="space-between">
@@ -228,14 +250,20 @@ const ProductDetailScreen = ({ history, match }) => {
 
                                 <div className={classes.box}>
                                     <Typography gutterBottom>Size (3 - {product.size})</Typography>
-                                    <TextField 
-                                        variant="standard"
-                                        className={classes.txtfield}
-                                        id="size"
+                                    <FormControl className={classes.formControl}>
+                                        <Select
+                                        labelId="size-select-label"
+                                        id="size-select"
                                         value={size}
                                         onChange={handleSizeChange}
-                                        name="size"
-                                    />
+                                        >
+                                        {
+                                            handleSizeList().map(k => (
+                                                <MenuItem key={k + 1} value={k + 1}>{k + 1}</MenuItem>
+                                            ))
+                                        }
+                                        </Select>
+                                    </FormControl>
                                 </div>
                                 <Divider style={{margin: "0.5rem 0"}}/>
                             </CardContent>
@@ -283,7 +311,7 @@ const ProductDetailScreen = ({ history, match }) => {
                     <form>
                     <Grid item xs={12}>
                         <Typography variant="h4" component="h2" style={{margin: '2rem 0'}}>Write a Review</Typography>
-                        <Divider />
+                        <Divider className={classes.ratingDivider}/>
                     </Grid>  
                     <Grid item xs={12}>
                         <Typography variant="h6" component="h2">Rating</Typography>
@@ -336,7 +364,7 @@ const ProductDetailScreen = ({ history, match }) => {
                     </form>    
                 </Grid>
             </Container>
-        </>
+        </Paper>
     );
 };
 

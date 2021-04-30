@@ -166,9 +166,9 @@ const CustomCreateForm = ({ setOpenForm, setCustomDetails }) => {
             </Grid>
             <Grid item xs={6}>
             <FormControl className={classes.sizeFormControl}>
-                <InputLabel id="demo-controlled-open-select-label" required>Size</InputLabel>
+                <InputLabel id="controlled-open-select-label" required>Size</InputLabel>
                 <Select
-                    labelId="demo-controlled-open-select-label"
+                    labelId="controlled-open-select-label"
                     id="select-size"
                     open={openSize}
                     onClose={handleCloseSize}
@@ -193,9 +193,9 @@ const CustomCreateForm = ({ setOpenForm, setCustomDetails }) => {
             </Grid>
             <Grid item xs={6}>
                 <FormControl className={classes.brandFormControl} margin="normal">
-                    <InputLabel id="demo-controlled-open-select-label" required>Brand</InputLabel>
+                    <InputLabel id="controlled-open-select-label" required>Brand</InputLabel>
                     <Select
-                        labelId="demo-controlled-open-select-label"
+                        labelId="controlled-open-select-label"
                         id="select-brand"
                         open={openBrand}
                         onClose={handleCloseBrand}
@@ -214,10 +214,10 @@ const CustomCreateForm = ({ setOpenForm, setCustomDetails }) => {
             </Grid>
             <Grid item xs={6}>
                 <FormControl className={classes.categoryFormControl} margin="normal">
-                    <InputLabel id="demo-controlled-open-select-label required">Category</InputLabel>
+                    <InputLabel id="open-select-label required">Category</InputLabel>
                     <Select
-                        labelId="demo-controlled-open-select-label"
-                        id="demo-controlled-open-select"
+                        labelId="open-select-label"
+                        id="open-select"
                         open={open}
                         onClose={handleClose}
                         onOpen={handleOpen}
