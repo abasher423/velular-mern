@@ -82,7 +82,7 @@ const useStyles = makeStyles( theme => ({
 const ProductDetailScreen = ({ history, match }) => {
     const productId = match.params.productId;
     const [quantity, setQuantity] = useState(1);
-    const [size, setSize] = useState(5);
+    const [size, setSize] = useState(3);
     const [product, setProduct] = useState('');
     const [error, setError] = useState('');
     const [reviewError, setReviewError] = useState('');
@@ -174,7 +174,7 @@ const ProductDetailScreen = ({ history, match }) => {
         let results = [];
         for (let i=2; i<array.length; i++){
             results.push(array[i]);
-            if (array[i] !== (array.length - 1)){
+            if (array[i] !== (array.length)){
               results.push(array[i]+0.5)
             }
         }
