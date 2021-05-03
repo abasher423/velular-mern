@@ -48,7 +48,7 @@ const orders_get_order = async (req, res) => {
         .findById(req.params.orderId)
         .populate('user', '_id firstName lastName email');
         if (order){
-            if (req.userData.userId === order.user._id.toString()){
+            if (req.userData.userId === order.user._id.toString() || req.userData.role === 'admin'){
                 res.status(200).json({
                     order: order,
                     request: {
@@ -99,8 +99,9 @@ const orders_create_order = async (req, res) => {
 const orders_get_user = async (req, res) => {
     try {
         if (req.userData.userId === req.params.userId){
-            const orders = await Order.find({ user: req.params.userId}); // find orders with matching userId
-            console.log(orders)
+            const orders = await Order
+                .find({ user: req.params.userId}) // find orders with matching userId
+                .populate('user', 'firstName lastName')
             if (orders.length >= 1){
                 res.status(200).json({
                     count: orders.length,

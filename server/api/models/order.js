@@ -10,6 +10,7 @@ const orderSchema = new Schema({
         productId: { type: mongoose.Schema.ObjectId, ref: 'Product', required: true },
         artist: {type: mongoose.Schema.ObjectId, ref: 'User', required: true },
         name: { type: String, required: true},
+        description: { type: String, required: true},
         quantity: {type: Number, required: true },
         size: {type: Number, required: true },
         price: {type: Number, requireD: true },
