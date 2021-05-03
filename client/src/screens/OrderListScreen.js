@@ -83,7 +83,7 @@ const OrderListScreen = () => {
                       <TableRow>
                         <StyledTableCell>Order ID</StyledTableCell>
                         <StyledTableCell>User</StyledTableCell>
-                        <StyledTableCell>Date</StyledTableCell>
+                        <StyledTableCell>Date Placed</StyledTableCell>
                         <StyledTableCell>Total</StyledTableCell>
                         <StyledTableCell>Paid</StyledTableCell>
                         <StyledTableCell>Delivered</StyledTableCell>
@@ -98,13 +98,16 @@ const OrderListScreen = () => {
                           <StyledTableCell>{order.order.date.substring(0,16)}</StyledTableCell>
                           <StyledTableCell>£{order.order.totalPrice}</StyledTableCell>
                           <StyledTableCell>
-                              {order.order.paidAt.substring(0, 25)} 
+                              {order.order.paidAt.substring(0, 16)} 
                               <CheckCircleOutlineIcon className={classes.paid}/>
                           </StyledTableCell>
                           <StyledTableCell>
-                              {order.order.isDelivered ? order.order.deliveredAt.substring(0, 25) : 
+                              {order.order.isDelivered ? order.order.deliveredAt.substring(0, 16) : 
                                 <CloseIcon className={classes.close} />          
                               }
+                              {order.order.isDelivered && (
+                                <CheckCircleOutlineIcon className={classes.paid}/>
+                              )}
                             </StyledTableCell>
                           <StyledTableCell>
                             <Button

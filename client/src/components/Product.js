@@ -11,7 +11,7 @@ import Rating from './Rating';
 import Link from 'react-router-dom/Link';
 import { Divider } from '@material-ui/core';
 
-const useStyles = makeStyles({
+const useStyles = makeStyles(theme => ({
   root: {
     maxWidth: 345,
     height: "100%"
@@ -22,8 +22,11 @@ const useStyles = makeStyles({
   },
   divide: {
     margin: "0.25rem 0"
+  },
+  ratingText: {
+    fontSize: theme.typography.pxToRem(20)
   }
-});
+}));
 
 const Product = ({ product }) => {
   const classes = useStyles();
@@ -54,8 +57,8 @@ const Product = ({ product }) => {
                       {`£${product.pricing.price}`}
                   </Typography>
                   <Divider className={classes.divide}/>
-                  <Typography gutterBottom variant="h6" component="h2">
-                    <Rating value={product.averageRating} text={`${product.totalNumRating} reviews`}/>
+                  <Typography gutterBottom className={classes.ratingText}>
+                    <Rating value={product.averageRating} text={`${product.averageRating} stars`}/>
                   </Typography>
                 </CardContent>
                 </CardActionArea>

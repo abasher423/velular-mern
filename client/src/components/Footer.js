@@ -16,9 +16,7 @@ const useStyles = makeStyles((theme) => ({
     },
     footer: {
         backgroundColor: "grey",
-        height: "200px",
-        marginBottom: "1rem",
-        marginTop: "4rem"
+        height: "200px"
     },
     heading: {
         fontSize: theme.typography.pxToRem(12),
@@ -38,7 +36,7 @@ const useStyles = makeStyles((theme) => ({
     },
     paper: {
         padding: "1rem",
-        margin: "2rem 0"
+        marginTop: "2rem"
     }
   }));
 

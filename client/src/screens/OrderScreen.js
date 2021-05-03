@@ -1,4 +1,4 @@
-import { Avatar, Button, Card, CardActions, CardContent, Container, Divider, Grid, IconButton, List, ListItem, ListItemAvatar, ListItemText, Paper, Typography 
+import { Avatar, Button, Card, CardActions, CardContent, Container, Divider, Grid, IconButton, List, ListItem, ListItemAvatar, ListItemText, Paper, Typography, useMediaQuery, useTheme 
 } from '@material-ui/core';
 import makeStyles from '@material-ui/core/styles/makeStyles';
 import React from 'react';
@@ -67,12 +67,15 @@ const useStyles = makeStyles((theme) => ({
         },
         backgroundColor: 'black'
     },
-    main: {
-        // marginTop: "2rem"
+    heading: {
+        fontSize: theme.typography.pxToRem(20)
     }
 }));
 
 const OrderScreen = ({ match, history }) => {
+    const theme = useTheme();
+    const mobile = useMediaQuery(theme.breakpoints.down("sm"));
+
     const orderId = match.params.orderId;
     const [sdkReady, setSdkReady] = useState(false);
     
@@ -136,14 +139,14 @@ const OrderScreen = ({ match, history }) => {
     return loading ? <Loader /> : error ? <Message status="error" text={error} /> : <>
         <Grid container spacing={1}>
             <Grid item xs={12}>
-                <Typography component="h1" variant="h4">Order: {order._id}</Typography>
+                <Typography component="h2" variant="h4" className={classes.heading}>Order: {order._id}</Typography>
             </Grid>
             <Grid item xs={12}>
                 <Divider />
             </Grid>
             <Grid item xs={12} className={classes.item}>
             </Grid>
-            <Grid item xs={8} className={classes.main}>
+            <Grid item xs={12} md={8} className={classes.main}>
                 <Grid item xs={12} className={classes.item} >
                     <Typography component="h1" variant="h4"> Shipping Details </Typography>
                 </Grid>
@@ -216,7 +219,7 @@ const OrderScreen = ({ match, history }) => {
                     </List>
                 </Grid>
             </Grid>
-            <Grid item xs={4} className={classes.main}>
+            <Grid item xs={12} md={4} className={classes.main}>
                 <Card className={classes.root} variant="outlined" align="center">
                     <CardContent justify="space-between">
                         <div>
@@ -255,7 +258,7 @@ const OrderScreen = ({ match, history }) => {
                             )}
                         </CardContent>
                     )}
-                    { userInfo.role === 'admin' && order.isPaid && !order.isDelivered && (
+                    { userInfo && userInfo.role === 'admin' && order.isPaid && !order.isDelivered && (
                         <CardContent>
                             <Button
                             variant="contained"

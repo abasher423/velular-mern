@@ -54,8 +54,9 @@ const useStyles = makeStyles((theme) => ({
         backgroundColor: theme.palette.text.secondary,
         color: "white"
     },
-    main: {
-        // marginTop: "2rem"
+    paper: {
+        minHeight: "700px",
+        padding: "1rem"
     }
   }));
 
@@ -104,6 +105,8 @@ const PlaceOrderScreen = ({ history }) => {
     };
 
     return(
+        <Paper className={classes.paper}>
+        <Container>
         <Grid container spacing={2}>
             {/* <Container> */}
                 <Grid item xs={12}>
@@ -114,7 +117,7 @@ const PlaceOrderScreen = ({ history }) => {
                     <ArrowBackIcon />
                 </IconButton>
                 </Grid>
-                <Grid item xs={8} className={classes.main}>
+                <Grid item xs={12} md={8} className={classes.main}>
                     <Grid item xs={12} className={classes.item} >
                         <Typography component="h1" variant="h4"> Shipping Details </Typography>
                     </Grid>
@@ -170,7 +173,7 @@ const PlaceOrderScreen = ({ history }) => {
                         </List>
                     </Grid>
                 </Grid>
-                <Grid item xs={4} className={classes.main}>
+                <Grid item xs={12} md={4} className={classes.main}>
                     <Card className={classes.root} variant="outlined" align="center">
                         <CardContent justify="space-between">
                             <div>
@@ -217,6 +220,8 @@ const PlaceOrderScreen = ({ history }) => {
                 </Grid>
             {/* </Container> */}
         </Grid>
+        </Container>
+        </Paper>
     );
 };
 

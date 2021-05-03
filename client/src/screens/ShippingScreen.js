@@ -17,7 +17,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { saveShippingDetails } from '../actions/cartActions';
 import { savePaymentMethod } from '../actions/cartActions';
 import ReviewForm from '../components/ReviewForm';
-import { IconButton } from '@material-ui/core';
+import { Grid, IconButton } from '@material-ui/core';
 import ArrowBackIcon from '@material-ui/icons/ArrowBack';
 import { Link } from 'react-router-dom';
 
@@ -47,6 +47,13 @@ const useStyles = makeStyles((theme) => ({
     },
     stepper: {
       padding: theme.spacing(3, 0, 5),
+      textAlign: "center",
+      display: "flex",
+      [theme.breakpoints.down('sm')] : {
+        flexDirection: "row",
+        justifyContent: "center",
+        allignItems: "center"
+      }
     },
     buttons: {
       display: 'flex',
@@ -150,20 +157,28 @@ const ShippingScreen = ({ history }) => {
         <CssBaseline />
       <main className={classes.layout}>
         <Paper className={classes.paper}>
-          <Typography component="h1" variant="h4" align="center">
-            Shipping
-          </Typography>
-          <IconButton edge="start" className={classes.backIcon} color="inherit" component={Link} to={'/cart'} aria-label="back">
-              <ArrowBackIcon />
-          </IconButton>
-          {message && <Message status="error" text={message} />}
-          <Stepper activeStep={activeStep} className={classes.stepper}>
-            {steps.map((label) => (
-              <Step key={label}>
-                <StepLabel>{label}</StepLabel>
-              </Step>
-            ))}
-          </Stepper>
+          <Grid container spacing={2}>
+            <Grid item xs={12}>
+              <Typography component="h1" variant="h4" align="center">
+              Shipping
+              </Typography>
+            </Grid>
+            <Grid item xs={12}>
+              <IconButton edge="start" className={classes.backIcon} color="inherit" component={Link} to={'/cart'} aria-label="back">
+                <ArrowBackIcon />
+              </IconButton>
+            </Grid>
+            {message && <Message status="error" text={message} />}
+            <Grid item xs={12}>
+              <Stepper activeStep={activeStep} className={classes.stepper}>
+              {steps.map((label) => (
+                <Step key={label}>
+                  <StepLabel>{label}</StepLabel>
+                </Step>
+              ))}
+              </Stepper>
+            </Grid>
+          </Grid>
           <React.Fragment>
             {activeStep === steps.length ? (
               <React.Fragment>

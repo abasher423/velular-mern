@@ -55,6 +55,9 @@ const useStyles = makeStyles((theme) => ({
         color: "white",
         marginBottom: "2rem"
     },
+    paper: {
+        minHeight: "600px"
+    }
   }));
 
 const CartScreen = ({ match, location, history}) => {
@@ -71,6 +74,7 @@ const CartScreen = ({ match, location, history}) => {
     }
     
     return (
+        <Paper className={classes.paper}>
         <Container>
             <Grid container spacing={2}>
                 <Grid item xs={12} md={6}>
@@ -160,6 +164,7 @@ const CartScreen = ({ match, location, history}) => {
                 </List>
             )}
         </Container>
+        </Paper>
     );
 }
 

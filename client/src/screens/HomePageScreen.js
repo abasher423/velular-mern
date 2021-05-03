@@ -147,6 +147,7 @@ const HomePageScreen = () => {
                 </Grid>
 
                 {/* --------------- Cards ------------------- */}
+                <Container>
                 <Grid container justify="center" spacing={0}>
                 <Grid item xs={12} md={4}>
                     <Paper className={classes.cardPaper}>
@@ -202,6 +203,7 @@ const HomePageScreen = () => {
                     </Paper>
                 </Grid>
                 </Grid>
+                </Container>
         </Grid>
     );
 };

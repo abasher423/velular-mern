@@ -12,6 +12,10 @@ const useStyles = makeStyles(theme => ({
         width: '100%', // Fix IE 11 issue.
         marginTop: theme.spacing(1),
       },
+      heading: {
+        fontSize: theme.typography.pxToRem(40),
+        fontFamily: "serif"
+      },
       txtfield: {
           width: "400px",
           [theme.breakpoints.down('sm')] : {
@@ -37,7 +41,13 @@ const useStyles = makeStyles(theme => ({
       },
       paper: {
           height: "600px",
-          padding: "2rem"
+          padding: "1rem",
+          width: "500px",
+          [theme.breakpoints.down('sm')] : {
+              width: "300px",
+              height: "500px"
+          },
+          textAlign: "center"
       }
 }));
 
@@ -79,66 +89,66 @@ const UserLoginScreen = ({ location, history }) => {
     }
 
     return (
-        <Paper className={classes.paper}>
-            <Container component="main" maxWidth="xs">
-                <Grid item xs={12} align="center">
-                <Avatar className={classes.avatar}>
-                    <img src="images/logo.png" alt="logo"/>
-                </Avatar>
-                </Grid>
-                <Grid item xs={12} align="center">
-                    <Typography variant="h2" component="h2">Login</Typography>
-                </Grid>
-                {error && <Message status="error" text={error} />}
-                {loading && <Loader />}
-                <form className={classes.form}>
-                    <Grid container>
-                        <Grid item xs={12} align="center">
-                            <TextField 
-                                variant="outlined"
-                                margin="normal"
-                                required
-                                className={classes.txtfield}
-                                id="email"
-                                label="Email Address"
-                                value={email}
-                                onChange={handleEmailChange}
-                                name="email"
-                            />
-                        </Grid>
-                        <Grid item xs={12} align="center">
-                            <TextField 
-                                variant="outlined"
-                                margin="normal"
-                                required
-                                className={classes.txtfield}
-                                id="password"
-                                type="password"
-                                label="Password"
-                                value={password}
-                                onChange={handlepasswordChange}
-                                name="password"
-                            />
-                        </Grid>
-                        <Grid item xs={12} align="center">
-                            <Button 
-                                type="submit"
-                                variant="contained"
-                                onClick={submitHandler}
-                                className={classes.submit}
-                            >
-                                Sign in
-                            </Button>
-                        </Grid>
-                        <Grid item xs={12}>
-                            <Link href="/register" variant="body2">
-                                Dont have an account? Register
-                            </Link>
-                        </Grid>
+        <Container component="main" maxWidth="xs">
+            <Paper className={classes.paper}>
+            <Grid item xs={12} align="center">
+            <Avatar className={classes.avatar}>
+                <img src="images/logo.png" alt="logo"/>
+            </Avatar>
+            </Grid>
+            <Grid item xs={12} align="center">
+                <Typography className={classes.heading}>Login</Typography>
+            </Grid>
+            {error && <Message status="error" text={error} />}
+            {loading && <Loader />}
+            <form className={classes.form}>
+                <Grid container>
+                    <Grid item xs={12} align="center">
+                        <TextField 
+                            variant="outlined"
+                            margin="normal"
+                            required
+                            className={classes.txtfield}
+                            id="email"
+                            label="Email Address"
+                            value={email}
+                            onChange={handleEmailChange}
+                            name="email"
+                        />
                     </Grid>
-                </form>
-            </Container>
-         </Paper>
+                    <Grid item xs={12} align="center">
+                        <TextField 
+                            variant="outlined"
+                            margin="normal"
+                            required
+                            className={classes.txtfield}
+                            id="password"
+                            type="password"
+                            label="Password"
+                            value={password}
+                            onChange={handlepasswordChange}
+                            name="password"
+                        />
+                    </Grid>
+                    <Grid item xs={12} align="center">
+                        <Button 
+                            type="submit"
+                            variant="contained"
+                            onClick={submitHandler}
+                            className={classes.submit}
+                        >
+                            Sign in
+                        </Button>
+                    </Grid>
+                    <Grid item xs={12}>
+                        <Link href="/register" variant="body2">
+                            Dont have an account? Register
+                        </Link>
+                    </Grid>
+                </Grid>
+            </form>
+            </Paper>
+        </Container>
     );
 };
 

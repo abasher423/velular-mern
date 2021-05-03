@@ -10,13 +10,14 @@ import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
 import IconButton from '@material-ui/core/IconButton';
 import Container from '@material-ui/core/Container';
-import Link from 'react-router-dom/Link'
+import { Link } from 'react-router-dom'
 import SearchIcon from '@material-ui/icons/Search';
 import FavoriteBorderIcon from '@material-ui/icons/FavoriteBorder';
 import ShoppingCartOutlinedIcon from '@material-ui/icons/ShoppingCartOutlined';
 import PersonOutlineOutlinedIcon from '@material-ui/icons/PersonOutlineOutlined';
 import HomeIcon from '@material-ui/icons/Home';
 import MenuIcon from '@material-ui/icons/Menu';
+import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import { logout } from '../actions/userActions';
 import { useHistory } from "react-router-dom";
 import { Divider, Drawer, Fade, List, ListItem, ListItemIcon, ListItemText, SwipeableDrawer, Tooltip, useMediaQuery, useTheme } from '@material-ui/core';
@@ -27,12 +28,20 @@ const useStyles = makeStyles((theme) => ({
     flexGrow: 1,
     marginBottom: "4rem"
   },
+  heading: {
+    [theme.breakpoints.down('sm')] : {
+        fontSize: theme.typography.pxToRem(16)
+    }
+  },
   title: {
     flexGrow: 1,
     fontWeight: '500',
     textDecoration: 'none',
     color: 'black',
-    fontFamily: 'New Century Schoolbook'
+    fontFamily: 'New Century Schoolbook',
+    [theme.breakpoints.down('sm')] : {
+        fontSize: theme.typography.pxToRem(37)
+    }
   },
   logo: {
       marginTop: '15px',
@@ -58,10 +67,10 @@ const useStyles = makeStyles((theme) => ({
   },
   loggedIn: {
       "&:hover": {
-        backgroundColor: theme.palette.success.main
+        // backgroundColor: theme.palette.success.main
       },
-      backgroundColor: theme.palette.info.dark,
-      color: 'white'
+    //   backgroundColor: theme.palette.info.dark,
+    //   color: 'white'
   }
 }));
 
@@ -69,6 +78,7 @@ const Header = () => {
     const classes = useStyles();
     const dispatch = useDispatch();
     const history = useHistory();
+    
     const theme = useTheme();
     const mobile = useMediaQuery(theme.breakpoints.down("sm"));
 
@@ -129,7 +139,7 @@ const Header = () => {
                     <Divider />
                     <List>
                         {['Profile', 'Orders'].map(option => (
-                            <ListItem button key={option}>
+                            <ListItem button key={option} onClick={() => handleMenuOption(option[0].toLowerCase() + option.substring(1))}>
                                 <ListItemText primary={option} />
                             </ListItem>
                         ))}
@@ -180,8 +190,8 @@ const Header = () => {
                     {mobile ? (
                         <>
                             {userInfo && (
-                                <Typography variant="h6" component="h1">
-                                {userInfo.firstName[0].toUpperCase() + userInfo.firstName.substring(1)}
+                                <Typography variant="h6" component="h1" className={classes.heading}>
+                                    {userInfo.firstName[0].toUpperCase() + userInfo.firstName.substring(1)}
                                 </Typography>
                             )}
                             <Tooltip TransitionComponent={Fade} TransitionProps={{ timeout: 600 }} title="Search">
@@ -226,10 +236,11 @@ const Header = () => {
                         <div>
                             <Button 
                                 className={userInfo ? classes.loggedIn : ''}
-                                variant="contained"
-                                color="primary"
+                                // variant="contained"
+                                // color="primary"
                                 onClick={handleClick}>
                                     {userInfo.firstName}
+                                    <ExpandMoreIcon />
                             </Button>
                             <Menu
                                 id="simple-menu"
@@ -240,6 +251,7 @@ const Header = () => {
                             >
                                 <MenuItem component={Link} to={'/'} onClick={handleClose}>Home</MenuItem>
                                 <MenuItem component={Link} to={'/profile'} onClick={handleClose}>Profile</MenuItem>
+                                <MenuItem component={Link} to={'/orders'} onClick={handleClose}>Orders</MenuItem>
                                 <MenuItem component={Link} to={'/login'} onClick={logoutHandler}>Logout</MenuItem>
                             </Menu>
                         </div>
@@ -254,6 +266,7 @@ const Header = () => {
                             <Button 
                                 onClick={adminHandleClick}>
                                     Admin
+                                    <ExpandMoreIcon />
                             </Button>
                             <Menu
                                 id="admin menu"
@@ -273,6 +286,7 @@ const Header = () => {
                             <Button 
                                 onClick={artistHandleClick}>
                                     Artist
+                                    <ExpandMoreIcon />
                             </Button>
                             <Menu
                                 id="artist menu"

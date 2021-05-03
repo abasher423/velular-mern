@@ -164,11 +164,13 @@ const ProductDetailScreen = ({ history, match }) => {
     };
 
     const handleSizeList = () => {
-        let sizeList;
+        let sizeList = 0;
+        let isInteger = false;
         if (product.size %1 === 0.5){
             sizeList = product.size - 0.5;
         } else {
             sizeList = product.size;
+            isInteger = true;
         }
         let array = [...Array(sizeList).keys()]
         let results = [];
@@ -177,6 +179,9 @@ const ProductDetailScreen = ({ history, match }) => {
             if (array[i] !== (array.length)){
               results.push(array[i]+0.5)
             }
+        }
+        if (isInteger){
+            results.pop();
         }
         return results;
     }
