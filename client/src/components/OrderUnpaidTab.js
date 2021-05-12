@@ -6,6 +6,7 @@ import Button from '@material-ui/core/Button';
 import Alert from "@material-ui/lab/Alert";
 import RepeatIcon from '@material-ui/icons/Repeat';
 
+// CSS to style UI component
 const useStyles = makeStyles(theme => ({
     root: {
         minWidth: 275,
@@ -26,7 +27,7 @@ const useStyles = makeStyles(theme => ({
     },
     emptyAlert: {
         margin: "1rem",
-        height: "500px"
+        height: 500
     },
     buyAgainBtn: {
         backgroundColor: theme.palette.secondary.light,
@@ -39,12 +40,16 @@ const useStyles = makeStyles(theme => ({
             marginBottom: "1rem"
         }
     },
-    supportBtn: {
-        backgroundColor: theme.palette.secondary.light,
+    supportBtn: {        
         "&:hover": {
-            backgroundColor: theme.palette.secondary.main
+            backgroundColor: "white",
+            color: theme.palette.info.dark,
+            border: `${theme.palette.info.dark} 3px solid`,
         },
+        backgroundColor: theme.palette.info.dark,
         color: "white",
+        fontWeight: 800,
+        borderRadius: 25,
         marginBottom: "1rem"
     },
     orderItem: {
@@ -54,18 +59,21 @@ const useStyles = makeStyles(theme => ({
         display: "flex",
         flexDirection: "column",
         justifyContent: "center",
-        alignItems: "center"
+        alignItems: "center",
+        
     }
 }));
 
-const UnpaidOrdersTab = ({ orders }) => {
+// This component is rendered when "Uncomplete" tab is clicked
+const OrderUnpaidTab = ({ orders }) => {
     const classes = useStyles();
 
+    // breakpoints for responsive web design
     const theme = useTheme();
     const mobile = useMediaQuery(theme.breakpoints.down("sm"));
 
     return (
-        <>     
+        <>
             <Grid container className={classes.container}>
                 <Grid item xs={12}>
                     <Typography variant="h6" className={classes.title}>
@@ -138,4 +146,4 @@ const UnpaidOrdersTab = ({ orders }) => {
     );
 };
 
-export default UnpaidOrdersTab;
+export default OrderUnpaidTab;

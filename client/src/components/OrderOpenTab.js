@@ -6,6 +6,7 @@ import Button from '@material-ui/core/Button';
 import Alert from "@material-ui/lab/Alert";
 import RepeatIcon from '@material-ui/icons/Repeat';
 
+// css to style UI component
 const useStyles = makeStyles(theme => ({
     root: {
         minWidth: 275,
@@ -26,25 +27,18 @@ const useStyles = makeStyles(theme => ({
     },
     emptyAlert: {
         margin: "1rem",
-        height: "500px"
-    },
-    buyAgainBtn: {
-        backgroundColor: theme.palette.secondary.light,
-        "&:hover": {
-            backgroundColor: theme.palette.secondary.main
-        },
-        marginRight: "1rem",
-        color: "white",
-        [theme.breakpoints.down('sm')] : {
-            marginBottom: "1rem"
-        }
+        height: 500
     },
     supportBtn: {
-        backgroundColor: theme.palette.secondary.light,
         "&:hover": {
-            backgroundColor: theme.palette.secondary.main
+            backgroundColor: "white",
+            color: theme.palette.info.dark,
+            border: `${theme.palette.info.dark} 3px solid`,
         },
+        backgroundColor: theme.palette.info.dark,
         color: "white",
+        borderRadius: 25,
+        fontWeight: 800,
         marginBottom: "1rem"
     },
     orderItemBtns: {
@@ -56,13 +50,16 @@ const useStyles = makeStyles(theme => ({
     viewOrderBtn: {
         [theme.breakpoints.up('sm')] : {
             width: 193
-        }
+        },
+        borderRadius: 25
     }
 }))
 
+// This component is rendered when "Active Orders" tab is clicked
 const OrderOpenTab = ({ orders }) => {
     const classes = useStyles();
 
+    // breakpoints for responsive design
     const theme = useTheme();
     const mobile = useMediaQuery(theme.breakpoints.down("sm"));
     
@@ -81,9 +78,13 @@ const OrderOpenTab = ({ orders }) => {
                 )}
                 <Grid item xs={12}>
                     {orders && orders.map(order => (
-                        <Card variant="outlined" className={classes.root} key={order._id}>
+                        <Card
+                            variant="outlined" 
+                            className={classes.root} 
+                            key={order._id}
+                        >
                             <CardContent>
-                                <Grid container spacing={2}>
+                                <Grid container spacing={2}> 
                                     <Grid item xs={12} md={2}>
                                         <Typography>ORDER PLACED</Typography>
                                         <Typography>{order.date.substring(5, 16)}</Typography>
@@ -131,7 +132,7 @@ const OrderOpenTab = ({ orders }) => {
                                                         fullWidth={mobile ? true : false}
                                                         className={classes.viewOrderBtn}
                                                         href={`/orders/${order._id}`}>
-                                                            View Your Order
+                                                            View Your Item
                                                     </Button>
                                                 </Grid>
                                             </Grid>

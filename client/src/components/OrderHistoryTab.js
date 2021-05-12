@@ -6,6 +6,7 @@ import Button from '@material-ui/core/Button';
 import Alert from "@material-ui/lab/Alert";
 import RepeatIcon from '@material-ui/icons/Repeat';
 
+// css to style UI component
 const useStyles = makeStyles(theme => ({
     root: {
         minWidth: 275,
@@ -26,25 +27,33 @@ const useStyles = makeStyles(theme => ({
     },
     emptyAlert: {
         margin: "1rem",
-        height: "500px"
+        height: 500
     },
     buyAgainBtn: {
-        backgroundColor: theme.palette.secondary.light,
         "&:hover": {
-            backgroundColor: theme.palette.secondary.main
+            backgroundColor: "white",
+            color: theme.palette.info.dark,
+            border: `${theme.palette.info.dark} 2px solid`,
         },
-        marginRight: "1rem",
+        backgroundColor: theme.palette.info.dark,
         color: "white",
+        fontWeight: 800,
+        borderRadius: 25,
+        marginRight: "1rem",
         [theme.breakpoints.down('sm')] : {
             marginBottom: "1rem"
         }
     },
     supportBtn: {
-        backgroundColor: theme.palette.secondary.light,
         "&:hover": {
-            backgroundColor: theme.palette.secondary.main
+            backgroundColor: "white",
+            color: theme.palette.info.dark,
+            border: `${theme.palette.info.dark} 3px solid`,
         },
+        backgroundColor: theme.palette.info.dark,
         color: "white",
+        fontWeight: 800,
+        borderRadius: 25,
         marginBottom: "1rem"
     },
     orderItemBtns: {
@@ -57,7 +66,8 @@ const useStyles = makeStyles(theme => ({
 
 const OrderHistoryTab = ({ orders }) => {
     const classes = useStyles();
-
+    
+    // needed to make responsive design
     const theme = useTheme();
     const mobile = useMediaQuery(theme.breakpoints.down("sm"));
     
@@ -124,6 +134,7 @@ const OrderHistoryTab = ({ orders }) => {
                                                     <Button
                                                         fullWidth={mobile ? true : false}
                                                         href={`/orders/${order._id}`}
+                                                        style={{ borderRadius: 25 }}
                                                         variant="contained">
                                                             View your item
                                                     </Button>
@@ -138,6 +149,7 @@ const OrderHistoryTab = ({ orders }) => {
                                                     <Button 
                                                         variant="contained"
                                                         fullWidth={mobile ? true : false}
+                                                        style={{ borderRadius: 25}}
                                                         href={`/products/${orderItem.productId}`}>
                                                             Write Product Review
                                                     </Button>
