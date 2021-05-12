@@ -2,9 +2,6 @@ import mongoose from 'mongoose';
 import Product from '../models/product.js';
 import User from '../models/user.js';
 
-// @desc Fetch all products
-// @route GET /api/products
-// @access Public
 const products_get_all = async (req, res) => {
     try {
         const products = await Product.find()
@@ -114,9 +111,6 @@ const customs_get_all_artist = async (req, res) => {
     }
 };
 
-// @desc Fetch single product
-// @route GET /api/products/:productId
-// @access Public
 const products_get_product = async (req, res) => {
     try {
         const product = await Product
@@ -163,7 +157,6 @@ const products_get_product = async (req, res) => {
 
 const products_create_product = async (req, res) => {
     try {
-        console.log(req.file);
         const product = new Product({
             _id: new mongoose.Types.ObjectId(),
             name: req.body.name,
@@ -296,9 +289,6 @@ const products_create_review = async (req, res) => {
     }
 };
 
-// @desc Delete single product
-// @route DELETE /api/products/:productId
-// @access Private
 const products_delete_product = async (req, res) => {
     try {
         const result = await Product.deleteOne({ _id: req.params.productId });

@@ -3,9 +3,7 @@ import jwt from 'jsonwebtoken';
 import bcrypt, { hash } from 'bcrypt';
 import User from '../models/user.js';
 
-// @desc Fetch all users
-// @route GET /api/users
-// @access Private
+
 const users_get_all = async (req, res) => {
     try {
         const users = await User.find()
@@ -38,9 +36,6 @@ const users_get_all = async (req, res) => {
     }
 };
 
-// @desc Fetch a user
-// @route GET /api/users/userId
-// @access Public
 const users_get_user = async (req, res) => {
     try {
         if (req.userData.userId === req.params.userId){ 
@@ -159,9 +154,6 @@ const user_login = async (req, res) => {
     }
 }
 
-// @desc Update a user
-// @route PATCH /api/users/userId
-// @access Public
 const users_update_user = async (req, res) => {
     try {
         const user = await User.findById(req.params.userId);
@@ -224,9 +216,6 @@ const admin_update_user = async (req, res) => {
     }
 }
 
-// @desc Delete a user
-// @route DELETE /api/users/userId
-// @access Private
 const users_delete_user = async (req, res) => {
     try {
         const result = await User.deleteOne({ _id: req.params.userId });

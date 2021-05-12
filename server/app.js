@@ -3,9 +3,7 @@ import morgan from 'morgan';
 import mongoose from 'mongoose';
 import productRoutes from './api/routes/products.js';
 import orderRoutes from './api/routes/orders.js';
-import cartRoutes from './api/routes/carts.js';
 import userRoutes from './api/routes/users.js';
-import reviewRoutes from './api/routes/reviews.js';
 import cors from 'cors';
 import path from 'path';
 
@@ -50,9 +48,7 @@ app.use((req, res, next) => {
 // routes middleware
 app.use('/api/products', productRoutes);
 app.use('/api/orders', orderRoutes);
-app.use('/api/cart', cartRoutes);
 app.use('/api/users', userRoutes);
-app.use('/api/reviews', reviewRoutes);
 
 // paypal route to fetch client ID
 app.get('/api/config/paypal', (req, res) => res.send(process.env.PAYPAL_CLIENT_ID));

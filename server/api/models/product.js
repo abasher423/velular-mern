@@ -1,6 +1,14 @@
 import mongoose from 'mongoose';
 const { Schema } = mongoose;
 
+/*
+    * A schema for products that maps to the MongoDB products collection
+    * The code was adapted by adding additional properties to be stored that is required for Velular
+    * This was adapted from a Udemy course by Brad Traversy
+    * Link here to udemy course's github:
+    * https://github.com/bradtraversy/proshop_mern/blob/master/backend/models/productModel.js
+*/
+
 const reviewSchema = mongoose.Schema({
     firstName: { type: String, required: true },
     rating: { type: Number, required: true },

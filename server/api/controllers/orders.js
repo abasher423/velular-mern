@@ -1,8 +1,8 @@
 import mongoose from 'mongoose';
 import Order from '../models/order.js';
 import Product from '../models/product.js';
-import sendmail from 'sendmail';
 
+// function to get the resoponse needed from the database
 const getResponse = (order, type, desc, id) => {
     return {
         order,
@@ -14,10 +14,11 @@ const getResponse = (order, type, desc, id) => {
     }
 };
 
+// function to get all orders from the database
 const orders_get_all = async (req, res) => {
     try {
-        const orders = await Order.find()
-        .populate('user', '_id firstName lastName email');
+        const orders = await Order.find() // finds all orders
+        .populate('user', '_id firstName lastName email'); // populates user field with fields from users' document
         if (orders.length > 0){
             const response = {
                 count: orders.length,
@@ -31,7 +32,7 @@ const orders_get_all = async (req, res) => {
                 message: 'No entry exists for orders',
                 request: {
                     type: 'POST',
-                    description: 'Create an order',
+                    description: 'Create an individual order',
                     url: 'http://localhost:3000/api/orders'
                 }
             });
@@ -42,12 +43,14 @@ const orders_get_all = async (req, res) => {
     }
 }
 
+// function to get a specific order
 const orders_get_order = async (req, res) => {
     try {
         const order = await Order
         .findById(req.params.orderId)
         .populate('user', '_id firstName lastName email');
         if (order){
+            // checks if ID found in the jwt is same as token provided in request or if its an admin
             if (req.userData.userId === order.user._id.toString() || req.userData.role === 'admin'){
                 res.status(200).json({
                     order: order,
@@ -61,7 +64,7 @@ const orders_get_order = async (req, res) => {
                 res.status(401).json({ message: 'Unauthorized'});
             }
         } else {
-            res.status(404).json({ message: 'order not found' });
+            res.status(404).json({ message: 'No order found' });
         }
     } catch (err){
         console.log(err);
@@ -69,15 +72,15 @@ const orders_get_order = async (req, res) => {
     }
 };
 
-// https://www.udemy.com/course/mern-ecommerce/learn/lecture/22495586?start=150#questions
+// function to create an orders in the database
 const orders_create_order = async (req, res) => {
    try {
-        const { orderItems, shippingDetails, paymentMethod, itemsPrice, taxPrice, shippingPrice, totalPrice } = req.body;
-        if (orderItems.length >= 1){
+        const { orderItems, shipping, paymentMethod, totalItemsPrice, tax, totalShippingPrice, total } = req.body;
+        if (orderItems.length >= 1){ // orders is an array, checks if an order exists
             const order = new Order({
                 _id: new mongoose.Types.ObjectId(),
                 user: req.userData.userId,
-                orderItems, shippingDetails, paymentMethod, itemsPrice, taxPrice, shippingPrice, totalPrice
+                orderItems, shipping, paymentMethod, totalItemsPrice, tax, totalShippingPrice, total
             });
             await order.save();
             res.status(201).json({order,
@@ -89,15 +92,18 @@ const orders_create_order = async (req, res) => {
                 }
             });
         } else {
-            res.status(400).json({ message: "No items in cart"})
+            res.status(400).json({ message: "No items found"})
         }
    } catch (err){
+       console.log(err)
        res.status(500).json({ error: err });
    }
 };
 
+// function to get all orders that belong to a specific user
 const orders_get_user = async (req, res) => {
     try {
+        // checks userId provided in jwt against one provided by the client
         if (req.userData.userId === req.params.userId){
             const orders = await Order
                 .find({ user: req.params.userId}) // find orders with matching userId
@@ -109,14 +115,14 @@ const orders_get_user = async (req, res) => {
                         return {
                             _id: order._id,
                             user: order.user,
-                            shippingDetails: order.shippingDetails,
+                            shipping: order.shipping,
                             orderItems: order.orderItems,
                             date: order.date,
                             currency: order.currency,
-                            itemsPrice: order.itemsPrice,
-                            taxPrice: order.taxPrice,
-                            totalPrice: order.totalPrice,
-                            shippingPrice: order.shippingPrice,
+                            totalItemsPrice: order.totalItemsPrice,
+                            tax: order.tax,
+                            total: order.total,
+                            totalShippingPrice: order.totalShippingPrice,
                             paymentMethod: order.paymentMethod,
                             paidAt: order.paidAt,
                             deliveredAt: order.deliveredAt,
@@ -137,16 +143,18 @@ const orders_get_user = async (req, res) => {
     }
 }
 
-// @desc Update an order to paid
-// @route PATCH /api/odrders
-// @access Private
-// https://github.com/bradtraversy/proshop_mern/blob/master/backend/controllers/orderController.js
+/*
+    * A function which sets order to paid and and stores PayPal payment information
+    * Developer 
+    * This was adapted from a Udemy course by Brad Traversy
+    * Link here to Udemy course:
+    * https://www.youtube.com/watch?v=8Ip0pcwbWYM&list=PL55RiY5tL51q4D-B63KBnygU6opNPFk_q&index=13&ab_channel=Academind
+*/
 const order_update_paid = async (req, res) => {
     try {
         const order = await Order.findById(req.params.orderId);
-        console.log(order)
         if (order){
-            for (const idx in order.orderItems){
+            for (const idx in order.orderItems){ // subtracts quantity bought from quantity in stock
                 const item = order.orderItems[idx];
                 const product = await Product.findById(item.productId);
                 product.quantityInStock -= item.quantity;
@@ -161,7 +169,7 @@ const order_update_paid = async (req, res) => {
                 update_time: req.body.update_time,
                 email_address: req.body.payer.email_address
             };
-            const updatedOrder = await order.save();
+            const updatedOrder = await order.save(); 
             res.status(200).json(updatedOrder);
             
         } else {
@@ -173,6 +181,7 @@ const order_update_paid = async (req, res) => {
     }
 }
 
+// function updates isDelivered property to true once delivered
 const order_update_delivered = async (req, res) => {
     try {
         const order = await Order.findById(req.params.orderId);
@@ -191,12 +200,11 @@ const order_update_delivered = async (req, res) => {
     }
 };
 
-// @desc Delete an order
-// @route DELETE /api/odrders
-// @access Private
+// function to delete a specific order
 const orders_delete_order = async (req, res) => {
     try {
         const result = await Order.deleteOne({_id: req.params.orderId});
+        // checks to see if order has already been deleted
         if (result.n > 0){
             console.log(result);
             res.status(200).json({
