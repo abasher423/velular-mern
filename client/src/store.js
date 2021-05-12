@@ -1,24 +1,23 @@
 import { createStore, combineReducers, applyMiddleware } from 'redux';
 import thunk from 'redux-thunk';
 import { composeWithDevTools } from 'redux-devtools-extension';
-import { productListReducer } from './reducers/productReducers';
 import { cartReducer } from './reducers/cartReducers';
-import { userLoginReducer, userRegisterReducer, userDetailsReducer, userUpdateReducer, userListReducer, userDeleteReducer } from './reducers/userReducers';
-import { orderCreateReducer, orderDetailsReducer, orderPayReducer, orderListUserReducer } from './reducers/orderReducers';
+import { userLoginReducer } from './reducers/userReducers';
+import { orderCreateReducer, orderDetailsReducer, orderPayReducer } from './reducers/orderReducers';
+
+/*
+    * Functions for localstorage compatability and reducers
+    * This was adapted from a Udemy course "MERN eCommerce From Scratch" by Brad Traversy
+    * Link here to course' GitHub:
+    * https://github.com/bradtraversy/proshop_mern/blob/master/frontend/src/store.js
+*/
 
 const reducer = combineReducers({
-    productList: productListReducer,
     cart: cartReducer,
     userLogin: userLoginReducer,
-    userRegister: userRegisterReducer,
-    userDetails: userDetailsReducer,
-    userUpdate: userUpdateReducer,
-    usersList: userListReducer,
-    userDelete: userDeleteReducer,
     orderCreate: orderCreateReducer,
     orderDetails: orderDetailsReducer,
     orderPay: orderPayReducer,
-    orderListUser: orderListUserReducer
 });
 
 // fetching cart from local storage
@@ -38,7 +37,7 @@ const initialState = {
         cartItems: cartItemsFromStorage,
         shippingDetails: shippingDetailsFromStorage 
     },
-    userLogin: { userInfo: userInfoFromStorage } // need to change
+    userLogin: { userInfo: userInfoFromStorage }
 };
 
 const middleware = [thunk];

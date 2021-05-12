@@ -9,12 +9,15 @@ import {
     ORDER_PAY_REQUEST,
     ORDER_PAY_SUCCESS,
     ORDER_PAY_FAILURE,
-    ORDER_PAY_RESET,
-    ORDER_LIST_USER_REQUEST,
-    ORDER_LIST_USER_SUCCESS,
-    ORDER_LIST_USER_FAILURE,
-    ORDER_LIST_USER_RESET
+    ORDER_PAY_RESET
 } from '../constants/orderConstants';
+
+/*
+    * Three functions to create an action in Redux for creating, fetching and paying orders
+    * This was reused from a Udemy course "MERN eCommerce From Scratch" by Brad Traversy
+    * Link here to course' GitHub:
+    * https://github.com/bradtraversy/proshop_mern/blob/master/frontend/src/reducers/orderReducer.js
+*/
 
 export const orderCreateReducer = (state = {}, action) => {
     switch(action.type){
@@ -54,21 +57,6 @@ export const orderPayReducer = (state = {}, action) => {
             return { loading: false, error: action.payload };
         case ORDER_PAY_RESET:
             return {};
-        default:
-            return state;
-    }
-}
-
-export const orderListUserReducer = (state = { orders: []}, action) => {
-    switch(action.type){
-        case ORDER_LIST_USER_REQUEST:
-            return { loading: true };
-        case ORDER_LIST_USER_SUCCESS:
-            return { loading: false, orders: action.payload };
-        case ORDER_LIST_USER_FAILURE:
-            return { loading: false, error: action.payload };
-        case ORDER_LIST_USER_RESET:
-            return { orders: [] };
         default:
             return state;
     }

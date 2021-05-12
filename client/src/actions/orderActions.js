@@ -8,11 +8,16 @@ import {
     ORDER_PAY_REQUEST,
     ORDER_PAY_SUCCESS,
     ORDER_PAY_FAILURE,
-    ORDER_LIST_USER_REQUEST,
-    ORDER_LIST_USER_SUCCESS,
-    ORDER_LIST_USER_FAILURE
 } from '../constants/orderConstants';
 import orderServices from '../services/orderServices';
+
+/*
+    * Two functions to create and pay for an order in the frontend
+    * The code was adapted by renaming variable names
+    * This was adapted from a Udemy course by Brad Traversy
+    * Link here to course' GitHub:
+    * https://github.com/bradtraversy/proshop_mern/blob/master/frontend/src/actions/orderActions.js
+*/
 
 export const createOrder = (orderData) => async (dispatch, getState) => {
     try {
@@ -104,39 +109,6 @@ export const payOrder = (orderId, paymentResult) => async (dispatch, getState) =
     } catch (error){ // need to change
         dispatch({
             type: ORDER_PAY_FAILURE,
-            payload: 
-            error.response && error.response.data.message 
-                ? error.response.data.message 
-                : error.message
-        })
-    }
-}
-
-export const listUserOrder = (userId) => async (dispatch, getState) => {
-    try {
-        dispatch({
-            type: ORDER_LIST_USER_REQUEST
-        });
-
-        const { userLogin: { userInfo } } = getState();
-       
-        const token = {
-            headers: {
-                Authorization: `Bearer ${userInfo.token}`
-            }
-        }
-
-        const { data } = await orderServices.listUserOrders(userId, token);
-     
-        dispatch({
-            type: ORDER_LIST_USER_SUCCESS,
-            payload: data.orders
-        })
-
-
-    } catch (error){ // need to change
-        dispatch({
-            type: ORDER_LIST_USER_FAILURE,
             payload: 
             error.response && error.response.data.message 
                 ? error.response.data.message 

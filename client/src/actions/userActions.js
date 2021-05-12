@@ -1,44 +1,24 @@
-import { ORDER_LIST_USER_RESET } from "../constants/orderConstants";
 import { 
-    USER_DELETE_FAILURE,
-    USER_DELETE_REQUEST,
-    USER_DELETE_SUCCESS,
-    USER_DETAILS_FAILURE,
-    USER_DETAILS_REQUEST,
-    USER_DETAILS_RESET,
-    USER_DETAILS_SUCCESS,
-    USER_LIST_FAILURE,
-    USER_LIST_REQUEST,
-    USER_LIST_SUCCESS,
     USER_LOGIN_FAILURE, 
     USER_LOGIN_REQUEST, 
     USER_LOGIN_SUCCESS, 
     USER_LOGOUT,
-    USER_REGISTER_FAILURE,
-    USER_REGISTER_REQUEST,
-    USER_REGISTER_SUCCESS,
-    USER_UPDATE_FAILURE,
-    USER_UPDATE_REQUEST,
-    USER_UPDATE_SUCCESS
 } from "../constants/userConstants";
 import authenticationServices from '../services/AuthenticationServices';
-import userServices from '../services/userServices';
+
+/*
+    * Two functions to login and logout and storing info into localstorage aswell clearing once logged out
+    * The code was adapted by renaming variable names
+    * This was adapted from a Udemy course by Brad Traversy
+    * Link here to course' GitHub:
+    * https://github.com/bradtraversy/proshop_mern/blob/master/frontend/src/actions/userActions.js
+*/
 
 export const login = (email, password) => async (dispatch) => {
     try {
         dispatch({
             type: USER_LOGIN_REQUEST
         });
-
-        const credentials = {
-            "email": email,
-            "password": password
-        }
-        const config = {
-            headers: {
-                'Content-Type': 'application/json'
-            }
-        };
 
         const { data } = await authenticationServices.login({
             email: email,
@@ -64,166 +44,5 @@ export const login = (email, password) => async (dispatch) => {
 
 export const logout = () => (dispatch) => {
     localStorage.removeItem('userInfo');
-    dispatch({ type: USER_LOGOUT});
-    dispatch({ type: USER_DETAILS_RESET });
-    dispatch({ type: ORDER_LIST_USER_RESET });
-}
-
-export const register = (firstName, lastName, email, password, role) => async (dispatch) => {
-    try {
-        dispatch({
-            type: USER_REGISTER_REQUEST
-        });
-
-        const { data } = await authenticationServices.register({
-            firstName: firstName,
-            lastName: lastName,
-            email: email,
-            password: password,
-            role: role
-        });
-
-        dispatch({
-            type: USER_REGISTER_SUCCESS,
-            payload: data
-        })
-    } catch (error){
-        dispatch({
-            type: USER_REGISTER_FAILURE,
-            payload: 
-            error.response && error.response.data.message 
-                ? error.response.data.message 
-                : error.message
-        })
-    }
-}
-
-export const listUsers = () => async (dispatch, getState) => {
-    try {
-        dispatch({
-            type: USER_LIST_REQUEST
-        });
-
-        const { userLogin: { userInfo } } = getState();
-  
-        const token = {
-            headers: {
-                Authorization: `Bearer ${userInfo.token}`
-            }
-        }
-
-        const { data } = await userServices.index(token);
-
-        dispatch({
-            type: USER_LIST_SUCCESS,
-            payload: data.users
-        })
-        
-    } catch (error){
-        dispatch({
-            type: USER_LIST_FAILURE,
-            payload: 
-            error.response && error.response.data.message 
-                ? error.response.data.message 
-                : error.message
-        })
-    }
-}
-
-export const getUserDetails = (userId) => async (dispatch, getState) => {
-    try {
-        dispatch({
-            type: USER_DETAILS_REQUEST
-        });
-
-        const { userLogin: { userInfo } } = getState();
-  
-        const config = {
-            headers: {
-                Authorization: `Bearer ${userInfo.token}`
-            }
-        }
-
-        const { data } = await userServices.indexOne(userId, config);
-     
-        dispatch({
-            type: USER_DETAILS_SUCCESS,
-            payload: data
-        })
-
-    } catch (error){
-        dispatch({
-            type: USER_DETAILS_FAILURE,
-            payload: 
-            error.response && error.response.data.message 
-                ? error.response.data.message 
-                : error.message
-        })
-    }
-}
-
-export const updateUserProfile = (userId, userData) => async (dispatch, getState) => {
-    try {
-        dispatch({
-            type: USER_UPDATE_REQUEST
-        });
-
-        const { userLogin: { userInfo } } = getState();
-  
-        const token = {
-            headers: {
-                Authorization: `Bearer ${userInfo.token}`
-            }
-        }
-
-        const { data } = await userServices.update(userId, userData, token);
-     
-        dispatch({
-            type: USER_UPDATE_SUCCESS,
-            payload: data
-        })
-
-        dispatch({
-            type: USER_LOGIN_SUCCESS
-        });
-
-        localStorage.setItem('userInfo', JSON.stringify(data));
-    } catch (error){
-        dispatch({
-            type: USER_UPDATE_FAILURE,
-            payload: 
-            error.response && error.response.data.message 
-                ? error.response.data.message 
-                : error.message
-        })
-    }
-}
-
-export const deleteUser = (userId) => async (dispatch, getState) => {
-    try {
-        dispatch({
-            type: USER_DELETE_REQUEST
-        });
-
-        const { userLogin: { userInfo } } = getState();
-  
-        const token = {
-            headers: {
-                Authorization: `Bearer ${userInfo.token}`
-            }
-        }
-
-        const {data} = await userServices.deleteUser(userId, token);
-
-        dispatch({ type: USER_DELETE_SUCCESS })
-        
-    } catch (error){
-        dispatch({
-            type: USER_DELETE_FAILURE,
-            payload: 
-            error.response && error.response.data.message 
-                ? error.response.data.message 
-                : error.message
-        })
-    }
+    dispatch({ type: USER_LOGOUT})
 }

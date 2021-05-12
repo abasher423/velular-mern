@@ -6,21 +6,29 @@ import {
     CART_SAVE_SHIPPING_DETAILS
 } from '../constants/cartConstants';
 
+/*
+    * A function to add and delete items from the cart and save payment and shipping information
+    * The code was adapted by renaming variable names
+    * This was adapted from a Udemy course "MERN eCommerce From Scratch" by Brad Traversy
+    * Link here to course' GitHub:
+    * https://github.com/bradtraversy/proshop_mern/blob/master/frontend/src/reducers/cartReducers.js
+*/
+
 export const cartReducer = (state = { cartItems: [], shippingDetails: {} }, action) => {
     switch (action.type){
         case CART_ADD_ITEM:
-            const item = action.payload;
-            const existItem = state.cartItems.find(product => product.productId === item.productId);
+            const cartItem = action.payload;
+            const existItem = state.cartItems.find(product => product.productId === cartItem.productId);
 
             if (existItem){
                 return {
                     ...state,
-                    cartItems: state.cartItems.map(product => product.productId === existItem.productId ? item : product)
+                    cartItems: state.cartItems.map(product => product.productId === existItem.productId ? cartItem : product)
                 };
             } else {
                 return {
                     ...state,
-                    cartItems: [...state.cartItems, item]
+                    cartItems: [...state.cartItems, cartItem]
                 };
             }
 
