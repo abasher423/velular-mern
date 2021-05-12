@@ -5,7 +5,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import Message from '../components/Message';
 import Loader from '../components/Loader';
 import { login } from '../actions/userActions';
-import { Container, Grid, Typography, FormGroup, makeStyles, TextField, Button, Avatar, Link, Paper, useMediaQuery, useTheme } from '@material-ui/core';
+import { Container, Grid, Typography, makeStyles, TextField, Button, Avatar, Link, Paper, } from '@material-ui/core';
 
 // CSS to style UI component
 const useStyles = makeStyles(theme => ({
