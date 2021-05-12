@@ -5,7 +5,6 @@ import Footer from './components/Footer';
 import HomePageScreen from './screens/HomePageScreen';
 import UserRegisterScreen from './screens/UserRegisterScreen';
 import UserLoginScreen from './screens/UserLoginScreen';
-import UserProfileScreen from './screens/UserProfileScreen';
 import ProductListScreen from './screens/ProductListScreen';
 import ProductDetailScreen from './screens/ProductDetailScreen';
 import CartScreen from './screens/CartScreen';
@@ -15,6 +14,7 @@ import PlaceOrderScreen from './screens/PlaceOrderScreen';
 import OrderScreen from './screens/OrderScreen';
 import UserListScreen from './screens/UserListScreen';
 import UserUpdateScreen from './screens/UserUpdateScreen';
+import UserProfileScreen from './screens/UserProfileScreen'
 import CustomListScreen from './screens/CustomListScreen';
 import CustomUpdateScreen from './screens/CustomUpdateScreen';
 import OrderListScreen from './screens/OrderListScreen';
@@ -26,15 +26,14 @@ const App = () => {
     <>
       <Router>
           <Header />
-        <main>
+        <main style={{ overflow: "auto", flexGrow: 1}}>
           <Container>
             <Route path='/' component={HomePageScreen} exact />
             <Route path='/products' component={ProductListScreen} exact />
             <Route path='/products/:productId' component={ProductDetailScreen} />
             <Route path='/cart/:cartId?' component={CartScreen} exact/>
             <Route path='/register' component={UserRegisterScreen} exact />
-            <Route path='/login' component={UserLoginScreen} exact />
-            <Route path='/profile' component={UserProfileScreen} exact />
+            <Route path='/login' component={UserLoginScreen} exact />      
             <Route path='/orders' component={UserOrdersScreen} exact />
             <Route path='/admin/users-list' component={UserListScreen} exact />
             <Route path='/users/:userId' component={UserUpdateScreen} />
@@ -45,7 +44,9 @@ const App = () => {
             <Route path='/admin/orders-list' component={OrderListScreen} exact />
             <Route path='/artist/customs' component={CustomCreateScreen} exact />
             <Route path='/customs/:customId' component={CustomUpdateScreen} />
+            <Route path='/account' component={UserProfileScreen} exact />
           </Container>
+          
         </main>
         <Footer />
         </Router>
