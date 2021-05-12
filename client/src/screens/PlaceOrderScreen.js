@@ -31,8 +31,8 @@ const useStyles = makeStyles((theme) => ({
         margin: "1rem 0"
     },
     drawerPaper: { 
-        width: "750px",
-        height: "100px",
+        width: 750,
+        height: 100,
         margin: "1rem 0",
         background: "white" 
     },
@@ -41,11 +41,15 @@ const useStyles = makeStyles((theme) => ({
         justifyContent: "space-between"
     },
     btn: {
-        "&:hover": {
-            backgroundColor: theme.palette.success.main
+        "&:hover": {            
+            backgroundColor: "white",
+            border: `${theme.palette.info.dark} 3px solid`,
+            color: theme.palette.info.dark,
         },
-        display: "block",
-        backgroundColor: theme.palette.info.dark
+        backgroundColor: theme.palette.info.dark,
+        color: "white",        
+        fontWeight: 800,
+        borderRadius: 25
     },
     backIcon: {
         "&:hover": {
@@ -55,7 +59,7 @@ const useStyles = makeStyles((theme) => ({
         color: "white"
     },
     paper: {
-        minHeight: "700px",
+        minHeight: 700,
         padding: "1rem"
     }
   }));
@@ -63,6 +67,7 @@ const useStyles = makeStyles((theme) => ({
 const PlaceOrderScreen = ({ history }) => {
     const classes = useStyles();
     const dispatch = useDispatch();
+    
     const cart = useSelector(state => state.cart);
     if (!cart.shippingDetails.hasOwnProperty('address')){
         history.push('/shipping');
@@ -72,13 +77,17 @@ const PlaceOrderScreen = ({ history }) => {
     const addDecimals = (num) => {
         return (Math.round(num * 100) / 100).toFixed(2);
     }
-    cart.itemsPrice = addDecimals(cart.cartItems.reduce((acc, item) => acc + item.price * item.quantity, 0));
+    let total = 0;
+    for (let i=0; i<cart.cartItems.length; i++){
+        total += (cart.cartItems[i].price * cart.cartItems[i].quantity);
+    }
+    cart.totalItemsPrice = addDecimals(total);
     // shipping price (if total is < £100 then its £10 shipping fee)
-    cart.shippingPrice = addDecimals(cart.itemsPrice > 100 ? 0 : 20);
+    cart.totalShippingPrice = addDecimals(cart.totalItemsPrice > 100 ? 0 : 20);
     // 15% tax
-    cart.taxPrice = addDecimals(Number((0.05 * cart.itemsPrice).toFixed(2)));
+    cart.tax = addDecimals(Number((0.05 * cart.totalItemsPrice).toFixed(2)));
     // total price
-    cart.totalPrice = (Number(cart.itemsPrice) + Number(cart.shippingPrice) + Number(cart.taxPrice)).toFixed(2);
+    cart.total = (Number(cart.totalItemsPrice) + Number(cart.totalShippingPrice) + Number(cart.tax)).toFixed(2);
 
     const orderCreate = useSelector(state => state.orderCreate);
     const { order, success, error } = orderCreate;
@@ -95,12 +104,12 @@ const PlaceOrderScreen = ({ history }) => {
     const placeOrderHandler = () => {
         dispatch(createOrder({
             orderItems: cart.cartItems,
-            shippingDetails: cart.shippingDetails,
+            shipping: cart.shippingDetails,
             paymentMethod: cart.paymentMethod,
-            itemsPrice: cart.itemsPrice,
-            shippingPrice: cart.shippingPrice,
-            taxPrice: cart.taxPrice,
-            totalPrice: cart.totalPrice
+            totalItemsPrice: cart.totalItemsPrice,
+            totalShippingPrice: cart.totalShippingPrice,
+            tax: cart.tax,
+            total: cart.total
         }));
     };
 
@@ -182,22 +191,22 @@ const PlaceOrderScreen = ({ history }) => {
                             <Divider style={{margin: "0.5rem 0"}}/>
                             <div className={classes.box}>
                                 <Typography variant="h6">Items</Typography>
-                                <Typography>£{cart.itemsPrice}</Typography>
+                                <Typography>£{cart.totalItemsPrice}</Typography>
                             </div>
                             <Divider style={{margin: "0.5rem 0"}}/>
                             <div className={classes.box}>
                                 <Typography variant="h6">Shipping</Typography>
-                                <Typography>£{cart.shippingPrice}</Typography>
+                                <Typography>£{cart.totalShippingPrice}</Typography>
                             </div>
                             <Divider style={{margin: "0.5rem 0"}}/>
                             <div className={classes.box}>
                                 <Typography variant="h6">Tax</Typography>
-                                <Typography>£{cart.taxPrice}</Typography>
+                                <Typography>£{cart.tax}</Typography>
                             </div>
                             <Divider style={{margin: "0.5rem 0"}}/>
                             <div className={classes.box}>
                                 <Typography variant="h6">Total</Typography>
-                                <Typography>£{cart.totalPrice}</Typography>
+                                <Typography>£{cart.total}</Typography>
                             </div>
                             <div>
                             {error && <Message status="error" text={error} />}

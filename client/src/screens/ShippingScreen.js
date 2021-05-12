@@ -21,6 +21,7 @@ import { Grid, IconButton } from '@material-ui/core';
 import ArrowBackIcon from '@material-ui/icons/ArrowBack';
 import { Link } from 'react-router-dom';
 
+// CSS to style UI components
 const useStyles = makeStyles((theme) => ({
     appBar: {
       position: 'relative',
@@ -62,6 +63,8 @@ const useStyles = makeStyles((theme) => ({
     button: {
       marginTop: theme.spacing(3),
       marginLeft: theme.spacing(1),
+      borderRadius: 25,
+      fontWeight: 800
     },
     backIcon: {
         "&:hover": {
@@ -76,7 +79,10 @@ const steps = ['Shipping Address', 'Payment Details', 'Review Your Order'];
 
 const ShippingScreen = ({ history }) => {
     const classes = useStyles();
+
     const cart = useSelector(state => state.cart);
+
+    // states
     const { shippingDetails } = cart;
     const [activeStep, setActiveStep] = useState(0);
     const [address, setAddress] = useState(shippingDetails.address ? shippingDetails.address : '');
@@ -88,14 +94,13 @@ const ShippingScreen = ({ history }) => {
 
     const dispatch = useDispatch();
  
+    // HANDLERS
     const handleNext = () => {
         setActiveStep(activeStep + 1);
     };
-    
     const handleBack = () => {
         setActiveStep(activeStep - 1);
     };
-
     const submitHandler = (e) => {
         if (address === '' || city === '' || postCode === '' || country === ''){
             setActiveStep(0)
@@ -109,23 +114,30 @@ const ShippingScreen = ({ history }) => {
             dispatch(savePaymentMethod(paymentMethod));
             history.push('/place-order')
         }
-    }
-
+    };
     const addAddress = (e) => {
         setAddress(e.target.value);
-    }
+    };
     const addCity = (e) => {
         setCity(e.target.value);
-    }
+    };
     const addPostCode = (e) => {
         setPostCode(e.target.value);
-    }
+    };
     const addCountry = (e) => {
         setCountry(e.target.value);
-    }
+    };
     const addPaymentMethod = (e) => {
         setPaymentMethod(e.target.value);
-    }
+    };
+
+    /*
+      * A multistep form component for shippping
+      * The code was adapted by adding additional details, styles and input components
+      * This was adapted from Material UI's free "Checkout" template
+      * Link here to template's GitHub:
+      * https://github.com/mui-org/material-ui/tree/master/docs/src/pages/getting-started/templates/checkout
+    */
 
     function getStepContent(step) {
         switch (step) {

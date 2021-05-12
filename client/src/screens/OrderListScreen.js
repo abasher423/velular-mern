@@ -19,6 +19,8 @@ import { useState } from 'react';
 import { useSelector } from 'react-redux';
 import orderServices from '../services/orderServices';
 import CheckCircleOutlineIcon from '@material-ui/icons/CheckCircleOutline';
+
+// CSS to style UI component
 const useStyles = makeStyles(theme => ({
     title: {
         textAlign: 'center'
@@ -28,10 +30,11 @@ const useStyles = makeStyles(theme => ({
     },
     paid: {
         color: theme.palette.success.main,
-        paddingLeft: '5px'
+        paddingLeft: 5
     }
 }));
 
+// Table style code adapted from example in https://material-ui.com/components/tables/
 const StyledTableCell = withStyles((theme) => ({
     head: {
       backgroundColor: theme.palette.common.white,
@@ -42,6 +45,7 @@ const StyledTableCell = withStyles((theme) => ({
     },
   }))(TableCell);
   
+  // Table style code adapted from example in https://material-ui.com/components/tables/
   const StyledTableRow = withStyles((theme) => ({
     root: {
       '&:nth-of-type(odd)': {
@@ -78,7 +82,10 @@ const OrderListScreen = () => {
         <Typography variant="h3" component="h1" className={classes.title}>Manage Orders ({ordersList ? ordersList.length : '0'})</Typography>
         <Container>
             <TableContainer component={Paper}>
-                  <Table className={classes.table} aria-label="customs table">
+                  <Table // Table component adapted from example in https://material-ui.com/components/tables/
+                    className={classes.table} 
+                    aria-label="customs table"
+                  >
                     <TableHead>
                       <TableRow>
                         <StyledTableCell>Order ID</StyledTableCell>
@@ -110,7 +117,7 @@ const OrderListScreen = () => {
                               )}
                             </StyledTableCell>
                           <StyledTableCell>
-                            <Button
+                            <Button // Button component adapted from example in https://material-ui.com/components/buttons/
                                 variant="contained"
                                 component={Link}
                                 to={`/orders/${order.order._id}`}

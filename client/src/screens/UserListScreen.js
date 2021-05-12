@@ -17,7 +17,10 @@ import CheckIcon from '@material-ui/icons/Check';
 import CloseIcon from '@material-ui/icons/Close';
 import EditIcon from '@material-ui/icons/Edit';
 import DeleteIcon from '@material-ui/icons/Delete';
+import { useState } from 'react';
+import userServices from '../services/userServices';
 
+// CSS to style UI component
 const useStyles = makeStyles(theme => ({
   title: {
     textAlign: 'center',
@@ -25,6 +28,7 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
+// function reused from example in https://material-ui.com/components/tables/
 const StyledTableCell = withStyles((theme) => ({
   head: {
     backgroundColor: theme.palette.common.white,
@@ -35,6 +39,7 @@ const StyledTableCell = withStyles((theme) => ({
   },
 }))(TableCell);
 
+// function reused from example in https://material-ui.com/components/tables/
 const StyledTableRow = withStyles((theme) => ({
   root: {
     '&:nth-of-type(odd)': {
@@ -45,35 +50,66 @@ const StyledTableRow = withStyles((theme) => ({
 
 const UserListScreen = ({ history }) => {
     const classes = useStyles();
-    const dispatch = useDispatch();
 
-    const usersList = useSelector(state => state.usersList);
-    const { loading, error, users } = usersList;
+    // states
+    const [users, setUsers] = useState('');
+    const [error, setError] = useState('');
 
-    const userDelete = useSelector(state => state.userDelete);
-    const { successDelete } = userDelete;
-    
+    // stores jwt and info about logged in user
     const userLogin = useSelector(state => state.userLogin);
     const { userInfo } = userLogin;
 
+    // React hook to fetch users from server when component mounts
     useEffect(() => {
-        if (userInfo && userInfo.role === 'admin'){
-          dispatch(listUsers());
-        } else {
-          history.push('/login');
+        const fetchUsers = async () => {
+          try {
+            if (userInfo && (userInfo.role === 'admin')){
+              if (!users){
+                const token = {
+                  headers: {
+                    Authorization: `Bearer ${userInfo.token}`
+                  }
+                };
+                // sends GET request to the server
+                const response = await userServices.index(token);
+                setUsers(response.data.users);
+              }
+            } else {
+              history.push('/login');
+            }
+          } catch (error) {
+            setError(error.response && error.response.data.message);
+          }
         }
-    }, [dispatch, history, userInfo, successDelete]);
+        fetchUsers();
+    }, [history, userInfo, users]);
 
-    const deleteHandler = (userId) => {
-      dispatch(deleteUser(userId));
+
+    // event handler when "Delete" button is clicked
+    const deleteHandler = async (userId) => {
+      try {
+        const token = {
+          headers: { // jwt to be sent for verification
+            Authorization: `Bearer ${userInfo.token}`
+          }
+        };
+        // sends DELETE request to the server
+        await userServices.deleteUser(userId, token);
+        setUsers('')
+      } catch (error) {
+        setError()
+      }
     }
 
     return (
         <Container>
             <Typography variant="h3" component="h1" className={classes.title}>Manage Users</Typography>
-            { loading ? <Loader /> : error ? <Message status="error" text={error} /> : (
+            { error ? <Message status="error" text={error} /> : (
                 <TableContainer component={Paper}>
-                  <Table className={classes.table} aria-label="users table">
+                  <Table // Table component adapted from example in https://material-ui.com/components/tables/
+                    className={classes.table} 
+                    aria-label="users table"
+                  >
                     <TableHead>
                       <TableRow>
                         <StyledTableCell>User ID</StyledTableCell>
@@ -84,7 +120,7 @@ const UserListScreen = ({ history }) => {
                       </TableRow>
                     </TableHead>
                     <TableBody>
-                      {users.map(user => (
+                      {users && users.map(user => (
                         <StyledTableRow key={user.userId}>
                           <StyledTableCell component="th" scope="row">{user.userId}</StyledTableCell>
                           <StyledTableCell>{user.firstName} {user.lastName}</StyledTableCell>

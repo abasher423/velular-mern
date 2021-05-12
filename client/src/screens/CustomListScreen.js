@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { Container, IconButton, Typography } from '@material-ui/core';
+import { Container, Fade, IconButton, Tooltip, Typography } from '@material-ui/core';
 import { Link } from 'react-router-dom';
 import Loader from '../components/Loader';
 import Message from '../components/Message';
@@ -19,6 +19,8 @@ import { useState } from 'react';
 import { useSelector } from 'react-redux';
 import productServices from '../services/productServices';
 import LoopIcon from '@material-ui/icons/Loop';
+
+// CSS to style UI component
 const useStyles = makeStyles(theme => ({
     title: {
         textAlign: 'center',
@@ -55,17 +57,19 @@ const useStyles = makeStyles(theme => ({
     }
 }));
 
+// function reused from https://material-ui.com/components/tables/
 const StyledTableCell = withStyles((theme) => ({
     head: {
       backgroundColor: '#d9e8ff',
       color: '#1b2082',
-      fontWeight: '700'
+      fontWeight: 700
     },
     body: {
       fontSize: 14,
     },
   }))(TableCell);
   
+  // function reused from https://material-ui.com/components/tables/
   const StyledTableRow = withStyles((theme) => ({
     root: {
       '&:nth-of-type(odd)': {
@@ -76,28 +80,25 @@ const StyledTableCell = withStyles((theme) => ({
 
 const CustomListScreen = () => {
     const classes = useStyles();
-    const [customsList, setCustomsList] = useState([]);
+
+    // States
+    const [customsList, setCustomsList] = useState('');
     const [error, setError] = useState('');
 
+    // variable to store jwt token and info about logged in user
     const userLogin = useSelector(state => state.userLogin);
-    const {userInfo } = userLogin;
+    const { userInfo } = userLogin;
 
-    const token = {
-        headers: {
-            Authorization: `Bearer ${userInfo.token}`
-        }
-    }
-
+    // React hook to fetch custom list from server when component mounted
     useEffect(() => {
         const fetchCustomsList = async () => {
             try{
-                if (customsList.length < 1){
+                if (!customsList){
                     const token = {
                         headers: {
                             Authorization: `Bearer ${userInfo.token}`
                         }
                     }
-    
                     const response = await productServices.fetchCustomsList(token);
                     setCustomsList(response.data.customs)
                 }
@@ -109,17 +110,35 @@ const CustomListScreen = () => {
         fetchCustomsList();
     }, [customsList, userInfo.token]);
 
+    // event handler for when "Accept" button is clicked
     const acceptHandler = async (customId) => {
+      const token = {
+        headers: {
+            Authorization: `Bearer ${userInfo.token}`
+            }
+        }
         await productServices.updateCustomStatus(customId, { status: 'Accepted' }, token);
-        setCustomsList([]);
+        setCustomsList('');
     };
 
+    // event handler for when "Reject" button is clicked
     const rejectHandler = async (customId) => {
+      const token = {
+        headers: {
+            Authorization: `Bearer ${userInfo.token}`
+            }
+        }
         await productServices.updateCustomStatus(customId, { status: 'Rejected' }, token);
-        setCustomsList([]);
+        setCustomsList('');
     };
 
+    // event handler for when "Pending" button is clicked
     const pendingHandler = async (customId) => {
+      const token = {
+        headers: {
+            Authorization: `Bearer ${userInfo.token}`
+          }
+      }
       await productServices.updateCustomStatus(customId, { status: 'Pending' }, token);
       setCustomsList([]);
     }
@@ -129,7 +148,10 @@ const CustomListScreen = () => {
             <Typography variant="h3" component="h1" className={classes.title}>Manage Pending Customs</Typography>
             {error && <Message status="error" text={error} />}
             <TableContainer component={Paper}>
-                  <Table className={classes.table} aria-label="customs table">
+                  <Table // Table component adapted from https://material-ui.com/components/tables/
+                    className={classes.table} 
+                    aria-label="customs table"
+                  >
                     <TableHead>
                       <TableRow>
                         <StyledTableCell>Custom ID</StyledTableCell>
@@ -141,7 +163,7 @@ const CustomListScreen = () => {
                       </TableRow>
                     </TableHead>
                     <TableBody>
-                      {customsList.map(custom => (
+                      {customsList && customsList.map(custom => (
                         <StyledTableRow key={custom._id}>
                           <StyledTableCell component="th" scope="row">{custom._id}</StyledTableCell>
                           <StyledTableCell>{custom.name}</StyledTableCell>
@@ -149,18 +171,26 @@ const CustomListScreen = () => {
                           <StyledTableCell>{custom.category}</StyledTableCell>
                           <StyledTableCell>{custom.brand}</StyledTableCell>
                           <StyledTableCell>
-                            <IconButton edge="start" component={Link} className={classes.editBtn} to={`/customs/${custom._id}`}>
-                                <EditIcon />
-                            </IconButton>
-                            <IconButton edge="start" className={classes.pendingBtn} onClick={() => pendingHandler(custom._id)}>
-                                <LoopIcon />
-                            </IconButton>
-                            <IconButton edge="start"  className={classes.accept} onClick={() => acceptHandler(custom._id)}>
-                                <CheckIcon />
-                            </IconButton>
-                            <IconButton edge="start" className={classes.reject} onClick={() => rejectHandler(custom._id)}>
-                                <CloseIcon />
-                            </IconButton>
+                            <Tooltip TransitionComponent={Fade} TransitionProps={{ timeout: 600 }} title="Edit">
+                              <IconButton edge="start" component={Link} className={classes.editBtn} to={`/customs/${custom._id}`}>
+                                  <EditIcon />
+                              </IconButton>
+                            </Tooltip> 
+                            <Tooltip TransitionComponent={Fade} TransitionProps={{ timeout: 600 }} title="Pending">
+                              <IconButton edge="start" className={classes.pendingBtn} onClick={() => pendingHandler(custom._id)}>
+                                  <LoopIcon />
+                              </IconButton>
+                            </Tooltip>
+                            <Tooltip TransitionComponent={Fade} TransitionProps={{ timeout: 600 }} title="Accept">
+                              <IconButton edge="start"  className={classes.accept} onClick={() => acceptHandler(custom._id)}>
+                                  <CheckIcon />
+                              </IconButton>
+                            </Tooltip>
+                            <Tooltip TransitionComponent={Fade} TransitionProps={{ timeout: 600 }} title="Reject">
+                              <IconButton edge="start" className={classes.reject} onClick={() => rejectHandler(custom._id)}>
+                                  <CloseIcon />
+                              </IconButton>
+                            </Tooltip>
                           </StyledTableCell>
                         </StyledTableRow>
                       ))}

@@ -6,6 +6,7 @@ import { Link } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import userServices from '../services/userServices';
 
+// CSS to style UI component
 const useStyles = makeStyles(theme => ({
     btn: {
         backgroundColor: theme.palette.info.dark,
@@ -28,16 +29,21 @@ const useStyles = makeStyles(theme => ({
 
 const UserUpdateScreen = ({ match, history }) => {
     const classes = useStyles();
+    
+    // user Id fetched from the URL
     const userId = match.params.userId;
+    // States
     const [userDetails, setUserDetails] = useState('');
     const [firstName, setFirstName] = useState(userDetails.firstName || '');
     const [lastName, setLastName] = useState(userDetails.lastName || '');
     const [email, setEmail] = useState(userDetails.email || '');
     const [role, setRole] = useState(userDetails || '');
   
+    // stores jwt and info about logged in user
     const userLogin = useSelector(state => state.userLogin);
     const {userInfo } = userLogin;
 
+    // React hook to fetch user details when component mounts
     useEffect(() => {
         const fetchUserDetails = async () => {
             if (!userDetails){
@@ -46,6 +52,7 @@ const UserUpdateScreen = ({ match, history }) => {
                         Authorization: `Bearer ${userInfo.token}`
                     }
                 }
+                // sends GET request to the server
                 const response = await userServices.adminFetchUser(userId, token);
                 setUserDetails(response.data);
             } else {
@@ -70,6 +77,7 @@ const UserUpdateScreen = ({ match, history }) => {
     userData[2].value = email;
     userData[3].value = role;
     
+    // HANDLERS
     const firstNameHandler = (e) => {
         setFirstName(e.target.value);
     };
@@ -96,10 +104,11 @@ const UserUpdateScreen = ({ match, history }) => {
                 Authorization: `Bearer ${userInfo.token}`
             }
         }
-
+        // sends UPDATE request to the server
         await userServices.adminUpdateUser(userId, userData, token);
         history.push('/users-list');
     };
+    
     return (
         <>
         <IconButton edge="start" className={classes.backIcon} color="inherit" component={Link} to={'/admin/users-list'} aria-label="back">
@@ -108,7 +117,7 @@ const UserUpdateScreen = ({ match, history }) => {
         <Container component="main" maxWidth="xs">
             <Typography variant="h3" component="h1">Update User</Typography>
             <form className={classes.form}>
-                <TextField 
+                <TextField // Textfield component adapted from example in https://material-ui.com/components/text-fields/
                     variant="standard"
                     margin="normal"
                     autoComplete="true"
@@ -119,7 +128,7 @@ const UserUpdateScreen = ({ match, history }) => {
                     onChange={firstNameHandler}
                     name="firstName"
                 />
-                <TextField 
+                <TextField // Textfield component adapted from example in https://material-ui.com/components/text-fields/
                     variant="standard"
                     margin="normal"
                     autoComplete="true"
@@ -130,7 +139,7 @@ const UserUpdateScreen = ({ match, history }) => {
                     onChange={lastNameHandler}
                     name="lastName"
                 />
-                <TextField 
+                <TextField // Textfield component adapted from example in https://material-ui.com/components/text-fields/
                     variant="standard"
                     margin="normal"
                     autoComplete="true"
@@ -144,12 +153,12 @@ const UserUpdateScreen = ({ match, history }) => {
                 <FormControlLabel
                     className={classes.checkbox}
                     label="Set Admin"
-                    control={<Checkbox 
+                    control={<Checkbox // Checkbox component adapted from example in https://material-ui.com/components/checkboxes/
                         onChange={roleHandler} 
                         checked={role === 'admin'? true : false}
                         color="primary" />}
                 />
-                <Button
+                <Button // Button component adapted from example in https://material-ui.com/components/buttons/
                     variant="contained"
                     color="primary"
                     className={classes.btn}

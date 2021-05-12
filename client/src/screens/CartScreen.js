@@ -10,6 +10,7 @@ import { addToCart, deleteFromCart } from '../actions/cartActions';
 import DeleteIcon from '@material-ui/icons/Delete';
 import ArrowBackIcon from '@material-ui/icons/ArrowBack';
 
+// CSS to style UI component
 const useStyles = makeStyles((theme) => ({
     root: {
     width: '100%',
@@ -31,10 +32,9 @@ const useStyles = makeStyles((theme) => ({
         margin: "0 2rem"
     },
     drawerPaper: { 
-        width: "900px",
-        height: "100px",
-        margin: "1rem 0",
-        // background: "#f5f5f5" 
+        width: 900,
+        height: 100,
+        margin: "1rem 0"
     },
     box: {
         display: "flex",
@@ -42,10 +42,14 @@ const useStyles = makeStyles((theme) => ({
     },
     btn: {
         "&:hover": {
-            backgroundColor: theme.palette.success.main
+            backgroundColor: "white",
+            color: theme.palette.info.dark,
+            border: `${theme.palette.info.dark} 3px solid`,
         },
-        display: "block",
-        backgroundColor: theme.palette.info.dark
+        backgroundColor: theme.palette.info.dark,
+        color: "white",
+        fontWeight: 800,
+        borderRadius: 25,
     },
     backIcon: {
         "&:hover": {
@@ -56,15 +60,17 @@ const useStyles = makeStyles((theme) => ({
         marginBottom: "2rem"
     },
     paper: {
-        minHeight: "600px"
+        minHeight: 600
     }
   }));
 
-const CartScreen = ({ match, location, history}) => {
+const CartScreen = ({ history}) => {
     const classes = useStyles();
     const dispatch = useDispatch();
+
     const { cartItems } = useSelector((state) => state.cart)
 
+    // function to remove item from cart from https://github.com/bradtraversy/proshop_mern/blob/master/frontend/src/screens/CartScreen.js
     const removeFromCartHandler = (productId) => {
         dispatch(deleteFromCart(productId));
     };
@@ -94,7 +100,7 @@ const CartScreen = ({ match, location, history}) => {
                             </div>
                         </CardContent>
                         <CardActions>
-                            <Button 
+                            <Button // Code adapted from https://material-ui.com/components/buttons/
                             variant="contained" 
                             color="primary" 
                             size="small"
@@ -125,9 +131,9 @@ const CartScreen = ({ match, location, history}) => {
                 </div>  
                 : (
                 <List dense className={classes.root}>
-                    {cartItems.map((item, idx) => {
+                    {cartItems.map((item, index) => {
                         return (
-                            <Paper className={classes.drawerPaper} key={idx}>
+                            <Paper className={classes.drawerPaper} key={index}>
                                 <ListItem key={item.productId}>
                                 <ListItemAvatar className={classes.item}>
                                     <Avatar alt="product image" src={item.productImage}  className={classes.large}/>
@@ -137,16 +143,16 @@ const CartScreen = ({ match, location, history}) => {
                                 <ListItemText primary={`Size ${item.size}`}/>
                                 <ListItemText primary={
                                     <FormControl className={classes.formControl}>
-                                    <Select
-                                    labelId="demo-simple-select-label"
-                                    id="demo-simple-select"
+                                    <Select 
+                                    labelId="quantity-in-stock-select-label"
+                                    id="quantity-in-stock-select"
                                     style={{margin: "0 10rem"}}
                                     value={item.quantity}
-                                    onChange={e => dispatch(addToCart(item.productId, Number(e.target.value)))}
+                                    onChange={e => dispatch(addToCart(item.productId, Number(e.target.value), item.size))}
                                     >
                                     {
-                                        [...Array(item.quantityInStock).keys()].map(x => (
-                                            <MenuItem key={x + 1} value={x + 1}>{x + 1}</MenuItem>
+                                        [...Array(item.quantityInStock).keys()].map(element => (
+                                            <MenuItem key={element + 1} value={element + 1}>{element + 1}</MenuItem>
                                         ))
                                     }
                                     </Select>

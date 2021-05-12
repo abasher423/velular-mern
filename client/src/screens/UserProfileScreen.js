@@ -1,304 +1,280 @@
-import { Button, Checkbox, Container, FormControlLabel, Grid, makeStyles, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TextField, Typography, withStyles } from '@material-ui/core';
 import React from 'react';
-import { useState, useEffect } from 'react';
-import ClearIcon from '@material-ui/icons/Clear';
+import Avatar from '@material-ui/core/Avatar';
+import Button from '@material-ui/core/Button';
+import CssBaseline from '@material-ui/core/CssBaseline';
+import TextField from '@material-ui/core/TextField';
+import FormControlLabel from '@material-ui/core/FormControlLabel';
+import Checkbox from '@material-ui/core/Checkbox';
+import Link from '@material-ui/core/Link';
+import Paper from '@material-ui/core/Paper';
+import Box from '@material-ui/core/Box';
+import Grid from '@material-ui/core/Grid';
+import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
+import Typography from '@material-ui/core/Typography';
+import { makeStyles } from '@material-ui/core/styles';
+import { useState } from 'react';
+import { Switch } from '@material-ui/core';
+import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { Link } from 'react-router-dom';
+import jwt from 'jwt-decode';
+import userServices from '../services/userServices';
 import Message from '../components/Message';
-import Loader from '../components/Loader';
-import { getUserDetails, updateUserProfile } from '../actions/userActions';
-import { listUserOrder } from '../actions/orderActions';
-import jwt from 'jwt-decode'
-import { USER_LOGIN, USER_LOGOUT, USER_UPDATE_RESET } from '../constants/userConstants';
-import Alert from '@material-ui/lab/Alert';
-import { ORDER_LIST_USER_RESET } from '../constants/orderConstants';
+import { USER_LOGOUT } from '../constants/userConstants';
 
-const useStyles = makeStyles(theme => ({
+// CSS to style UI component
+const useStyles = makeStyles((theme) => ({
+    root: {
+      minHeight: '100vh',
+      margin: "-3.9rem 0"
+    },
+    image: {
+      backgroundImage: `url("/images/airjordan-1.jpg")`,
+      backgroundRepeat: 'no-repeat',
+      backgroundColor:
+        theme.palette.type === 'light' ? theme.palette.grey[50] : theme.palette.grey[900],
+      backgroundSize: 'cover',
+      backgroundPosition: 'center',
+    },
+    paper: {
+      margin: theme.spacing(8, 4),
+      display: 'flex',
+      flexDirection: 'column',
+      alignItems: 'center',
+    },
     form: {
-        width: '100%', // Fix IE 11 issue.
+      width: '100%', // Fix IE 11 issue.
+      marginTop: theme.spacing(1),
     },
     submit: {
-        margin: theme.spacing(3, 0, 2),
-        backgroundColor: theme.palette.info.dark,
-        color: "white",
-        "&:hover": {
-            backgroundColor: theme.palette.success.main,
-          }
-      },
-      clear: {
-          color: "red"
-      },
-      table: {
-        minWidth: 700,
-      },
-      title: {
-        marginBottom: "2rem"
-      },
-      checkbox: {
-        //   marginTop: "2rem"
+      margin: theme.spacing(3, 0, 2),
+      backgroundColor: theme.palette.secondary.main,
+      color: "white",
+      border: `${theme.palette.secondary.main} 3px solid`,
+      fontWeight: 800,
+      borderRadius: 25,
+      "&:hover": {
+        backgroundColor: "white",
+        color: theme.palette.secondary.main
       }
-}));
-
-const StyledTableCell = withStyles((theme) => ({
-    head: {
-      backgroundColor: theme.palette.common.black,
-      color: theme.palette.common.white,
     },
-    body: {
-      fontSize: 14,
-    },
-  }))(TableCell);
-
-  const StyledTableRow = withStyles((theme) => ({
-    root: {
-      '&:nth-of-type(odd)': {
-        backgroundColor: theme.palette.action.hover,
-      },
-    },
-  }))(TableRow);
-
-const UserProfileScreen = ({ history }) => {
+  }));
+  
+  const UserProfileScreen = ({ history }) => {
     const classes = useStyles();
+    const dispatch = useDispatch();
+    
+    // States
+    const [user, setUser] = useState('');
     const [firstName, setFirstName] = useState('');
     const [lastName, setLastName] = useState('');
     const [email, setEmail] = useState('');
+    const [role, setRole] = useState('');
+    const [switchOpen, setSwitchOpen] = useState(false);
     const [password, setPassword] = useState('');
-    const [confirmPassword, setConfirmPassword] = useState('');
-    const [role, setRole] = useState(null);
-    const [message, setMessage] = useState(null);
+    const [password2, setPassword2] = useState('');
+    const [error, setError] = useState('');
 
-    const dispatch = useDispatch();
-
-    const userDetails = useSelector(state => state.userDetails);
-    const { loading, error, user } = userDetails;
-
+    // stores jwt and info about logged in user
     const userLogin = useSelector(state => state.userLogin);
-    const {userInfo } = userLogin;
+    const { userInfo } = userLogin;
 
-    const userUpdate = useSelector(state => state.userUpdate);
-    const { success } = userUpdate;
-
-    const orderListUser = useSelector(state => state.orderListUser);
-    const { loading: loadingOrders, error: errorOrders, orders } = orderListUser;
-
+    // React hook to fetch user when component mounts
     useEffect(() => {
-        if (!userInfo){
-            history.push('/login');
+      const fetchuser = async () => {
+        if (!user){
+          try {
+            const token = {
+              headers: {
+                Authorization: `Bearer ${userInfo.token}`
+              }
+            };
+            const userId = await jwt(userInfo.token).userId;
+            // sends GET request to the server
+            const response = await userServices.indexOne(userId, token);
+            setUser(response.data);
+          } catch (error){
+            setError(error.response && error.response.data.message);
+            setTimeout(() => setError(null), 3000);
+          }
         } else {
-            if (!user || !orders || success){
-                dispatch({ type: USER_UPDATE_RESET });
-                dispatch({ type: ORDER_LIST_USER_RESET });
-                dispatch(getUserDetails(jwt(userInfo.token).userId));
-                dispatch(listUserOrder(jwt(userInfo.token).userId));
-                
-            } else {
-                setFirstName(user.firstName);
-                setLastName(user.lastName);
-                setEmail(user.email);
-                setRole(user.role);
-            }
+          setFirstName(user.firstName);
+          setLastName(user.lastName);
+          setEmail(user.email);
+          setRole(user.role);
+          setSwitchOpen(user.role === 'artist' ? true : false);
         }
-        
-    }, [dispatch, history, userInfo, user, success, orders]) // we want to set variables when user changes
+      }
+      fetchuser();
+    }, [user, userInfo.token]);
 
     const userData = [
-        {propName: "firstName", value: null},
-        {propName: "lastName", value: null},
-        {propName: "email", value: null},
-        {propName: "role", value: null},
-        {propName: "password", value: null},
-    ]
-    userData[0].value = firstName;
-    userData[1].value = lastName;
-    userData[2].value = email;
-    userData[3].value = role;
-    userData[4].value = password;
-   
-    const submitHandler = (e) => {
-        e.preventDefault();
-        if (password !== confirmPassword){
-            setMessage('Passwords do not match');
-        } else {
-            dispatch(updateUserProfile(jwt(userInfo.token).userId, userData));
-        }
-    }
+      {propName: "firstName", value: null},
+      {propName: "lastName", value: null},
+      {propName: "email", value: null},
+      {propName: "role", value: null},
+      {propName: "password", value: null},
+      ]
+      userData[0].value = firstName;
+      userData[1].value = lastName;
+      userData[2].value = email;
+      userData[3].value = role;
+      userData[4].value = password;
 
     // HANDLERS
     const firstNameHandler = (e) => {
-        setFirstName(e.target.value);
-    }
+      setFirstName(e.target.value);
+    };
     const lastNameHandler = (e) => {
-        setLastName(e.target.value);
-    }
+      setLastName(e.target.value);
+    };
     const emailHandler = (e) => {
-        setEmail(e.target.value);
-    }
+      setEmail(e.target.value);
+    };
     const passwordHandler = (e) => {
-        setPassword(e.target.value);
-    }
+      setPassword(e.target.value);
+    };
+    const password2Handler = (e) => {
+      setPassword2(e.target.value);
+    };
     const roleHandler = (e) => {
-        if (e.target.checked){
-            setRole('artist');
-        } else {
-            setRole('customer');
+      setSwitchOpen(e.target.checked);
+      if (!switchOpen){
+        setRole('artist');
+      } else {
+        setRole('customer')
+      } 
+    };
+    const submitHandler = async (e) => {
+      e.preventDefault();
+      if (password !== password2){
+        setError('Passwords do not match');
+        setTimeout(() => setError(null), 3000);
+      } else {
+        try {
+          const token = {
+            headers: {
+              Authorization: `Bearer ${userInfo.token}`
+            }
+          };
+          const userId = await jwt(userInfo.token).userId;
+          // sends POST request to the server
+          const { data } = await userServices.update(userId, userData, token);
+          localStorage.setItem('userInfo', JSON.stringify(data));
+          history.push('/login')
+          dispatch({ type: USER_LOGOUT})
+          history.push('/login')
+        } catch (error){
+          setError(error.response && error.response.data.message);
+          setTimeout(() => setError(null), 3000);
         }
-    }
-    const confirmPasswordHandler = (e) => {
-        setConfirmPassword(e.target.value);
+      }
     }
 
+    /*
+      * A UI component for updating user information
+      * This was adapted from Material UI's free "Sign-in side" template
+      * Link here to template's GitHub:
+      * https://github.com/mui-org/material-ui/tree/master/docs/src/pages/getting-started/templates/sign-in-side
+    */
+
     return (
-        <Container component="main" >
-            <Grid container spacing={4}>
-                <form className={classes.form}>
-                    <Grid container spacing={4}>
-                        <Grid item xs={4}>
-                            <Grid item xs={12}>
-                                <Typography component="h1" variant="h4" className={classes.title}>Edit Profile</Typography>
-                                {success && <Message status="success" text={"Profile Updated"}/>}
-                                {message && <Message status="info" text={message}/>}
-                                {error && <Message status="error" text={error} />}
-                                {loading && <Loader />}
-                            </Grid>
-                            <Grid item xs={12}>
-                                <TextField 
-                                    variant="standard"
-                                    margin="normal"
-                                    autoComplete="true"
-                                    fullWidth
-                                    id="firstName"
-                                    label="First Name"
-                                    value={firstName}
-                                    onChange={firstNameHandler}
-                                    name="firstName"
-                                />
-                            </Grid>
-                            <Grid item xs={12}>
-                                <TextField 
-                                    variant="standard"
-                                    margin="normal"
-                                    autoComplete="true"
-                                    fullWidth
-                                    id="lastName"
-                                    label="Last Name"
-                                    value={lastName}
-                                    onChange={lastNameHandler}
-                                    name="lastName"
-                                />
-                            </Grid>
-                            <Grid item xs={12}>
-                                <TextField 
-                                    variant="standard"
-                                    margin="normal"
-                                    autoComplete="true"
-                                    fullWidth
-                                    id="email"
-                                    label="Email Address"
-                                    value={email}
-                                    onChange={emailHandler}
-                                    name="email"
-                                />
-                            </Grid>
-                            <Grid item xs={12}>
-                            <FormControlLabel
-                                className={classes.checkbox}
-                                control={<Checkbox 
-                                    onChange={roleHandler} 
-                                    checked={role === 'artist'? true : false}
-                                    color="primary" />}
-                                label="I am an artist"
-                            />
-                            </Grid>
-                            <Grid item xs={12}>
-                                <TextField 
-                                    variant="standard"
-                                    margin="normal"
-                                    fullWidth
-                                    id="password"
-                                    label="New Password"
-                                    value={password}
-                                    onChange={passwordHandler}
-                                    name="password"
-                                />
-                            </Grid>
-                            <Grid item xs={12}>
-                                <TextField 
-                                    variant="standard"
-                                    margin="normal"
-                                    fullWidth
-                                    id="confirmPassword"
-                                    label="Confirm Password"
-                                    value={confirmPassword}
-                                    onChange={confirmPasswordHandler}
-                                    name="confirmPassword"
-                                />
-                            </Grid>
-                            <Grid item xs={12}>
-                                <Button
-                                    type="submit"
-                                    variant="contained"
-                                    fullWidth
-                                    onClick={submitHandler}
-                                    className={classes.submit}
-                                >
-                                    update
-                                </Button>
-                            </Grid>
-                        </Grid>
-                        <Grid item xs={8}>
-                            <Grid item xs={12}>
-                                <Typography variant="h4" component="h1" className={classes.title}>My Orders ({orders ? orders.length : '0'})</Typography>
-                                {!orders && <Alert severity="info">Order list is empty</Alert>}
-                                {loadingOrders ? <Loader /> : errorOrders 
-                                ? <Message status="error" text={errorOrders}/> : (
-                                    <TableContainer component={Paper}>
-                                        <Table className={classes.table} aria-label="orders table">
-                                            <TableHead>
-                                                <StyledTableRow>
-                                                   <StyledTableCell>Order ID</StyledTableCell> 
-                                                   <StyledTableCell allign="right">Date</StyledTableCell> 
-                                                   <StyledTableCell allign="right">Total</StyledTableCell> 
-                                                   <StyledTableCell allign="right">Paid</StyledTableCell> 
-                                                   <StyledTableCell allign="right">Delivered</StyledTableCell> 
-                                                   <StyledTableCell allign="right"></StyledTableCell> 
-                                                </StyledTableRow>
-                                            </TableHead>
-                                            <TableBody>
-                                                {orders.map(order => (
-                                                    <StyledTableRow key={order._id}>
-                                                        <StyledTableCell component="th" scope="row">
-                                                            {order._id}    
-                                                        </StyledTableCell>
-                                                        <StyledTableCell>{order.date}</StyledTableCell>
-                                                        <StyledTableCell>£{order.totalPrice}</StyledTableCell> 
-                                                        <StyledTableCell>{order.isPaid ? order.paidAt.substring(0, 25) : (
-                                                            <ClearIcon className={classes.clear}/>
-                                                        )}</StyledTableCell> 
-                                                        <StyledTableCell>{order.isDelivered ? order.deliveredAt.substring(0, 25) : (
-                                                            <ClearIcon className={classes.clear}/>
-                                                        )}</StyledTableCell>
-                                                        <StyledTableCell>
-                                                              <Button 
-                                                                variant="contained"
-                                                                component={Link}
-                                                                to={`/orders/${order._id}`}
-                                                            >
-                                                                Details
-                                                            </Button>  
-                                                        </StyledTableCell> 
-                                                    </StyledTableRow>
-                                                ))}
-                                            </TableBody>
-                                        </Table>
-                                    </TableContainer>
-                                )}
-                            </Grid>
-                        </Grid>
-                    </Grid>
-                </form>
+      <Grid container component="main" className={classes.root}>
+        <CssBaseline />
+        <Grid item xs={12} sm={8} md={5} component={Paper} elevation={6} square>
+          <div className={classes.paper}>
+            <Typography component="h1" variant="h4">
+              Account
+            </Typography>
+            {error && (<Message status="error" text={error} />)}
+            <form className={classes.form}>
+            <Grid item xs={12}>
+            <TextField
+                    variant="standard"
+                    margin="normal"
+                    autoComplete="true"
+                    fullWidth
+                    id="firstName"
+                    label="First Name"
+                    value={firstName}
+                    onChange={firstNameHandler}
+                    name="firstName"
+                />
             </Grid>
-        </Container>
+            <Grid item xs={12}>
+                <TextField 
+                    variant="standard"
+                    margin="normal"
+                    autoComplete="true"
+                    fullWidth
+                    id="lastName"
+                    label="Last Name"
+                    value={lastName}
+                    onChange={lastNameHandler}
+                    name="lastName"
+                />
+            </Grid>
+            <Grid item xs={12}>
+                <TextField 
+                    variant="standard"
+                    margin="normal"
+                    autoComplete="true"
+                    fullWidth
+                    id="email"
+                    label="Email Address"
+                    value={email}
+                    onChange={emailHandler}
+                    name="email"
+                />
+            </Grid>
+            <Grid item xs={12}>
+                <TextField 
+                    variant="standard"
+                    margin="normal"
+                    fullWidth
+                    id="password"
+                    label="New Password"
+                    type="password"
+                    value={password}
+                    onChange={passwordHandler}
+                    name="password"
+                />
+            </Grid>
+            <Grid item xs={12}>
+                <TextField 
+                    variant="standard"
+                    margin="normal"
+                    fullWidth
+                    id="confirmPassword"
+                    label="Confirm Password"
+                    type="password"
+                    value={password2}
+                    onChange={password2Handler}
+                    name="confirmPassword"
+                />
+            </Grid>
+            <Grid item xs={12} style={{marginTop: "1.5rem"}}>
+            <FormControlLabel
+              control={<Switch checked={switchOpen} onChange={roleHandler} name="artist" />}
+              label="Artist"
+            />
+            </Grid>
+            <Grid item xs={12}>
+                <Button
+                    type="submit"
+                    variant="contained"
+                    fullWidth
+                    onClick={submitHandler}
+                    className={classes.submit}
+                >
+                    update
+                </Button>
+            </Grid>
+            </form>
+          </div>
+        </Grid>
+        <Grid item xs={false} sm={4} md={7} className={classes.image} />
+      </Grid>
     );
-};
+  }
 
 export default UserProfileScreen;

@@ -53,8 +53,8 @@ const useStyles = makeStyles(theme => ({
         padding: theme.spacing(1, 2)
     },
     image: {
-        height: '185px',
-        width: 'auto'
+        height: 185,
+        width: "auto"
     },
     deleteBtn: {
         color: theme.palette.error.main
@@ -70,45 +70,37 @@ const useStyles = makeStyles(theme => ({
     }
 }));
 
-// https://material-ui.com/components/accordion/
 const CustomCreateScreen = () => {
     const classes = useStyles();
     const [openForm, setOpenForm] = useState(false);
     const [error, setError] = useState(null);
     const [expanded, setExpanded] = useState(false);
-    const [customDetails, setCustomDetails] = useState([]);
+    const [customDetails, setCustomDetails] = useState('');
 
+    // variable to store jwt and user logged in info
     const userLogin = useSelector(state => state.userLogin);
-    const {userInfo } = userLogin;
+    const { userInfo } = userLogin;
 
-    const token = {
-        headers: {
-            Authorization: `Bearer ${userInfo.token}`
-        }
-    };
-
+    // React hook to fetch custom details when component mounts
     useEffect(() => {
-        if (customDetails.length < 1){
-            const fetchCustomDetails = async () => {
+        const fetchCustomDetails = async () => {
+            if (!customDetails){
                 try {
-                    
-                        const token = {
-                            headers: {
-                                Authorization: `Bearer ${userInfo.token}`
-                            }
+                    const token = {
+                        headers: {
+                            Authorization: `Bearer ${userInfo.token}`
                         }
-                        const response = await productServices.fetchArtistCustoms(token);
-                        // https://stackoverflow.com/questions/45924821/javascript-sorting-array-of-objects-by-string-property
-                        const data = response.data.customs.sort(function(a,b) {return (a.status > b.status) ? 1 : ((b.status > a.status) ? -1 : 0);} );
-                        setCustomDetails(data);
-                    
+                    }
+                    const response = await productServices.fetchArtistCustoms(token);
+                    // code adapted for sorting algorithm from https://stackoverflow.com/questions/45924821/javascript-sorting-array-of-objects-by-string-property
+                    const data = response.data.customs.sort(function(a,b) {return (a.status > b.status) ? 1 : ((b.status > a.status) ? -1 : 0);} );
+                    setCustomDetails(data);
                 } catch (error){
                     setError(error.response && error.response.data.message);
                 }
-            };
-    
-            fetchCustomDetails();
+            }
         }
+        fetchCustomDetails();
         
     }, [userInfo.token, customDetails]);
 
@@ -117,19 +109,28 @@ const CustomCreateScreen = () => {
     const handleChange = (panel) => (event, isExpanded) => {
         setExpanded(isExpanded ? panel : false);
     };
-
     const handleClickOpen = () => {
         setOpenForm(true);
     };
-
     const submitHandler = async (customId) => {
+        const token = {
+            headers: { // jwt token to be sent for verification
+                Authorization: `Bearer ${userInfo.token}` 
+            }
+        };
+        // sends PUT request to server
         await productServices.updateCustomStatus(customId, { status: 'Submitted' }, token);
-        setCustomDetails([]);
+        setCustomDetails('');
     };
-
     const deleteHandler = async (customId) => {
+        const token = {
+            headers: {
+                Authorization: `Bearer ${userInfo.token}`
+            }
+        };
+        // sends PUT request to server
         await productServices.deleteCustom(customId, token);
-        setCustomDetails([]);
+        setCustomDetails('');
     }
     
     return (
@@ -140,7 +141,7 @@ const CustomCreateScreen = () => {
                 </Grid>
                 <Grid item xs={12} className={classes.new}>
                 <Button
-                    variant="contained"
+                    variant="contained" // Code adapted from https://material-ui.com/components/buttons/
                     color="primary"
                     className={classes.createBtn}
                     onClick={handleClickOpen}
@@ -148,7 +149,7 @@ const CustomCreateScreen = () => {
                 >
                     Create New
                 </Button>
-                <PopupDialog 
+                <PopupDialog // Code adapted from https://material-ui.com/components/dialogs/
                     openForm={openForm}
                     setOpenForm={setOpenForm}
                     setCustomDetails={setCustomDetails}
@@ -158,9 +159,9 @@ const CustomCreateScreen = () => {
                 <Grid item xs={12}>
                     {error && <Message status="error" text={error} />}
                     <div className={classes.root}>
-                    {customDetails.map((custom, idx) => {
+                    {customDetails && customDetails.map((custom, idx) => {
                         return (
-                        <Accordion key={idx} 
+                        <Accordion key={idx} // Code adapted from https://material-ui.com/components/accordion/
                             expanded={expanded === `panel${idx}`}
                             style={
                                 custom.status ==='Accepted' ? {backgroundColor: '#eeffe6'} : 
@@ -212,14 +213,14 @@ const CustomCreateScreen = () => {
                             <Divider />
                         {custom.status === 'Pending' && (
                             <AccordionActions>
-                            <Button 
+                            <Button // code adapted from https://material-ui.com/components/buttons/
                                 size="small" 
                                 className={classes.deleteBtn}
                                 onClick={() => deleteHandler(custom._id)}
                             >
                                 Delete
                             </Button>
-                            <Button 
+                            <Button // Code adapted from https://material-ui.com/components/buttons/
                                 size="small"
                                 color="primary"
                                 className={classes.submitBtn}
@@ -231,7 +232,7 @@ const CustomCreateScreen = () => {
                         )}
                         {custom.status === 'Rejected' && (
                             <AccordionActions>
-                            <Button 
+                            <Button // Code adapted from https://material-ui.com/components/buttons/
                                 size="small" 
                                 className={classes.deleteBtn}
                                 onClick={() => deleteHandler(custom._id)}
@@ -242,7 +243,7 @@ const CustomCreateScreen = () => {
                         )}
                         {custom.status === 'Accepted' && (
                             <AccordionActions>
-                            <Button 
+                            <Button // Code adapted from https://material-ui.com/components/buttons/
                                 size="small" 
                                 color="primary"
                                 variant="contained"

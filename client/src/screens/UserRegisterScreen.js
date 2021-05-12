@@ -18,7 +18,9 @@ import { register } from '../actions/userActions';
 import Message from '../components/Message';
 import Loader from '../components/Loader';
 import { Paper } from '@material-ui/core';
+import AuthenticationServices from '../services/AuthenticationServices';
 
+// CSS to style UI component
 const useStyles = makeStyles((theme) => ({
     paper: {
       marginTop: theme.spacing(8),
@@ -37,21 +39,24 @@ const useStyles = makeStyles((theme) => ({
       marginTop: theme.spacing(3),
     },
     submit: {
-      margin: theme.spacing(3, 0, 2),
-      backgroundColor: theme.palette.info.dark,
-      color: "white",
-      "&:hover": {
-          backgroundColor: theme.palette.success.main,
-        }
-    },
-    paper: {
-        height: "800px",
-        padding: "2rem"
+        "&:hover": {
+            color: theme.palette.info.dark,
+            backgroundColor: "white",
+            border: `${theme.palette.info.dark} 3px solid`,
+         },
+         backgroundColor: theme.palette.info.dark,
+         color: "white",
+         fontWeight: 800,
+         borderRadius: 25,
+         margin: theme.spacing(3, 0, 2),
+         width: 400,
     }
 }));
 
 const UserRegisterScreen = ({ history, location }) => {
     const classes = useStyles();
+    
+    // States
     const [firstName, setFirstName] = useState('');
     const [lastName, setLastName] = useState('');
     const [email, setEmail] = useState('');
@@ -59,13 +64,13 @@ const UserRegisterScreen = ({ history, location }) => {
     const [confirmPassword, setConfirmPassword] = useState('');
     const [role, setRole] = useState('customer');
     const [message, setMessage] = useState(null);
-
-    const dispatch = useDispatch();
-
+    const [error, setError] = useState('');
+    
     const redirect = location.search ? location.search.split('=')[1] : '/';
-
-    const userRegister = useSelector(state => state.userRegister);
-    const { loading, error, userInfo } = userRegister;
+    
+    // stores jwt and info about logged in user
+    const userLogin = useSelector(state => state.userLogin);
+    const { userInfo } = userLogin;
 
     useEffect(() => {
         if (userInfo){
@@ -73,38 +78,52 @@ const UserRegisterScreen = ({ history, location }) => {
         }
     })
 
-    const submitHandler = (e) => {
+    // HANDLERS
+    const submitHandler = async (e) => {
         e.preventDefault();
         if(password !== confirmPassword){
             setMessage('Passwords do not match')
         } else {
-            dispatch(register(firstName, lastName, email, password, role));
-            history.push('/login');
+            try {
+                // sends POST request to the server with userData in the body
+                const response = await AuthenticationServices.register({
+                    firstName, lastName, email, password, role
+                });
+                if (response) history.push('/login')
+            } catch(error) {
+                setError(error.response && error.response.data.message)
+            }
         }
-    }
+    };
     const roleHandler = (e) => {
         if (e.target.checked){
             setRole('artist');
         } else {
             setRole('customer');
         }
-    }
+    };
     const firstNameHandler = (e) => {
         setFirstName(e.target.value);
-    }
+    };
     const lastNameHandler = (e) => {
         setLastName(e.target.value);
-    }
+    };
     const emailHandler = (e) => {
         setEmail(e.target.value);
-    }
+    };
     const passwordHandler = (e) => {
         setPassword(e.target.value);
-    }
+    };
     const confirmPasswordHandler = (e) => {
         setConfirmPassword(e.target.value);
-    }
+    };
 
+    /*
+        * A registration UI form for user updating personal information
+        * This was adapted from Material UI's free "Sign up" template
+        * Link here to template's GitHub:
+        * https://github.com/mui-org/material-ui/tree/master/docs/src/pages/getting-started/templates/sign-up
+    */
     return (
         <Paper className={classes.paper}>
         <Container component="main" maxWidth="xs">
@@ -119,7 +138,6 @@ const UserRegisterScreen = ({ history, location }) => {
                 </Grid>
                 {message && <Message status="info" text={message}/>}
                 {error && <Message status="error" text={error} />}
-                {loading && <Loader />}
                 <form className={classes.form}>
                     <Grid container spacing={2}>
                         <Grid item xs={12} md={6} align="center">

@@ -13,11 +13,13 @@ import Alert from '@material-ui/lab/Alert';
 import { PayPalButton } from 'react-paypal-button-v2';
 import AuthenticationServices from '../services/AuthenticationServices';
 import { ORDER_LIST_USER_RESET, ORDER_PAY_RESET } from '../constants/orderConstants';
-import { CART_ITEMS_RESET } from '../constants/cartConstants';
 import orderServices from '../services/orderServices';
 
 
 const useStyles = makeStyles((theme) => ({
+    container: {
+        padding: "1rem"
+    },
     root: {
     width: '100%',
     maxWidth: 360,
@@ -38,21 +40,14 @@ const useStyles = makeStyles((theme) => ({
         margin: "1rem 0"
     },
     drawerPaper: { 
-        width: "750px",
-        height: "100px",
+        width: 750,
+        height: 100,
         margin: "1rem 0",
         background: "white" 
     },
     box: {
         display: "flex",
         justifyContent: "space-between"
-    },
-    btn: {
-        "&:hover": {
-            backgroundColor: theme.palette.success.main
-        },
-        display: "block",
-        backgroundColor: theme.palette.info.dark
     },
     backIcon: {
         "&:hover": {
@@ -73,14 +68,20 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const OrderScreen = ({ match, history }) => {
-    const theme = useTheme();
-    const mobile = useMediaQuery(theme.breakpoints.down("sm"));
-
+    // Id fetched from URL
     const orderId = match.params.orderId;
+
     const [sdkReady, setSdkReady] = useState(false);
     
     const dispatch = useDispatch();
     const classes = useStyles();
+
+    /*
+    * Variables and functions used to add the PayPal Script and fetch order details 
+    * This was reused from Udemy course "MERN eCommerce From Scratch" by Brad Traversy
+    * Link here to course' GitHub:
+    * https://github.com/bradtraversy/proshop_mern/blob/master/frontend/src/screens/OrderScreen.js
+    */
 
     const userLogin = useSelector(state => state.userLogin);
     const { userInfo } = userLogin;
@@ -123,7 +124,7 @@ const OrderScreen = ({ match, history }) => {
     
     const successPaymentHandler = (paymentResult) => {
         dispatch(payOrder(orderId, paymentResult));
-        dispatch({ type: ORDER_LIST_USER_RESET });
+        // dispatch({ type: ORDER_LIST_USER_RESET });
     };
 
     const deliveredHandler = async (orderId) => {
@@ -137,9 +138,10 @@ const OrderScreen = ({ match, history }) => {
     };
     
     return loading ? <Loader /> : error ? <Message status="error" text={error} /> : <>
+        <Paper style={{ padding: "1rem"}} >
         <Grid container spacing={1}>
             <Grid item xs={12}>
-                <Typography component="h2" variant="h4" className={classes.heading}>Order: {order._id}</Typography>
+                <Typography component="h2" variant="h4" className={classes.heading}>ORDER # {order._id}</Typography>
             </Grid>
             <Grid item xs={12}>
                 <Divider />
@@ -157,10 +159,10 @@ const OrderScreen = ({ match, history }) => {
                     </Typography>
                     <Typography 
                     variant="body1">
-                        {`${order.shippingDetails.address}, 
-                        ${order.shippingDetails.city},
-                        ${order.shippingDetails.country},
-                        ${order.shippingDetails.postCode}`}
+                        {`${order.shipping.address}, 
+                        ${order.shipping.city},
+                        ${order.shipping.country},
+                        ${order.shipping.postCode}`}
                     </Typography>
                     <Typography 
                     variant="body1">
@@ -228,22 +230,22 @@ const OrderScreen = ({ match, history }) => {
                         <Divider style={{margin: "0.5rem 0"}}/>
                         <div className={classes.box}>
                             <Typography variant="h6">Items</Typography>
-                            <Typography>£{addDecimals(order.itemsPrice)}</Typography>
+                            <Typography>£{addDecimals(order.totalItemsPrice)}</Typography>
                         </div>
                         <Divider style={{margin: "0.5rem 0"}}/>
                         <div className={classes.box}>
                             <Typography variant="h6">Shipping</Typography>
-                            <Typography>£{addDecimals(order.shippingPrice)}</Typography>
+                            <Typography>£{addDecimals(order.totalShippingPrice)}</Typography>
                         </div>
                         <Divider style={{margin: "0.5rem 0"}}/>
                         <div className={classes.box}>
                             <Typography variant="h6">Tax</Typography>
-                            <Typography>£{addDecimals(order.taxPrice)}</Typography>
+                            <Typography>£{addDecimals(order.tax)}</Typography>
                         </div>
                         <Divider style={{margin: "0.5rem 0"}}/>
                         <div className={classes.box}>
                             <Typography variant="h6">Total</Typography>
-                            <Typography>£{addDecimals(order.totalPrice)}</Typography>
+                            <Typography>£{addDecimals(order.total)}</Typography>
                         </div>
                     </CardContent>
                     {!order.isPaid && (
@@ -252,7 +254,7 @@ const OrderScreen = ({ match, history }) => {
                             {loadingPay && <Loader />}
                             {!sdkReady ? <Loader /> : (
                                 <PayPalButton 
-                                    amount={order.totalPrice} 
+                                    amount={order.total} 
                                     onSuccess={successPaymentHandler}
                                 />
                             )}
@@ -274,6 +276,7 @@ const OrderScreen = ({ match, history }) => {
                 </Card>
             </Grid>
         </Grid>
+        </Paper>
     </>
 };
 

@@ -6,7 +6,7 @@ import Tab from '@material-ui/core/Tab';
 import { useState } from 'react';
 import OrderHistoryTab from '../components/OrderHistoryTab';
 import OrderOpenTab from '../components/OrderOpenTab';
-import UnpaidOrdersTab from '../components/unpaidOrdersTab';
+import OrderUnpaidTab from '../components/OrderUnpaidTab';
 import { useEffect } from 'react';
 import orderServices from '../services/orderServices';
 import { token } from 'morgan';
@@ -15,29 +15,31 @@ import { useSelector } from 'react-redux';
 import { Grid, Typography } from '@material-ui/core';
 import Message from '../components/Message';
 
+// CSS to style UI component
 const useStyles = makeStyles(theme => ({
     root: {
         flexGrow: 1
     },
     heading: {
-        fontFamily: "Serif",
         marginBottom: "1rem"
     }
 }))
 
 const UserOrdersScreen = () => {
     const classes = useStyles();
+
+    // States
     const [selectedTab, setSelectedTab] = useState(0);
     const [pastOrders, setPastOrders] = useState('');
     const [openOrders, setOpenOrders] = useState('');
     const [unpaidOrders, setUnpaidOrders] = useState('');
     const [error, setError] = useState('');
 
+    // stores jwt and info about logged in user
     const userLogin = useSelector(state => state.userLogin);
     const { userInfo } = userLogin;
 
-    const userId = jwt(userInfo.token).userId;
-
+    // React hook to fetch orders from server when component mounts
     useEffect(() => {
         const fetchOrders = async () => {
             if (!pastOrders || !openOrders){
@@ -47,6 +49,8 @@ const UserOrdersScreen = () => {
                             Authorization: `Bearer ${userInfo.token}`
                         }
                     };
+                    // decoding jwt to retrieve plaintext version of the user Id
+                    const userId = await jwt(userInfo.token).userId;
                     const response = await orderServices.listUserOrders(userId, token);
                     const pastOrders = response.data.orders.filter(order => {
                         return order.isDelivered === true && order.isPaid === true;
@@ -68,9 +72,9 @@ const UserOrdersScreen = () => {
             }
         }
         fetchOrders();
-    }, [pastOrders, openOrders, userInfo.token, userId]);
+    }, [pastOrders, openOrders, userInfo.token]);
 
-    //https://material-ui.com/components/tabs/
+    // function reused from example in //https://material-ui.com/components/tabs/
     const handleTabChange = (event, newValue) => {
         setSelectedTab(newValue);
     };
@@ -89,7 +93,7 @@ const UserOrdersScreen = () => {
 
             <Grid item xs={12}>
                 <Paper className={classes.root}>
-                    <Tabs
+                    <Tabs // Tabs component adapted from example in //https://material-ui.com/components/tabs/
                         value={selectedTab}
                         variant="scrollable"
                         onChange={handleTabChange}
@@ -102,7 +106,7 @@ const UserOrdersScreen = () => {
                     </Tabs>
                     {selectedTab === 0 && <OrderHistoryTab orders={pastOrders} />}
                     {selectedTab === 1 && <OrderOpenTab orders={openOrders} />}
-                    {selectedTab === 2 && <UnpaidOrdersTab orders={unpaidOrders} />}
+                    {selectedTab === 2 && <OrderUnpaidTab orders={unpaidOrders} />}
                 </Paper>
             </Grid>
         </Grid>

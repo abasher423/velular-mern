@@ -7,6 +7,7 @@ import { Link } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import productServices from '../services/productServices';
 
+// CSS to style UI component
 const useStyles = makeStyles(theme => ({
     backIcon: {
         margin: theme.spacing(1),
@@ -20,19 +21,19 @@ const useStyles = makeStyles(theme => ({
         textAlign: 'center'
     },
     image: {
-        width: '500px',
-        height: 'auto'
+        width: 500,
+        height: "auto"
     },
     form: {
         width: '100%'
     },
     divider: {
-        marginLeft: '400px',
-        width: '400px',
+        marginLeft: 400,
+        width: 400,
         marginBottom: '2rem'
     },
     sizeFormControl: {
-        marginTop: '17px',
+        marginTop: 17,
         minWidth: 185,
     },
     categoryFormControl: {
@@ -53,7 +54,10 @@ const useStyles = makeStyles(theme => ({
 
 const CustomUpdateScreen = ({ match, history }) => {
     const classes = useStyles();
+
     const customId = match.params.customId;
+
+    // states
     const [open, setOpen] = useState(null);
     const [openBrand, setOpenBrand] = useState(null);
     const [openSize, setOpenSize] = useState(null);
@@ -67,17 +71,20 @@ const CustomUpdateScreen = ({ match, history }) => {
     const [description, setDescription] = useState(customDetails.description || '');
     const [reason, setReason] = useState(customDetails.reason || '');
 
+    // variabl to store jwt and info on logged in user
     const userLogin = useSelector(state => state.userLogin);
     const { userInfo } = userLogin;
 
+    // React hook which fetches custom details when component mounts
     useEffect(() => {
         const fetchCustomDetails = async () => {
             if (!customDetails){
                 const token = {
-                    headers: {
+                    headers: { // jwt token to be sent for verification
                         Authorization: `Bearer ${userInfo.token}`
                     }
                 }
+                // sends GET request to the server
                 const response = await productServices.indexOne(customId, token);
                 setCustomDetails(response.data);
             } else {
@@ -93,8 +100,9 @@ const CustomUpdateScreen = ({ match, history }) => {
         }
 
         fetchCustomDetails();
-    }, [customDetails, userInfo.token, customId])
+    }, [customDetails, userInfo.token, customId]) // dependencies
 
+    // data to be sent to the database
     const customData = [
         {propName: "name", value: null},
         {propName: "price", value: null},
@@ -104,7 +112,8 @@ const CustomUpdateScreen = ({ match, history }) => {
         {propName: "description", value: null},
         {propName: "category", value: null},
         {propName: "reason", value: null}
-    ]
+    ];
+
     customData[0].value = productName;
     customData[1].value = price;
     customData[2].value = size;
@@ -121,62 +130,51 @@ const CustomUpdateScreen = ({ match, history }) => {
                 Authorization: `Bearer ${userInfo.token}`
             }
         }
+        // sends UPDATE request to the server
         await productServices.updateCustom(customData, customId, token);
         history.push('/admin/customs-list');
     };
 
+    // HANDLERS
     const handleClose = () => {
         setOpen(false);
     };
-
     const handleOpen = () => {
         setOpen(true);
     };
-
     const handleCloseSize = () => {
         setOpenSize(false);
     };
-
     const handleOpenSize = () => {
         setOpenSize(true);
     };
-
     const handleCloseBrand = () => {
         setOpenBrand(false);
     };
-
     const handleOpenBrand = () => {
         setOpenSize(true);
     };
-    
     const productNameHandler = (e) => {
         setProductName(e.target.value);
     };
-
     const priceHandler = (e) => {
         setPrice(e.target.value);
     };
-
     const sizeHandler = (e) => {
         setSize(e.target.value);
     };
-
     const quantityHandler = (e) => {
         setQuantity(e.target.value);
-    }
-
+    };
     const brandHandler = (e) => {
         setBrand(e.target.value);
     };
-
     const categoryHandler = (e) => {
         setCategory(e.target.value);
     };
-
     const descriptionHandler = (e) => {
         setDescription(e.target.value);
     };
-
     const reasonHandler = (e) => {
         setReason(e.target.value);
     };
@@ -203,7 +201,7 @@ const CustomUpdateScreen = ({ match, history }) => {
                             <Container maxWidth="xs">
                                 <Grid container spacing={1}>
                                     <Grid item xs={6}>
-                                        <TextField 
+                                        <TextField // Textfield component adapted from https://material-ui.com/components/text-fields/
                                             variant="standard"
                                             margin="normal"
                                             autoComplete="true"
@@ -215,7 +213,7 @@ const CustomUpdateScreen = ({ match, history }) => {
                                         />
                                     </Grid>
                                     <Grid item xs={6}>
-                                        <TextField 
+                                        <TextField // Textfield component adapted from https://material-ui.com/components/text-fields/
                                             variant="standard"
                                             margin="normal"
                                             autoComplete="true"
@@ -229,7 +227,7 @@ const CustomUpdateScreen = ({ match, history }) => {
                                     <Grid item xs={6}>
                                     <FormControl className={classes.sizeFormControl}>
                                         <InputLabel id="demo-controlled-open-select-label">Size</InputLabel>
-                                        <Select
+                                        <Select // Select component adapted from https://material-ui.com/components/selects/
                                             labelId="demo-controlled-open-select-label"
                                             id="select-size"
                                             open={openSize}
@@ -243,7 +241,7 @@ const CustomUpdateScreen = ({ match, history }) => {
                                     </FormControl>
                                     </Grid>
                                     <Grid item xs={6}>
-                                        <TextField 
+                                        <TextField // Textfield component adapted from https://material-ui.com/components/text-fields/
                                             variant="standard"
                                             margin="normal"
                                             autoComplete="true"
@@ -257,7 +255,7 @@ const CustomUpdateScreen = ({ match, history }) => {
                                     <Grid item xs={12}>
                                         <FormControl className={classes.brandFormControl} margin="normal">
                                             <InputLabel id="demo-controlled-open-select-label">Brand</InputLabel>
-                                            <Select
+                                            <Select // Select component adapted from https://material-ui.com/components/selects/
                                                 labelId="demo-controlled-open-select-label"
                                                 id="select-brand"
                                                 open={openBrand}
@@ -276,7 +274,7 @@ const CustomUpdateScreen = ({ match, history }) => {
                                         </FormControl>
                                     </Grid>
                                     <Grid item xs={12}>
-                                        <TextField 
+                                        <TextField // Textfield component adapted from https://material-ui.com/components/text-fields/
                                             variant="standard"
                                             margin="normal"
                                             autoComplete="true"
@@ -291,7 +289,7 @@ const CustomUpdateScreen = ({ match, history }) => {
                                     <Grid item xs={12}>
                                         <FormControl className={classes.categoryFormControl} margin="normal">
                                             <InputLabel id="demo-controlled-open-select-label">Category</InputLabel>
-                                            <Select
+                                            <Select // Select component adapted from https://material-ui.com/components/selects/
                                                 labelId="demo-controlled-open-select-label"
                                                 id="demo-controlled-open-select"
                                                 open={open}
@@ -307,7 +305,7 @@ const CustomUpdateScreen = ({ match, history }) => {
                                         </FormControl>
                                     </Grid>
                                     <Grid item xs={12}>
-                                    <TextField
+                                    <TextField // Textfield component adapted from https://material-ui.com/components/text-fields/
                                         id="outlined-multiline-static"
                                         label="Note"
                                         margin="normal"
@@ -320,7 +318,7 @@ const CustomUpdateScreen = ({ match, history }) => {
                                     />
                                     </Grid>
                                     <Grid item xs={12}>
-                                        <Button
+                                        <Button // Button component adapted from https://material-ui.com/components/buttons/
                                             variant="contained"
                                             color="primary"
                                             className={classes.btn}

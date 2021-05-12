@@ -10,6 +10,7 @@ import NavigateNextIcon from '@material-ui/icons/NavigateNext';
 import { Link } from 'react-router-dom';
 import HelpIcon from '@material-ui/icons/Help';
 
+// CSS to style UI component
 const useStyles = makeStyles(theme => ({
     slogan: {
         marginTop: "2rem",
@@ -26,10 +27,10 @@ const useStyles = makeStyles(theme => ({
         justifyContent: "center",
         flexDirection: "column",
         alignItems: "center",
-        height: "568px",
+        height: 568,
         width: "auto",
         [theme.breakpoints.down('sm')] : {
-            height: "311px",
+            height: 311,
             width: "auto"
         },
         marginTop: "2rem"
@@ -38,7 +39,7 @@ const useStyles = makeStyles(theme => ({
         textAlign: "center",
         marginTop: "2rem",
         padding: "1rem",
-        height: "300px",
+        height: 300,
         width: "auto",
         position: "relative",
         backgroundSize: "cover",
@@ -49,7 +50,7 @@ const useStyles = makeStyles(theme => ({
         justifyContent: "center"
     },
     carouselPaper: {
-        maxWidth: "1280px",
+        maxWidth: 1280,
         padding: "0.5rem",
         [theme.breakpoints.up('sm')] : {
             padding: "2rem"
@@ -82,6 +83,7 @@ const useStyles = makeStyles(theme => ({
 const HomePageScreen = () => {
     const classes = useStyles();
 
+    // Random text for slogan info
     const sloganInfo = 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed malesuada consectetur nibh vitae porta. Morbi ullamcorper, odio vel fringilla luctus, purus lacus euismod neque, sed laoreet nisl enim eu nisl'
 
     return (
@@ -92,7 +94,7 @@ const HomePageScreen = () => {
                 </Paper>
             </Grid>
 
-            {/* Slogan */}
+            {/* ------------ Slogan ----------------- */}
             <Grid item xs={12} md={6}>
                 <Container>
                     <Paper>
@@ -151,12 +153,9 @@ const HomePageScreen = () => {
                 <Grid container justify="center" spacing={0}>
                 <Grid item xs={12} md={4}>
                     <Paper className={classes.cardPaper}>
-                    <div className={classes.image} style={{backgroundImage: `url(${"/images/air-force-01.jpg"})`}}>
+                    <div className={classes.image} style={{backgroundImage: "url(/images/air-force-01.jpg)"}}>
                         <div className={classes.cardText}>
-                            {/* <Typography variant="h4" component="h2" style={{margin: "1rem 0"}}>
-                            Nike Air 1s
-                            </Typography> */}
-                            <Button 
+                            <Button // Button component adapted from example in https://material-ui.com/components/buttons/
                                 variant="contained" 
                                 component={Link} 
                                 to={'/products'} 
@@ -172,7 +171,7 @@ const HomePageScreen = () => {
                 
                 <Grid item xs={12} md={4}>
                     <Paper className={classes.cardPaper}>
-                    <div className={classes.image} style={{backgroundImage: `url(${"/images/vans-1.jpg"})`}}>
+                    <div className={classes.image} style={{backgroundImage: "url(/images/vans-1.jpg)"}}>
                             <div className={classes.cardText}>
                                 {/* <Typography variant="h4" component="h2" style={{margin: "1rem 0"}}> */}
                                 {/* Vans */}
@@ -185,12 +184,12 @@ const HomePageScreen = () => {
 
                 <Grid item xs={12} md={4}>
                     <Paper className={classes.cardPaper}>
-                    <div className={classes.image} style={{backgroundImage: `url(${"/images/air-max-2.jpg"})`}}>
+                    <div className={classes.image} style={{backgroundImage: "url(/images/air-max-2.jpg)"}}>
                         <div className={classes.cardText}>
                             {/* <Typography variant="h4" component="h2">
                                 Air Max
                             </Typography> */}
-                            <Button 
+                            <Button // Button component adapted from example in https://material-ui.com/components/buttons/
                                 variant="contained" 
                                 component={Link} 
                                 to={'/products'} 

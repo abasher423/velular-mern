@@ -10,12 +10,15 @@ import productServices from '../services/productServices';
 import { useState } from 'react';
 
 const ListedProducts = () => {
+    // states
     const [products, setProducts] = useState([]);
     const [error, setError] = useState('');
     
+    // React hook to fetch product list when component mounts
     useEffect(() => {
         const fetchProductList = async () => {
             try {
+                // sends GET request to server and filters out 'Accepted' customs
                 const response = await productServices.index();
                 const acceptedCustoms = response.data.products.filter(product => {
                     return product.status === 'Accepted'
@@ -30,16 +33,16 @@ const ListedProducts = () => {
   
     return (
         <>
-        <Typography variant="h2" component="h2" style={{ marginBottom: "3rem", textAlign: "center" }}>Latest Products</Typography>
+        <Typography variant="h2" style={{ marginBottom: "3rem", textAlign: "left" }}>Latest Products</Typography>
         { error ? <Message status="error" text={error} />
-            : <Grid container spacing={2} alignItems="stretch">
-            {products.map(product => {
-                return <Grid item  xs={12} md={3} key={product._id} style={{ flexGrow: 1 }}>
-                            <Card 
-                                product={product}
-                            />
-                        </Grid>
-            })}
+            : <Grid container spacing={2} alignItems="stretch" style={{flexGrow: 1}}>
+            {products.map(product => (
+                 <Grid item  xs={12} sm={6} md={3} key={product._id} style={{ flexGrow: 1 }}>
+                    <Card 
+                        product={product}
+                    />
+                </Grid>
+            ))}
         </Grid>}
         
         </>

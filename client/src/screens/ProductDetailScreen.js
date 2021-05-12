@@ -20,6 +20,7 @@ import ArrowBackIcon from '@material-ui/icons/ArrowBack';
 import productServices from '../services/productServices';
 import Alert from '@material-ui/lab/Alert';
 
+// CSS to style UI component
 const useStyles = makeStyles( theme => ({
     root: {
         minWidth: 275,
@@ -29,19 +30,27 @@ const useStyles = makeStyles( theme => ({
         justifyContent: "space-between"
     },
     btn: {
-        "&:hover": {
-            backgroundColor: theme.palette.success.main
+        "&:hover": {     
+            backgroundColor: "white",
+            color: theme.palette.info.dark,
+            border: `${theme.palette.info.dark} 3px solid`,
         },
-        marginBottom: "0.5rem",
-        backgroundColor: theme.palette.info.dark
+        backgroundColor: theme.palette.info.dark,
+        color: "white",
+        fontWeight: 800,
+        borderRadius: 25,
+        marginBottom: "0.5rem"  
     },
     submitBtn: {
-        "&:hover": {
-            backgroundColor: theme.palette.success.main,
-            color: 'white'
+        "&:hover": {      
+            backgroundColor: 'white',
+            color: 'black',
+            border: "black 3px solid",
         },
-        backgroundColor: 'black',
-        color: 'white',
+        backgroundColor: "black",
+        color: "white",
+        fontWeight: 800,
+        borderRadius: 25,
         marginTop: '1rem',
         marginBottom: '2rem'
     },
@@ -65,7 +74,7 @@ const useStyles = makeStyles( theme => ({
     },
     ratingDivider: {
         [theme.breakpoints.down('sm')] : {
-            width: "315px"
+            width: 315
         }
     },
     ratingDropDown: {
@@ -75,12 +84,15 @@ const useStyles = makeStyles( theme => ({
         }
     },
     txtfield: {
-        width: '45px'
+        width: 45
     }
 }));
 
 const ProductDetailScreen = ({ history, match }) => {
+    // product ID fetched from URL
     const productId = match.params.productId;
+    
+    // States
     const [quantity, setQuantity] = useState(1);
     const [size, setSize] = useState(3);
     const [product, setProduct] = useState('');
@@ -96,10 +108,12 @@ const ProductDetailScreen = ({ history, match }) => {
     const userLogin = useSelector(state => state.userLogin);
     const { userInfo } = userLogin;
     
+    // React hook to fetch product details when component mounts
     useEffect(() => {
         if(!product){
             const fetchProductDetails = async () => {
                 try {
+                    // sends GET request to server
                     const response = await productServices.indexOne(productId)
                     setProduct(response.data)
                 } catch(err){
@@ -112,6 +126,7 @@ const ProductDetailScreen = ({ history, match }) => {
 
     }, [productId, product]);
 
+    // HANDLERS
     const handleQtyChange = e => {
         setQuantity(e.target.value)
     };
@@ -119,31 +134,26 @@ const ProductDetailScreen = ({ history, match }) => {
     const handleSizeChange = e => {
         setSize(e.target.value)
     };
-
     const addToCartHandler = (e) => {
         dispatch(addToCart(product._id, quantity, size))
         history.push('/cart');
     };
-
-    // HANDLERS
-
     const ratingHandler = (e) => {
         setRating(e.target.value);
     };
-
     const commentHandler = (e) => {
         setComment(e.target.value);
     }
-
     const submitHandler = async () => {
         try {
             if (userInfo){
                 const reviewData = { rating, comment };
                 const token = {
-                    headers: {
+                    headers: { // jwt to be sent for verification
                         Authorization: `Bearer ${userInfo.token}`
                     }
                 };
+                // sends POST request to server
                 await productServices.writeReview(productId, reviewData, token);
                 setProduct('');
             } else {
@@ -154,11 +164,9 @@ const ProductDetailScreen = ({ history, match }) => {
             setTimeout(() => setReviewError(''), 3000);
         }
     }
-
     const handleClose = () => {
         setOpen(false);
     };
-
     const handleOpen = () => {
         setOpen(true);
     };
@@ -166,13 +174,16 @@ const ProductDetailScreen = ({ history, match }) => {
     const handleSizeList = () => {
         let sizeList = 0;
         let isInteger = false;
-        if (product.size %1 === 0.5){
+        // checks to see if size is a whole number
+        if (product.size % 1 === 0.5){
             sizeList = product.size - 0.5;
         } else {
             sizeList = product.size;
             isInteger = true;
         }
-        let array = [...Array(sizeList).keys()]
+        // creates array of whole numbers
+        let array = [...Array(sizeList).keys()];
+        // creates new array to hold all sizes
         let results = [];
         for (let i=2; i<array.length; i++){
             results.push(array[i]);
@@ -189,6 +200,7 @@ const ProductDetailScreen = ({ history, match }) => {
     return (
         <Paper>
             <Container>
+            <Typography variant="h3">Product Details</Typography>
             <IconButton edge="start" className={classes.backIcon} color="inherit" component={Link} to={'/products'} aria-label="back">
                 <ArrowBackIcon />
             </IconButton>
@@ -244,8 +256,8 @@ const ProductDetailScreen = ({ history, match }) => {
                                         onChange={handleQtyChange}
                                         >
                                         {
-                                            [...Array(product.quantityInStock).keys()].map(k => (
-                                                <MenuItem key={k + 1} value={k + 1}>{k + 1}</MenuItem>
+                                            [...Array(product.quantityInStock).keys()].map(element => (
+                                                <MenuItem key={element + 1} value={element + 1}>{element + 1}</MenuItem>
                                             ))
                                         }
                                         </Select>
@@ -256,15 +268,15 @@ const ProductDetailScreen = ({ history, match }) => {
                                 <div className={classes.box}>
                                     <Typography gutterBottom>Size (3 - {product.size})</Typography>
                                     <FormControl className={classes.formControl}>
-                                        <Select
+                                        <Select 
                                         labelId="size-select-label"
                                         id="size-select"
                                         value={size}
                                         onChange={handleSizeChange}
                                         >
                                         {
-                                            handleSizeList().map(k => (
-                                                <MenuItem key={k + 1} value={k + 1}>{k + 1}</MenuItem>
+                                            handleSizeList().map(element => (
+                                                <MenuItem key={element + 1} value={element + 1}>{element + 1}</MenuItem>
                                             ))
                                         }
                                         </Select>
@@ -273,9 +285,9 @@ const ProductDetailScreen = ({ history, match }) => {
                                 <Divider style={{margin: "0.5rem 0"}}/>
                             </CardContent>
                             <CardActions>
-                                <Button 
+                                <Button
                                 variant="contained" 
-                                color="secondary" 
+                                color="primary" 
                                 size="small"
                                 fullWidth 
                                 className={classes.btn}
@@ -321,7 +333,7 @@ const ProductDetailScreen = ({ history, match }) => {
                     <Grid item xs={12}>
                         <Typography variant="h6" component="h2">Rating</Typography>
                         <FormControl className={classes.ratingDropDown} margin="normal">
-                            <Select
+                            <Select // Select component adapted from example in https://material-ui.com/components/selects/
                                 labelId="rating-label"
                                 id="rating-select"
                                 variant="outlined"
@@ -342,7 +354,7 @@ const ProductDetailScreen = ({ history, match }) => {
                     </Grid>
                     <Grid item xs={12}>
                         <Typography variant="h6" component="h2">Comment</Typography>
-                        <TextField 
+                        <TextField // Textfield component adapted from example in https://material-ui.com/components/text-fields/
                             variant="outlined"
                             margin="normal"
                             label="Comment"
@@ -356,7 +368,7 @@ const ProductDetailScreen = ({ history, match }) => {
                         />
                     </Grid>
                     <Grid item xs={12}>
-                        <Button 
+                        <Button // Button component adapted from example in https://material-ui.com/components/buttons/
                             variant="contained"
                             color="primary"
                             className={classes.submitBtn}

@@ -7,54 +7,63 @@ import Loader from '../components/Loader';
 import { login } from '../actions/userActions';
 import { Container, Grid, Typography, FormGroup, makeStyles, TextField, Button, Avatar, Link, Paper, useMediaQuery, useTheme } from '@material-ui/core';
 
+// CSS to style UI component
 const useStyles = makeStyles(theme => ({
+    container: {
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center"
+    },
     form: {
         width: '100%', // Fix IE 11 issue.
         marginTop: theme.spacing(1),
-      },
-      heading: {
-        fontSize: theme.typography.pxToRem(40),
-        fontFamily: "serif"
-      },
-      txtfield: {
-          width: "400px",
-          [theme.breakpoints.down('sm')] : {
-              width: "200px"
-          }
-      },
-      submit: {
-          "&:hover": {
-            backgroundColor: theme.palette.success.main,
-          },
+    },
+    heading: {
+        fontSize: theme.typography.pxToRem(40)
+    },
+    txtfield: {
+        width: 400,
+        [theme.breakpoints.down('sm')] : {
+            width: 300
+        }
+    },
+    submit: {
+        "&:hover": {           
+            color: theme.palette.info.dark,
+            backgroundColor: "white",
+            border: `${theme.palette.info.dark} 3px solid`,
+        },
         backgroundColor: theme.palette.info.dark,
         color: "white",
+        fontWeight: 800,
+        borderRadius: 25,
         margin: theme.spacing(3, 0, 2),
-        width: "400px",
+        width: 400,
         [theme.breakpoints.down('sm')] : {
-            width: "200px"
+            width: 300
         }
-      },
-      avatar: {
-          backgroundColor: "white",
-          width: theme.spacing(15),
-          height: theme.spacing(15),
-      },
-      paper: {
-          height: "600px",
-          padding: "1rem",
-          width: "500px",
-          [theme.breakpoints.down('sm')] : {
-              width: "300px",
-              height: "500px"
-          },
-          textAlign: "center"
-      }
+     },
+    avatar: {
+        backgroundColor: "white",
+        width: theme.spacing(15),
+        height: theme.spacing(15),
+    },
+    paper: {
+        height: 600,
+        padding: "1rem",
+        width: 500,
+        [theme.breakpoints.down('sm')] : {
+            width: 300,
+            height: 500
+        },
+        textAlign: "center"
+    }
 }));
 
 const UserLoginScreen = ({ location, history }) => {
     const classes = useStyles();
-    const theme = useTheme();
-    const mobile = useMediaQuery(theme.breakpoints.down("sm"));
+
+    // states
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
 
@@ -74,22 +83,27 @@ const UserLoginScreen = ({ location, history }) => {
         }
     }, [history, userInfo, redirect])
 
+    // HANDLERS
     const handleEmailChange = e => {
         setEmail(e.target.value);
-    }
-
+    };
     const handlepasswordChange = e => {
         setPassword(e.target.value);
-    }
-
+    };
     const submitHandler = (e) => {
         e.preventDefault();
-        // DISPATCH login
         dispatch(login(email, password));
-    }
+    };
+
+    /*
+        * A login UI form for user authentication
+        * This was adapted from Material UI's free "Sign In" template
+        * Link here to template's GitHub:
+        * https://github.com/mui-org/material-ui/tree/master/docs/src/pages/getting-started/templates/sign-in
+    */
 
     return (
-        <Container component="main" maxWidth="xs">
+        <Container className={classes.container}>
             <Paper className={classes.paper}>
             <Grid item xs={12} align="center">
             <Avatar className={classes.avatar}>
