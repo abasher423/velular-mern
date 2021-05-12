@@ -5,11 +5,21 @@ import store from './store';
 import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
+import { createMuiTheme, MuiThemeProvider } from '@material-ui/core';
+// import { MuiThemeProvider, createMuiTheme } from '@material-ui/styles';
+
+const THEME = createMuiTheme({
+  typography: {
+    fontFamily: "Montserrat"
+  }
+});
 
 ReactDOM.render(
-  <Provider store={store}>
-    <App />
-  </Provider>,
+  <MuiThemeProvider theme={THEME}>
+      <Provider store={store}>
+      <App />
+    </Provider>
+  </MuiThemeProvider>,
   document.getElementById('root')
 );
 

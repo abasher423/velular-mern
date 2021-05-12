@@ -12,35 +12,35 @@ const useStyles = makeStyles(theme => ({
             // height: "400px"
         },
         [theme.breakpoints.down('sm')] : {
-            height: "200px"
+            height: 200
         }
     },
     carouselBtn: {}
 }))
 
-// code from https://www.npmjs.com/package/react-material-ui-carousel
+// code adapted from https://www.npmjs.com/package/react-material-ui-carousel
+// to implement the carousel
 const SlideShow = () => {
     const classes = useStyles();
 
     return(
         <Carousel 
-        // fullHeightHover={false}     // We want the nav buttons wrapper to only be as big as the button element is
-        navButtonsProps={{          // Change the colors and radius of the actual buttons. THIS STYLES BOTH BUTTONS
+        navButtonsProps={{
             
         }} 
-        navButtonsWrapperProps={{   // Move the buttons to the bottom. Unsetting top here to override default style.
+        navButtonsWrapperProps={{ 
             style: {
                 bottom: '0',
                 top: 'unset'
             }
         }} >
             <div className={classes.image}>
-                <Link to={'/products'}>
+                <Link to={'/products/6090aef9f6ea3f1b288aafdd'}>
                     <img className="center" src="/images/air-max-5.jpg" alt="airmax"/>
                 </Link>
             </div>
             <div className={classes.image}>
-                <Link to={'/products'}>
+                <Link to={'/products/6090b085b36ea04ac04c11f6'}>
                     <img src="/images/air-max-2.jpg" alt="airmax2" />
                 </Link>
             </div>

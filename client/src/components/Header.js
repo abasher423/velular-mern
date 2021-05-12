@@ -17,16 +17,27 @@ import ShoppingCartOutlinedIcon from '@material-ui/icons/ShoppingCartOutlined';
 import PersonOutlineOutlinedIcon from '@material-ui/icons/PersonOutlineOutlined';
 import HomeIcon from '@material-ui/icons/Home';
 import MenuIcon from '@material-ui/icons/Menu';
+import AddIcon from '@material-ui/icons/Add';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import { logout } from '../actions/userActions';
 import { useHistory } from "react-router-dom";
-import { Divider, Drawer, Fade, List, ListItem, ListItemIcon, ListItemText, SwipeableDrawer, Tooltip, useMediaQuery, useTheme } from '@material-ui/core';
+import { Avatar, Divider, Drawer, Fade, List, ListItem, ListItemIcon, ListItemText, SwipeableDrawer, Tooltip, useMediaQuery, useTheme } from '@material-ui/core';
 import { USER_LOGOUT } from '../constants/userConstants';
+
+const randomColor = () => {
+    const colors = ['teal', 'lime', '#ff5722', 'brown', '#607d8b', '#ffeb3b', 'cyan', 'red', 'pink'];
+    const rand = Math.floor(Math.random() * 9);
+    return colors[rand];
+}
 
 const useStyles = makeStyles((theme) => ({
   root: {
     flexGrow: 1,
     marginBottom: "4rem"
+  },
+  appbar: {
+    // width: `calc(100% - ${drawerWidth}px)`,
+    // marginLeft: drawerWidth,
   },
   heading: {
     [theme.breakpoints.down('sm')] : {
@@ -35,21 +46,20 @@ const useStyles = makeStyles((theme) => ({
   },
   title: {
     flexGrow: 1,
-    fontWeight: '500',
+    display: "flex",
     textDecoration: 'none',
     color: 'black',
-    fontFamily: 'New Century Schoolbook',
     [theme.breakpoints.down('sm')] : {
         fontSize: theme.typography.pxToRem(37)
     }
   },
   logo: {
-      marginTop: '15px',
-      width: '250px',
+      marginTop: 15,
+      width: 250,
       height: 'auto'
   },
   breadcrumbs: {
-      marginBottom: '25px',
+      marginBottom: 25,
       fontWeight: '500'
   },
   icons: {
@@ -71,10 +81,10 @@ const useStyles = makeStyles((theme) => ({
       },
     //   backgroundColor: theme.palette.info.dark,
     //   color: 'white'
-  }
+  },
 }));
 
-const Header = () => {
+const Header = ({ match }) => {
     const classes = useStyles();
     const dispatch = useDispatch();
     const history = useHistory();
@@ -83,8 +93,6 @@ const Header = () => {
     const mobile = useMediaQuery(theme.breakpoints.down("sm"));
 
     const [anchorEl, setAnchorEl] = useState(null);
-    const [anchrolEl2, setAnchorEl2] = useState(null);
-    const [anchorEl3, setAnchorEl3] = useState(null);
     const [openDrawer, setOpenDrawer] = useState(false);
 
     const userLogin = useSelector(state => state.userLogin);
@@ -93,46 +101,25 @@ const Header = () => {
     const handleDrawerOpen = () => {
         setOpenDrawer(true);
     };
-
     const handleDrawerClose = () => {
         setOpenDrawer(false);
     };
-
     const handleClick = (e) => {
         setAnchorEl(e.currentTarget);
     };
-
-    const adminHandleClick = (e) => {
-        setAnchorEl2(e.currentTarget);
-    }
-
-    const artistHandleClick = (e) => {
-        setAnchorEl3(e.currentTarget);
-    }
-    
     const handleClose = () => {
         setAnchorEl(null);
     };
-
-    const adminHandleClose = () => {
-        setAnchorEl2(null);
-    };
-
-    const artistHandleClose = () => {
-        setAnchorEl3(null);
-    };
-
     const logoutHandler = () => {
         dispatch(logout());
         setAnchorEl(null);
     };
-
     const handleMenuOption = option => {
         history.push(`/${option}`)
-    }
+    };
 
     const menuItems = (
-        <div>
+        <div className={classes.appbar2} onClick={handleDrawerClose}>
             <div className={classes.toolbar}>
                 {userInfo && (
                     <>
@@ -143,6 +130,18 @@ const Header = () => {
                                 <ListItemText primary={option} />
                             </ListItem>
                         ))}
+                        {userInfo && (userInfo.role === 'admin') && (
+                            ['Manage Users', 'Manage Customs', 'Manage Orders'].map(option => (
+                                <ListItem button key={option} onClick={() => handleMenuOption(option)}>
+                                    <ListItemText primary={option} />
+                                </ListItem>
+                            ))
+                        )}
+                        {userInfo && (userInfo.role === 'artist') && (
+                            <ListItem button  onClick={() => history.push('/artist/customs')}>
+                                <ListItemText primary="Customs" />
+                            </ListItem>
+                        )}
                     </List>
                     </>
                 )}
@@ -158,7 +157,7 @@ const Header = () => {
                         </ListItem>
                     ))}
                     {userInfo ? 
-                        <ListItem button onClick={() => {dispatch({ type: USER_LOGOUT })}}>
+                        <ListItem button component={Link} to={'/login'} onClick={logoutHandler}>
                         <ListItemIcon>
                             <PersonOutlineOutlinedIcon />
                         </ListItemIcon>
@@ -176,14 +175,15 @@ const Header = () => {
     )
 
     // https://material-ui.com/components/drawers/
-    // https://material-ui.com/components/menus/
+    
 
     return (
-        <div className={classes.root}>
-            <AppBar position="static" color="default">
+        <header className={classes.root}>
+            <AppBar position="static" color="default" className={classes.appbar}>
                 <Container>
                 <Toolbar>
                     <Typography variant="h3" component={Link} to={'/'} className={classes.title}>
+                        {/* <img style={{ height: 50 }} src="/images/logo.png" alt="logo" /> */}
                         Velular
                     </Typography>
 
@@ -214,98 +214,72 @@ const Header = () => {
                         </>
                     ) : (
                         <>
+                        { !userInfo && !mobile && (
+                            <Typography variant="body2" >United Kingdom/English</Typography>
+                        )}
                         <Tooltip TransitionComponent={Fade} TransitionProps={{ timeout: 600 }} title="Search">
                         <IconButton edge="start" className={classes.icons} color="inherit" component={Link} to={'/search'} aria-label="search">
                             <SearchIcon />
                         </IconButton>
-                    </Tooltip>
+                        </Tooltip>
 
-                    <Tooltip TransitionComponent={Fade} TransitionProps={{ timeout: 600 }} title="Favourites">
-                        <IconButton edge="start" className={classes.icons} color="inherit" component={Link} to={'/favourites'} aria-label="favorite">
-                            <FavoriteBorderIcon />
-                        </IconButton>
-                    </Tooltip>
+                        <Tooltip TransitionComponent={Fade} TransitionProps={{ timeout: 600 }} title="Favourites">
+                            <IconButton edge="start" className={classes.icons} color="inherit" component={Link} to={'/favourites'} aria-label="favorite">
+                                <FavoriteBorderIcon />
+                            </IconButton>
+                        </Tooltip>
 
-                    <Tooltip TransitionComponent={Fade} TransitionProps={{ timeout: 600 }} title="Cart">
-                        <IconButton edge="start" className={classes.icons} component={Link} to={'/cart'} color="inherit" aria-label="cart">
-                            <ShoppingCartOutlinedIcon />
-                        </IconButton>
-                    </Tooltip>
-                    
-                    { userInfo ? (
-                        <div>
-                            <Button 
-                                className={userInfo ? classes.loggedIn : ''}
-                                // variant="contained"
-                                // color="primary"
-                                onClick={handleClick}>
-                                    {userInfo.firstName}
-                                    <ExpandMoreIcon />
-                            </Button>
-                            <Menu
-                                id="simple-menu"
-                                anchorEl={anchorEl}
-                                keepMounted
-                                open={Boolean(anchorEl)}
-                                onClose={handleClose}
-                            >
-                                <MenuItem component={Link} to={'/'} onClick={handleClose}>Home</MenuItem>
-                                <MenuItem component={Link} to={'/profile'} onClick={handleClose}>Profile</MenuItem>
-                                <MenuItem component={Link} to={'/orders'} onClick={handleClose}>Orders</MenuItem>
-                                <MenuItem component={Link} to={'/login'} onClick={logoutHandler}>Logout</MenuItem>
-                            </Menu>
-                        </div>
-                    ) :
-                    <Tooltip TransitionComponent={Fade} TransitionProps={{ timeout: 600 }} title="Sign In">
-                        <IconButton edge="start" className={classes.icons} component={Link} to={'/login'} color="inherit" aria-label="login">
-                            <PersonOutlineOutlinedIcon />
-                        </IconButton>
-                    </Tooltip>}
-                    {userInfo && userInfo.role === 'admin' && (
-                        <div style={{margin: "0 1rem"}}>
-                            <Button 
-                                onClick={adminHandleClick}>
-                                    Admin
-                                    <ExpandMoreIcon />
-                            </Button>
-                            <Menu
-                                id="admin menu"
-                                anchorEl={anchrolEl2}
-                                keepMounted
-                                open={Boolean(anchrolEl2)}
-                                onClose={adminHandleClose}
-                            >
-                                <MenuItem component={Link} to={'/admin/users-list'} onClick={adminHandleClose}>Users</MenuItem>
-                                <MenuItem component={Link} to={'/admin/customs-list'} onClick={adminHandleClose}>Customs</MenuItem>
-                                <MenuItem component={Link} to={'/admin/orders-list'} onClick={adminHandleClose}>Orders</MenuItem>
-                            </Menu>
-                        </div>
-                    )}
-                    {userInfo && userInfo.role === 'artist' && (
-                        <div style={{margin: "0 1rem"}}>
-                            <Button 
-                                onClick={artistHandleClick}>
-                                    Artist
-                                    <ExpandMoreIcon />
-                            </Button>
-                            <Menu
-                                id="artist menu"
-                                anchorEl={anchorEl3}
-                                keepMounted
-                                open={Boolean(anchorEl3)}
-                                onClose={artistHandleClose}
-                            >
-                                <MenuItem component={Link} to={'/artist/customs'} onClick={artistHandleClose}>Customs</MenuItem>
-                                <MenuItem component={Link} to={'/artist/orders-list'} onClick={artistHandleClose}>Orders</MenuItem>
-                            </Menu>
-                        </div>
-                    )}
-                    </>
+                        <Tooltip TransitionComponent={Fade} TransitionProps={{ timeout: 600 }} title="Cart">
+                            <IconButton edge="start" className={classes.icons} component={Link} to={'/cart'} color="inherit" aria-label="cart">
+                                <ShoppingCartOutlinedIcon />
+                            </IconButton>
+                        </Tooltip>
+                        
+                        { userInfo ? (
+                            <div>
+                                <Button 
+                                    className={userInfo ? classes.loggedIn : ''}
+                                    // variant="contained"
+                                    // color="primary"
+                                    onClick={handleClick}>
+                                        {userInfo.firstName}
+                                        <ExpandMoreIcon />
+                                </Button>
+                                <Menu // Code adapted from example in https://material-ui.com/components/menus/
+                                    id="simple-menu"
+                                    anchorEl={anchorEl}
+                                    keepMounted
+                                    open={Boolean(anchorEl)}
+                                    onClose={handleClose}
+                                >
+                                    <MenuItem component={Link} to={'/'} onClick={handleClose}>Home</MenuItem>
+                                    <MenuItem component={Link} to={'/account'} onClick={handleClose}>Account</MenuItem>
+                                    <MenuItem component={Link} to={'/orders'} onClick={handleClose}>Orders</MenuItem>
+                                    {userInfo && (userInfo.role === 'admin') && (
+                                        <div>
+                                            <MenuItem component={Link} to={'/admin/users-list'} onClick={handleClose}>Manage Users</MenuItem>
+                                            <MenuItem component={Link} to={'/admin/customs-list'} onClick={handleClose}>Manage Customs</MenuItem>
+                                            <MenuItem component={Link} to={'/admin/orders-list'} onClick={handleClose}>Manage Orders</MenuItem>
+                                        </div>
+                                    )}
+                                    {userInfo && (userInfo.role === 'artist') && (
+                                        <MenuItem component={Link} to={'/artist/customs'} onClick={handleClose}>Customs</MenuItem>
+                                    )}
+                                    <MenuItem component={Link} to={'/login'} onClick={logoutHandler}>Logout</MenuItem>
+                                </Menu>
+                            </div>
+                        ) :
+                        <Tooltip TransitionComponent={Fade} TransitionProps={{ timeout: 600 }} title="Sign In">
+                            <IconButton edge="start" className={classes.icons} component={Link} to={'/login'} color="inherit" aria-label="login">
+                                <PersonOutlineOutlinedIcon />
+                            </IconButton>
+                        </Tooltip>}        
+                        </>
                     )}
                 </Toolbar>
                 </Container>
             </AppBar>
-        </div>
+        </header>
         );
 };
 

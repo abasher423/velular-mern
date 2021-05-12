@@ -10,22 +10,21 @@ import YouTubeIcon from '@material-ui/icons/YouTube';
 import LinkedInIcon from '@material-ui/icons/LinkedIn';
 import { useState } from 'react';
 
+// css styles
 const useStyles = makeStyles((theme) => ({
     root: {
         marginTop: "2rem"
     },
     footer: {
         backgroundColor: "grey",
-        height: "200px"
+        height: 200
     },
     heading: {
         fontSize: theme.typography.pxToRem(12),
-        fontWeight: "700",
-        fontFamily: "Serif"
+        fontWeight: 700
     },
     details: {
-        fontSize: theme.typography.pxToRem(12),
-        fontFamily: "Serif"
+        fontSize: theme.typography.pxToRem(12)
     },
     socials: {
         textAlign: "center",
@@ -48,14 +47,13 @@ const Footer = () => {
     
     const [expanded, setExpanded] = useState(false);
 
-    // https://material-ui.com/components/accordion/#controlled-accordion
+    // This function is reused from Material UI example // https://material-ui.com/components/accordion/#controlled-accordion
     const handleAccordionChange = (panel) => (e, isExpanded) => {
         setExpanded(isExpanded ? panel : false);
     }
 
     return (
-        <Container className="center">
-            <Paper className={classes.paper}>
+        <Paper className={classes.paper}>
             {!mobile ?
             <footer className={classes.footer}>
             <div className="footer-heading footer-1">
@@ -79,7 +77,7 @@ const Footer = () => {
                 <p><FacebookIcon/></p>
             </div>
             </footer> :
-             <Grid container justify="center" className={classes.root}>
+                <Grid container justify="center" className={classes.root}>
                 <Grid item xs={12}>
                     <Accordion expanded={expanded === "panel1a"} onChange={handleAccordionChange("panel1a")}>
                         <AccordionSummary 
@@ -91,10 +89,10 @@ const Footer = () => {
                         </AccordionSummary>
                         <AccordionDetails>
                             <div>
-                            <Typography className={classes.details}>(+44) 7975 782 168</Typography>
-                            <Typography className={classes.details}>info@velular.com</Typography>
-                            <Typography className={classes.details}>Sustainability</Typography>
-                            <Typography className={classes.details}>Work with us</Typography>
+                                <Typography className={classes.details}>(+44) 7975 782 168</Typography>
+                                <Typography className={classes.details}>info@velular.com</Typography>
+                                <Typography className={classes.details}>Sustainability</Typography>
+                                <Typography className={classes.details}>Work with us</Typography>
                             </div>
                         </AccordionDetails>
                     </Accordion>
@@ -108,10 +106,10 @@ const Footer = () => {
                         </AccordionSummary>
                         <AccordionDetails>
                             <div>
-                            <Typography className={classes.details}>Legal Notice</Typography>
-                            <Typography className={classes.details}>Privacy Policy</Typography>
-                            <Typography className={classes.details}>Cookie Policy</Typography>
-                            <Typography className={classes.details}>Terms of Sale</Typography>
+                                <Typography className={classes.details}>Legal Notice</Typography>
+                                <Typography className={classes.details}>Privacy Policy</Typography>
+                                <Typography className={classes.details}>Cookie Policy</Typography>
+                                <Typography className={classes.details}>Terms of Sale</Typography>
                             </div>
                         </AccordionDetails>
                     </Accordion>
@@ -125,10 +123,10 @@ const Footer = () => {
                         </AccordionSummary>
                         <AccordionDetails>
                             <div>
-                            <Typography className={classes.details}>Contact Us</Typography>
-                            <Typography className={classes.details}>FAQ</Typography>
-                            <Typography className={classes.details}>Track your order</Typography>
-                            <Typography className={classes.details}>Refunds and returns</Typography>
+                                <Typography className={classes.details}>Contact Us</Typography>
+                                <Typography className={classes.details}>FAQ</Typography>
+                                <Typography className={classes.details}>Track your order</Typography>
+                                <Typography className={classes.details}>Refunds and returns</Typography>
                             </div>
                         </AccordionDetails>
                     </Accordion>
@@ -140,9 +138,8 @@ const Footer = () => {
                     <YouTubeIcon />
                     <LinkedInIcon />
                 </Grid>
-             </Grid>}
-             </Paper>
-        </Container>
+                </Grid>}
+            </Paper>
     );
 };
 

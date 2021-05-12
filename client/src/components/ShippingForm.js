@@ -8,7 +8,7 @@ const ShippingForm = ({ address, addressChange, city, cityChange, postCode, post
             <form>
                 <Grid container spacing={2}>
                     <Grid item xs={12}>
-                        <TextField 
+                        <TextField // Code adapted from https://material-ui.com/components/text-fields/ 
                             variant="standard"
                             margin="normal"
                             autoComplete="true"
@@ -22,7 +22,7 @@ const ShippingForm = ({ address, addressChange, city, cityChange, postCode, post
                         />
                     </Grid>
                     <Grid item xs={6}>
-                        <TextField 
+                        <TextField // Code adapted from https://material-ui.com/components/text-fields/ 
                             variant="standard"
                             margin="normal"
                             autoComplete="true"
@@ -36,7 +36,7 @@ const ShippingForm = ({ address, addressChange, city, cityChange, postCode, post
                         />
                     </Grid>
                     <Grid item xs={6}>
-                        <TextField 
+                        <TextField // Code adapted from https://material-ui.com/components/text-fields/ 
                             variant="standard"
                             margin="normal"
                             autoComplete="true"
@@ -50,7 +50,7 @@ const ShippingForm = ({ address, addressChange, city, cityChange, postCode, post
                         />
                     </Grid>
                     <Grid item xs={12}>
-                        <TextField 
+                        <TextField // Code adapted from https://material-ui.com/components/text-fields/ 
                             variant="standard"
                             margin="normal"
                             autoComplete="true"

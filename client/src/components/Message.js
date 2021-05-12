@@ -3,6 +3,7 @@ import { useState, useEffect } from 'react'
 import { makeStyles } from '@material-ui/core/styles';
 import Alert from '@material-ui/lab/Alert';
 
+// css to style UI component
 const useStyles = makeStyles((theme) => ({
     root: {
       width: '100%',
@@ -12,6 +13,8 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
+// code adapted from example https://stackoverflow.com/questions/62286242/react-material-ui-delayed-permission-dialog
+// to display message for only 5seconds
 const Message = ({ status, text }) => {
     const classes = useStyles();
     const [show, setShow] = useState(true);

@@ -11,13 +11,14 @@ import Rating from './Rating';
 import Link from 'react-router-dom/Link';
 import { Divider } from '@material-ui/core';
 
+// CSS to style UI component
 const useStyles = makeStyles(theme => ({
   root: {
     maxWidth: 345,
     height: "100%"
   },
   media: {
-    height: "270px",
+    height: 270,
     width: "auto"
   },
   divide: {
@@ -32,7 +33,8 @@ const Product = ({ product }) => {
   const classes = useStyles();
   
   return (
-        <Card className={classes.root}>
+        <Card // Code adapted from https://material-ui.com/components/cards/ 
+        className={classes.root}> 
           <Link to={`/products/${product._id}`} style={{ textDecoration: "none", color: "black"}}>
             <CardActionArea>
                 <CardMedia
