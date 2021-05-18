@@ -103,7 +103,7 @@ const OrderListScreen = () => {
                           <StyledTableCell component="th" scope="row">{order.order._id}</StyledTableCell>
                           <StyledTableCell>{order.order.user.firstName} {order.order.user.lastName}</StyledTableCell>
                           <StyledTableCell>{order.order.date.substring(0,16)}</StyledTableCell>
-                          <StyledTableCell>£{order.order.totalPrice}</StyledTableCell>
+                          <StyledTableCell>£{order.order.total}</StyledTableCell>
                           <StyledTableCell>
                               {order.order.paidAt.substring(0, 16)} 
                               <CheckCircleOutlineIcon className={classes.paid}/>

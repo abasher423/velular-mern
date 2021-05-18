@@ -91,7 +91,7 @@ const OrderOpenTab = ({ orders }) => {
                                     </Grid>
                                     <Grid item xs={12} md={2}>
                                         <Typography>TOTAL</Typography>
-                                        <Typography>£{order.itemsPrice}</Typography>
+                                        <Typography>£{order.total}</Typography>
                                     </Grid>
                                     <Grid item xs={12} md={2}>
                                         <Typography>DISPATCH TO</Typography>
