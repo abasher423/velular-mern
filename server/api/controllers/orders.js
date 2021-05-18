@@ -37,9 +37,9 @@ const orders_get_all = async (req, res) => {
                 }
             });
         }
-    } catch (err){
-        console.log(err);
-        res.status(500).json({ error: err });
+    } catch (error){
+        console.log(error);
+        res.status(500).json({ message: `The following error has occurred: ${error}` });
     }
 }
 
@@ -66,9 +66,9 @@ const orders_get_order = async (req, res) => {
         } else {
             res.status(404).json({ message: 'No order found' });
         }
-    } catch (err){
-        console.log(err);
-        res.status(500).json({ error: err });
+    } catch (error){
+        console.log(error);
+        res.status(500).json({ message: `The following error has occurred: ${error}` });
     }
 };
 
@@ -94,9 +94,9 @@ const orders_create_order = async (req, res) => {
         } else {
             res.status(400).json({ message: "No items found"})
         }
-   } catch (err){
-       console.log(err)
-       res.status(500).json({ error: err });
+   } catch (error){
+       console.log(error)
+       res.status(500).json({ message: `The following error has occurred: ${error}` });
    }
 };
 
@@ -138,8 +138,8 @@ const orders_get_user = async (req, res) => {
         } else {
             res.status(401).json({ message: 'Authentication Failed' });
         }
-    } catch (err){
-        res.status(500).json({ error: err });
+    } catch (error){
+        res.status(500).json({ message: `The following error has occurred: ${error}` });
     }
 }
 
@@ -175,9 +175,9 @@ const order_update_paid = async (req, res) => {
         } else {
             res.status(400).json({ message: 'Invalid request'});
         }
-    } catch (err){
-        console.log(err)
-        res.status(500).json({ error: err });
+    } catch (error){
+        console.log(error)
+        res.status(500).json({ message: `The following error has occurred: ${error}` });
     }
 }
 
@@ -195,8 +195,8 @@ const order_update_delivered = async (req, res) => {
         } else {
             res.status(400).json({ message: 'No entry found for provided Order ID' });
         }
-    } catch (err){
-        res.status(500).json({ error: err });
+    } catch (error){
+        res.status(500).json({ message: `The following error has occurred: ${error}` });
     }
 };
 
@@ -232,9 +232,9 @@ const orders_delete_order = async (req, res) => {
                 }
             });
         }
-    } catch (err){
-        console.log(err);
-        res.status(500).json({ error: err });
+    } catch (error){
+        console.log(error);
+        res.status(500).json({ message: `The following error has occurred: ${error}` });
     }
 }
 

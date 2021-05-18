@@ -262,7 +262,7 @@ const OrderScreen = ({ match, history }) => {
                     )}
                     { userInfo && userInfo.role === 'admin' && order.isPaid && !order.isDelivered && (
                         <CardContent>
-                            <Button
+                            <Button // Code adapted from example in https://material-ui.com/components/buttons/
                             variant="contained"
                             color="primary"
                             className={classes.delivered}

@@ -126,7 +126,8 @@ const Header = ({ match }) => {
                     <Divider />
                     <List>
                         {['Profile', 'Orders'].map(option => (
-                            <ListItem button key={option} onClick={() => handleMenuOption(option[0].toLowerCase() + option.substring(1))}>
+                            <ListItem // Code adapted from examples in https://material-ui.com/components/drawers/
+                            button key={option} onClick={() => handleMenuOption(option[0].toLowerCase() + option.substring(1))}>
                                 <ListItemText primary={option} />
                             </ListItem>
                         ))}
@@ -208,7 +209,11 @@ const Header = ({ match }) => {
                             >
                                 <MenuIcon />
                             </IconButton>
-                            <Drawer anchor="right" open={openDrawer} onClose={handleDrawerClose}>
+                            <Drawer // Code adapted from example in https://material-ui.com/components/drawers/
+                                anchor="right" 
+                                open={openDrawer} 
+                                onClose={handleDrawerClose}
+                            >
                                 {menuItems}
                             </Drawer>
                         </>
@@ -237,7 +242,7 @@ const Header = ({ match }) => {
                         
                         { userInfo ? (
                             <div>
-                                <Button 
+                                <Button // Code adapted from example in https://material-ui.com/components/buttons/
                                     className={userInfo ? classes.loggedIn : ''}
                                     // variant="contained"
                                     // color="primary"

@@ -249,7 +249,7 @@ const ProductDetailScreen = ({ history, match }) => {
                                 <div className={classes.box}>
                                     <Typography gutterBottom>Quantity</Typography>
                                     <FormControl className={classes.formControl}>
-                                        <Select
+                                        <Select // Code adapted from example in https://material-ui.com/components/selects/
                                         labelId="quantity-select-label"
                                         id="quantity-select"
                                         value={quantity}
@@ -268,7 +268,7 @@ const ProductDetailScreen = ({ history, match }) => {
                                 <div className={classes.box}>
                                     <Typography gutterBottom>Size (3 - {product.size})</Typography>
                                     <FormControl className={classes.formControl}>
-                                        <Select 
+                                        <Select // Code adapted from example in https://material-ui.com/components/selects/
                                         labelId="size-select-label"
                                         id="size-select"
                                         value={size}
@@ -285,7 +285,7 @@ const ProductDetailScreen = ({ history, match }) => {
                                 <Divider style={{margin: "0.5rem 0"}}/>
                             </CardContent>
                             <CardActions>
-                                <Button
+                                <Button // Code adapted from example in https://material-ui.com/components/buttons/
                                 variant="contained" 
                                 color="primary" 
                                 size="small"

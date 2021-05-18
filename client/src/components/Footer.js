@@ -79,7 +79,10 @@ const Footer = () => {
             </footer> :
                 <Grid container justify="center" className={classes.root}>
                 <Grid item xs={12}>
-                    <Accordion expanded={expanded === "panel1a"} onChange={handleAccordionChange("panel1a")}>
+                    <Accordion // code adapted from examples in https://material-ui.com/components/accordion/
+                        expanded={expanded === "panel1a"} 
+                        onChange={handleAccordionChange("panel1a")}
+                    >
                         <AccordionSummary 
                             expandIcon={expanded === "panel1a" ? <RemoveIcon /> : <AddIcon />}
                             aria-controls="panl1a-about-us"
@@ -95,8 +98,11 @@ const Footer = () => {
                                 <Typography className={classes.details}>Work with us</Typography>
                             </div>
                         </AccordionDetails>
-                    </Accordion>
-                    <Accordion expanded={expanded === "panel1b"} onChange={handleAccordionChange("panel1b")}>
+                    </Accordion> 
+                    <Accordion // code adapted from examples in https://material-ui.com/components/accordion/
+                        expanded={expanded === "panel1b"} 
+                        onChange={handleAccordionChange("panel1b")}
+                    >
                         <AccordionSummary 
                             expandIcon={expanded === "panel1b" ? <RemoveIcon /> : <AddIcon />}
                             aria-controls="panl1a-legal"
@@ -113,7 +119,10 @@ const Footer = () => {
                             </div>
                         </AccordionDetails>
                     </Accordion>
-                    <Accordion expanded={expanded === "panel1c"} onChange={handleAccordionChange("panel1c")}>
+                    <Accordion // code adapted from examples in https://material-ui.com/components/accordion/
+                        expanded={expanded === "panel1c"} 
+                        onChange={handleAccordionChange("panel1c")}
+                    >
                         <AccordionSummary 
                             expandIcon={expanded === "panel1c" ? <RemoveIcon /> : <AddIcon />}
                             aria-controls="panl1a-customer-service"

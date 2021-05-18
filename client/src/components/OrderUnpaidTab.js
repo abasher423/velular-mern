@@ -87,7 +87,11 @@ const OrderUnpaidTab = ({ orders }) => {
                 )}
                 <Grid item xs={12}>
                     {orders && orders.map(order => (
-                        <Card variant="outlined" className={classes.root} key={order._id}>
+                        <Card // Code adapted from example in https://material-ui.com/components/cards/ 
+                            variant="outlined" 
+                            className={classes.root} 
+                            key={order._id}
+                        >
                             <CardContent>
                                 <Grid container spacing={2}>
                                     <Grid item xs={12} md={2}>
@@ -125,7 +129,7 @@ const OrderUnpaidTab = ({ orders }) => {
                                                     </Link>
                                                 </Grid>
                                                 <Grid item xs={12} md={3} className={classes.completeOrder}>
-                                                    <Button 
+                                                    <Button // Code adapted from example in https://material-ui.com/components/buttons/
                                                         variant="contained"
                                                         fullWidth={mobile ? true : false}
                                                         href={`/orders/${order._id}`}

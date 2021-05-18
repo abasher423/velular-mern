@@ -183,7 +183,11 @@ const PlaceOrderScreen = ({ history }) => {
                     </Grid>
                 </Grid>
                 <Grid item xs={12} md={4} className={classes.main}>
-                    <Card className={classes.root} variant="outlined" align="center">
+                    <Card // Code adapted from example in https://material-ui.com/components/cards/
+                        className={classes.root} 
+                        variant="outlined" 
+                        align="center"
+                    >
                         <CardContent justify="space-between">
                             <div>
                                 <Typography variant="h5" gutterBottom algin="center">Order Summary</Typography>
@@ -213,7 +217,7 @@ const PlaceOrderScreen = ({ history }) => {
                             </div>
                         </CardContent>
                         <CardActions>
-                            <Button 
+                            <Button // Code adapted from example in https://material-ui.com/components/buttons/
                             variant="contained" 
                             color="primary" 
                             size="small"

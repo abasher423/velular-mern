@@ -204,7 +204,7 @@ const ShippingScreen = ({ history }) => {
                       Back
                     </Button>
                   )}
-                  <Button
+                  <Button // Code adapted from example in https://material-ui.com/components/buttons/
                     variant="contained"
                     color="primary"
                     onClick={handleNext}
@@ -214,7 +214,7 @@ const ShippingScreen = ({ history }) => {
                       Next
                   </Button>
                   {activeStep === steps.length - 1 
-                    ? <Button
+                    ? <Button // Code adapted from example in https://material-ui.com/components/buttons/
                         variant="contained"
                         color="primary"
                         onClick={submitHandler}

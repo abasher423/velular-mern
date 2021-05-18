@@ -188,7 +188,7 @@ const useStyles = makeStyles((theme) => ({
             {error && (<Message status="error" text={error} />)}
             <form className={classes.form}>
             <Grid item xs={12}>
-            <TextField
+            <TextField  // Code adapted from example in https://material-ui.com/components/text-fields/
                     variant="standard"
                     margin="normal"
                     autoComplete="true"
@@ -201,7 +201,7 @@ const useStyles = makeStyles((theme) => ({
                 />
             </Grid>
             <Grid item xs={12}>
-                <TextField 
+                <TextField // Code adapted from example in https://material-ui.com/components/text-fields/
                     variant="standard"
                     margin="normal"
                     autoComplete="true"
@@ -214,7 +214,7 @@ const useStyles = makeStyles((theme) => ({
                 />
             </Grid>
             <Grid item xs={12}>
-                <TextField 
+                <TextField // Code adapted from example in https://material-ui.com/components/text-fields/
                     variant="standard"
                     margin="normal"
                     autoComplete="true"
@@ -227,7 +227,7 @@ const useStyles = makeStyles((theme) => ({
                 />
             </Grid>
             <Grid item xs={12}>
-                <TextField 
+                <TextField // Code adapted from example in https://material-ui.com/components/text-fields/
                     variant="standard"
                     margin="normal"
                     fullWidth
@@ -240,7 +240,7 @@ const useStyles = makeStyles((theme) => ({
                 />
             </Grid>
             <Grid item xs={12}>
-                <TextField 
+                <TextField // Code adapted from example in https://material-ui.com/components/text-fields/
                     variant="standard"
                     margin="normal"
                     fullWidth

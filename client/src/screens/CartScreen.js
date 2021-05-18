@@ -87,7 +87,11 @@ const CartScreen = ({ history}) => {
                     <Typography variant="h3" component="h1" className={classes.title}>Shopping Cart</Typography>
                 </Grid>
                 <Grid item xs={12} md={6}>
-                    <Card className={classes.root} variant="outlined" align="center">
+                    <Card // Code adapted from example in https://material-ui.com/components/cards/
+                        className={classes.root} 
+                        variant="outlined" 
+                        align="center"
+                    >
                         <CardContent justify="space-between">
                             <div className={classes.box}>
                                 <Typography gutterBottom>Items</Typography>

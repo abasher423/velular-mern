@@ -45,9 +45,9 @@ const products_get_all = async (req, res) => {
                 }
             });
         }
-    } catch (err){
-        console.log(err);
-        res.status(500).json({ error: err });
+    } catch (error){
+        console.log(error);
+        res.status(500).json({ message: `The following error has occurred: ${error}` });
     }
 }
 
@@ -75,8 +75,8 @@ const customs_get_all = async (req, res) => {
         } else {
             res.status(400).json({ message: 'No entry exists for customs' })
         }
-    } catch (err){
-        res.status(500).json({ error: err });
+    } catch (error){
+        res.status(500).json({ message: `The following error has occurred: ${error}` });
     }
 };
 
@@ -106,8 +106,8 @@ const customs_get_all_artist = async (req, res) => {
         } else {
             res.status(400).json({ message: 'No entry exists for customs' })
         }
-    } catch (err){
-        res.status(500).json({ error: err });
+    } catch (error){
+        res.status(500).json({ message: `The following error has occurred: ${error}` });
     }
 };
 
@@ -149,9 +149,9 @@ const products_get_product = async (req, res) => {
                 }
             });
         }
-    } catch (err){
-        console.log(err);
-        res.status(500).json({ error: err })
+    } catch (error){
+        console.log(error);
+        res.status(500).json({ message: `The following error has occurred: ${error}` })
     }
 };
 
@@ -198,9 +198,9 @@ const products_create_product = async (req, res) => {
                 }
             }
         })
-    } catch (err){
-        console.log(err);
-        res.status(500).json({ error: err });
+    } catch (error){
+        console.log(error);
+        res.status(500).json({ message: `The following error has occurred: ${error}` });
     }
 };
 
@@ -215,9 +215,9 @@ const custom_update_status = async (req, res) => {
         } else {
             res.status(400).json({ message: 'Invalid Request' });
         }
-    } catch (err){
-        console.log(err)
-        res.status(500).json({ error: err });
+    } catch (error){
+        console.log(error)
+        res.status(500).json({ message: `The following error has occurred: ${error}` });
     }
 }
 
@@ -237,9 +237,9 @@ const products_update_product = async (req, res) => {
                 url: `http://localhost:300/api/products/${result._id}`
             }
         });
-    } catch (err){
-        console.log(err);
-        res.status(500).json({ error: err });
+    } catch (error){
+        console.log(error);
+        res.status(500).json({ message: `The following error has occurred: ${error}` });
     }
 
 }
@@ -283,9 +283,9 @@ const products_create_review = async (req, res) => {
         } else {
             res.status(500).json({ message: 'Product not found' });
         }
-    } catch (err){
-        console.log(err);
-        res.status(500).json({ error: err });
+    } catch (error){
+        console.log(error);
+        res.status(500).json({ message: `The following error has occurred: ${error}` });
     }
 };
 
@@ -323,9 +323,9 @@ const products_delete_product = async (req, res) => {
                 }
             });
         }
-    } catch (err){
-        console.log(err);
-        res.status(500).json({ error: err });
+    } catch (error){
+        console.log(error);
+        res.status(500).json({ message: `The following error has occurred: ${error}` });
     }
 }
 

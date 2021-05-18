@@ -86,7 +86,11 @@ const OrderHistoryTab = ({ orders }) => {
                 )}
                 <Grid item xs={12}>
                     {orders && orders.map(order => (
-                        <Card variant="outlined" className={classes.root} key={order._id}>
+                        <Card // Code adapted from example in https://material-ui.com/components/cards/ 
+                            variant="outlined" 
+                            className={classes.root} 
+                            key={order._id}
+                        >
                             <CardContent>
                                 <Grid container spacing={2}>
                                     <Grid item xs={12} md={2}>
@@ -124,14 +128,14 @@ const OrderHistoryTab = ({ orders }) => {
                                                         <Typography>{orderItem.description}</Typography>
                                                     </Link>
                                                     
-                                                    <Button 
+                                                    <Button // Code adapted from example in https://material-ui.com/components/buttons/
                                                         variant="contained"
                                                         fullWidth={mobile ? true : false}
                                                         className={classes.buyAgainBtn}>
                                                             <RepeatIcon /> 
                                                             Buy it again
                                                     </Button>
-                                                    <Button
+                                                    <Button // Code adapted from example in https://material-ui.com/components/buttons/
                                                         fullWidth={mobile ? true : false}
                                                         href={`/orders/${order._id}`}
                                                         style={{ borderRadius: 25 }}
@@ -146,7 +150,7 @@ const OrderHistoryTab = ({ orders }) => {
                                                         className={classes.supportBtn}>
                                                             Get Product Support
                                                     </Button>
-                                                    <Button 
+                                                    <Button  // Code adapted from example in https://material-ui.com/components/buttons/
                                                         variant="contained"
                                                         fullWidth={mobile ? true : false}
                                                         style={{ borderRadius: 25}}

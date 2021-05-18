@@ -118,7 +118,7 @@ const UserLoginScreen = ({ location, history }) => {
             <form className={classes.form}>
                 <Grid container>
                     <Grid item xs={12} align="center">
-                        <TextField 
+                        <TextField // Code adapted from example in https://material-ui.com/components/textfields/
                             variant="outlined"
                             margin="normal"
                             required
@@ -131,7 +131,7 @@ const UserLoginScreen = ({ location, history }) => {
                         />
                     </Grid>
                     <Grid item xs={12} align="center">
-                        <TextField 
+                        <TextField // Code adapted from example in https://material-ui.com/components/textfields/
                             variant="outlined"
                             margin="normal"
                             required

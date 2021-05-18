@@ -78,7 +78,7 @@ const OrderOpenTab = ({ orders }) => {
                 )}
                 <Grid item xs={12}>
                     {orders && orders.map(order => (
-                        <Card
+                        <Card // Code adapted from example in https://material-ui.com/components/cards/ 
                             variant="outlined" 
                             className={classes.root} 
                             key={order._id}
@@ -121,13 +121,13 @@ const OrderOpenTab = ({ orders }) => {
                                                     </Link>
                                                 </Grid>
                                                 <Grid item xs={12} md={3} className={classes.orderItemBtns}>
-                                                    <Button 
+                                                    <Button // Code adapted from example in https://material-ui.com/components/buttons/ 
                                                         variant="contained"
                                                         fullWidth={mobile ? true : false}
                                                         className={classes.supportBtn}>
                                                             Get Order Support
                                                     </Button>
-                                                    <Button 
+                                                    <Button // Code adapted from example in https://material-ui.com/components/buttons/ 
                                                         variant="contained"
                                                         fullWidth={mobile ? true : false}
                                                         className={classes.viewOrderBtn}

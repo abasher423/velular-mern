@@ -30,9 +30,9 @@ const users_get_all = async (req, res) => {
         } else {
             res.status(404).json({ message: 'No entry exists for user' })
         }
-    } catch (err){
-        console.log(err);
-        res.status({ error: err });
+    } catch (error){
+        console.log(error);
+        res.status({ message: `The following error has occurred: ${error}` });
     }
 };
 
@@ -55,9 +55,9 @@ const users_get_user = async (req, res) => {
         } else {
             res.status(401).json({ message: "userId does not match" })
         } 
-    } catch (err){
-        console.log(err);
-        res.status(500).json({ error: err });
+    } catch (error){
+        console.log(error);
+        res.status(500).json({ message: `The following error has occurred: ${error}` });
     }
 };
 
@@ -79,8 +79,8 @@ const admin_get_user = async (req, res) => {
         } else {
             res.status(401).json({ message: "userId does not match" })
         }
-    } catch (err){
-        res.status(500).json({ error: err });
+    } catch (error){
+        res.status(500).json({ message: `The following error has occurred: ${error}` });
     }
 };
 
@@ -110,9 +110,9 @@ const user_register = async (req, res) => {
         } else {
             res.status(401).json({ message: 'An account with the same email address already exists' });
         }
-    } catch (err){
-        console.log(err);
-        res.status(500).json({ error: err });
+    } catch (error){
+        console.log(error);
+        res.status(500).json({ message: `The following error has occurred: ${error}` });
     }
 };
 
@@ -148,9 +148,9 @@ const user_login = async (req, res) => {
         } else {
             res.status(401).json({ message: 'Incorrect email address or password' });
         }
-    } catch (err) {
-        console.log(err);
-        res.status(500).json({ error: err });
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({ message: `The following error has occurred: ${error}` });
     }
 }
 
@@ -170,7 +170,7 @@ const users_update_user = async (req, res) => {
                 if (hashedPassword){
                     updateItems.password = hashedPassword;
                 } else {
-                    res.status(500).json({ error: err });
+                    res.status(500).json({ message: `The following error has occurred: ${error}` });
                 }
             }
             await User.updateOne({_id: req.params.userId}, {$set: updateItems});
@@ -184,9 +184,9 @@ const users_update_user = async (req, res) => {
         } else {
             res.status(401).json({ message: 'Authentication Failed'})
         }
-    } catch (err){
-        console.log(err);
-        res.status(500).json({ error: err });
+    } catch (error){
+        console.log(error);
+        res.status(500).json({ message: `The following error has occurred: ${error}` });
     }
 };
 
@@ -211,8 +211,8 @@ const admin_update_user = async (req, res) => {
             res.status(401).json({ message: 'Invalid request'})
         }
         
-    } catch (err){
-        res.status(500).json({ error: err });
+    } catch (error){
+        res.status(500).json({ message: `The following error has occurred: ${error}` });
     }
 }
 
@@ -238,9 +238,9 @@ const users_delete_user = async (req, res) => {
         } else {
             res.status(404).json({ message: 'User already deleted' });
         }
-    } catch (err){
-        console.log(err);
-        res.status(500).json({ error: err });
+    } catch (error){
+        console.log(error);
+        res.status(500).json({ message: `The following error has occurred: ${error}` });
     }
 };
 
