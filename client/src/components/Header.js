@@ -21,7 +21,7 @@ import AddIcon from '@material-ui/icons/Add';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import { logout } from '../actions/userActions';
 import { useHistory } from "react-router-dom";
-import { Avatar, Divider, Drawer, Fade, List, ListItem, ListItemIcon, ListItemText, SwipeableDrawer, Tooltip, useMediaQuery, useTheme } from '@material-ui/core';
+import { Avatar, Divider, Drawer, Fade, List, ListItem, ListItemIcon, ListItemText, SwipeableDrawer, TextField, Tooltip, useMediaQuery, useTheme } from '@material-ui/core';
 import { USER_LOGOUT } from '../constants/userConstants';
 
 const randomColor = () => {
@@ -35,10 +35,6 @@ const useStyles = makeStyles((theme) => ({
     flexGrow: 1,
     marginBottom: "4rem"
   },
-  appbar: {
-    // width: `calc(100% - ${drawerWidth}px)`,
-    // marginLeft: drawerWidth,
-  },
   heading: {
     [theme.breakpoints.down('sm')] : {
         fontSize: theme.typography.pxToRem(16)
@@ -50,7 +46,7 @@ const useStyles = makeStyles((theme) => ({
     textDecoration: 'none',
     color: 'black',
     [theme.breakpoints.down('sm')] : {
-        fontSize: theme.typography.pxToRem(37)
+        fontSize: theme.typography.pxToRem(25)
     }
   },
   logo: {
@@ -94,6 +90,7 @@ const Header = ({ match }) => {
 
     const [anchorEl, setAnchorEl] = useState(null);
     const [openDrawer, setOpenDrawer] = useState(false);
+    const [openSearch, setOpenSearch] = useState(false);
 
     const userLogin = useSelector(state => state.userLogin);
     const { userInfo } = userLogin;
@@ -115,9 +112,16 @@ const Header = ({ match }) => {
         setAnchorEl(null);
     };
     const handleMenuOption = option => {
-        history.push(`/${option}`)
+        if (option) {
+            history.push('/');
+        } else {
+            history.push(`/${option}`);
+        }
     };
-
+    const handleOpenSearch = () => {
+        setOpenSearch(!openSearch);
+    };
+    
     const menuItems = (
         <div className={classes.appbar2} onClick={handleDrawerClose}>
             <div className={classes.toolbar}>
@@ -126,7 +130,7 @@ const Header = ({ match }) => {
                     <Divider />
                     <List>
                         {['Profile', 'Orders'].map(option => (
-                            <ListItem // Code adapted from examples in https://material-ui.com/components/drawers/
+                            <ListItem
                             button key={option} onClick={() => handleMenuOption(option[0].toLowerCase() + option.substring(1))}>
                                 <ListItemText primary={option} />
                             </ListItem>
@@ -175,28 +179,33 @@ const Header = ({ match }) => {
         </div>
     )
 
-    // https://material-ui.com/components/drawers/
-    
-
     return (
         <header className={classes.root}>
             <AppBar position="static" color="default" className={classes.appbar}>
                 <Container>
                 <Toolbar>
                     <Typography variant="h3" component={Link} to={'/'} className={classes.title}>
-                        {/* <img style={{ height: 50 }} src="/images/logo.png" alt="logo" /> */}
                         Velular
                     </Typography>
 
                     {mobile ? (
                         <>
-                            {userInfo && (
+                            {userInfo && !openSearch && (
                                 <Typography variant="h6" component="h1" className={classes.heading}>
                                     {userInfo.firstName[0].toUpperCase() + userInfo.firstName.substring(1)}
                                 </Typography>
                             )}
+
+                            {openSearch && (<TextField 
+                            size="small"
+                            margin="dense"
+                            variant="outlined"
+                            label="Search..."
+                            style={{ marginLeft: 5}}
+                        />)}
+
                             <Tooltip TransitionComponent={Fade} TransitionProps={{ timeout: 600 }} title="Search">
-                                <IconButton edge="start" className={classes.icons} component={Link} to={'/search'} color="inherit" aria-label="login">
+                                <IconButton edge="start" className={classes.icons} onClick={handleOpenSearch} color="inherit" aria-label="login">
                                     <SearchIcon />
                                 </IconButton>
                             </Tooltip>
@@ -209,7 +218,7 @@ const Header = ({ match }) => {
                             >
                                 <MenuIcon />
                             </IconButton>
-                            <Drawer // Code adapted from example in https://material-ui.com/components/drawers/
+                            <Drawer
                                 anchor="right" 
                                 open={openDrawer} 
                                 onClose={handleDrawerClose}
@@ -219,11 +228,21 @@ const Header = ({ match }) => {
                         </>
                     ) : (
                         <>
-                        { !userInfo && !mobile && (
+                        { !mobile && (
                             <Typography variant="body2" >United Kingdom/English</Typography>
                         )}
+
+                        {openSearch && (
+                            <TextField 
+                            size="small"
+                            variant="outlined"
+                            label="Search Products..."
+                            style={{ marginLeft: 5}}
+                        />
+                        )}
+
                         <Tooltip TransitionComponent={Fade} TransitionProps={{ timeout: 600 }} title="Search">
-                        <IconButton edge="start" className={classes.icons} color="inherit" component={Link} to={'/search'} aria-label="search">
+                        <IconButton edge="start" className={classes.icons} color="inherit" onClick={handleOpenSearch} aria-label="search">
                             <SearchIcon />
                         </IconButton>
                         </Tooltip>
@@ -242,15 +261,13 @@ const Header = ({ match }) => {
                         
                         { userInfo ? (
                             <div>
-                                <Button // Code adapted from example in https://material-ui.com/components/buttons/
+                                <Button
                                     className={userInfo ? classes.loggedIn : ''}
-                                    // variant="contained"
-                                    // color="primary"
                                     onClick={handleClick}>
                                         {userInfo.firstName}
                                         <ExpandMoreIcon />
                                 </Button>
-                                <Menu // Code adapted from example in https://material-ui.com/components/menus/
+                                <Menu
                                     id="simple-menu"
                                     anchorEl={anchorEl}
                                     keepMounted
