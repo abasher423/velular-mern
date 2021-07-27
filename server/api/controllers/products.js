@@ -4,7 +4,15 @@ import User from '../models/user.js';
 
 const products_get_all = async (req, res) => {
     try {
-        const products = await Product.find()
+        // get keyword from query string
+        const keywordName = req.query.keyword ? {
+            name: {
+                $regex: req.query.keyword,
+                $options: 'i'
+            }
+        } : {}
+
+        const products = await Product.find({ ...keywordName });
         if (products.length > 0){ //.where to add conditions or .limit for pagination
             const response = {
                 count: products.length,
@@ -15,6 +23,7 @@ const products_get_all = async (req, res) => {
                         name: product.name,
                         description: product.description,
                         brand: product.brand,
+                        category: product.category,
                         averageRating: product.averageRating,
                         totalNumRating: product.totalNumRating,
                         size: product.size,
@@ -34,6 +43,7 @@ const products_get_all = async (req, res) => {
                     }
                 })
             }
+            console.log(response)
             res.status(200).json(response);
         } else {
             res.status(500).json({ 
