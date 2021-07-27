@@ -1,4 +1,5 @@
 import React from 'react';
+import { Route } from 'react-router-dom';
 import { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import makeStyles from '@material-ui/core/styles/makeStyles';
@@ -23,12 +24,7 @@ import { logout } from '../actions/userActions';
 import { useHistory } from "react-router-dom";
 import { Avatar, Divider, Drawer, Fade, List, ListItem, ListItemIcon, ListItemText, SwipeableDrawer, TextField, Tooltip, useMediaQuery, useTheme } from '@material-ui/core';
 import { USER_LOGOUT } from '../constants/userConstants';
-
-const randomColor = () => {
-    const colors = ['teal', 'lime', '#ff5722', 'brown', '#607d8b', '#ffeb3b', 'cyan', 'red', 'pink'];
-    const rand = Math.floor(Math.random() * 9);
-    return colors[rand];
-}
+import SearchBox from './SearchBox';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -71,16 +67,9 @@ const useStyles = makeStyles((theme) => ({
       "fontWeight": 600,
     }
   },
-  loggedIn: {
-      "&:hover": {
-        // backgroundColor: theme.palette.success.main
-      },
-    //   backgroundColor: theme.palette.info.dark,
-    //   color: 'white'
-  },
 }));
 
-const Header = ({ match }) => {
+const Header = () => {
     const classes = useStyles();
     const dispatch = useDispatch();
     const history = useHistory();
@@ -90,7 +79,6 @@ const Header = ({ match }) => {
 
     const [anchorEl, setAnchorEl] = useState(null);
     const [openDrawer, setOpenDrawer] = useState(false);
-    const [openSearch, setOpenSearch] = useState(false);
 
     const userLogin = useSelector(state => state.userLogin);
     const { userInfo } = userLogin;
@@ -112,16 +100,13 @@ const Header = ({ match }) => {
         setAnchorEl(null);
     };
     const handleMenuOption = option => {
-        if (option) {
+        if (option === 'home') {
             history.push('/');
         } else {
             history.push(`/${option}`);
         }
     };
-    const handleOpenSearch = () => {
-        setOpenSearch(!openSearch);
-    };
-    
+
     const menuItems = (
         <div className={classes.appbar2} onClick={handleDrawerClose}>
             <div className={classes.toolbar}>
@@ -190,22 +175,9 @@ const Header = ({ match }) => {
 
                     {mobile ? (
                         <>
-                            {userInfo && !openSearch && (
-                                <Typography variant="h6" component="h1" className={classes.heading}>
-                                    {userInfo.firstName[0].toUpperCase() + userInfo.firstName.substring(1)}
-                                </Typography>
-                            )}
-
-                            {openSearch && (<TextField 
-                            size="small"
-                            margin="dense"
-                            variant="outlined"
-                            label="Search..."
-                            style={{ marginLeft: 5}}
-                        />)}
-
                             <Tooltip TransitionComponent={Fade} TransitionProps={{ timeout: 600 }} title="Search">
-                                <IconButton edge="start" className={classes.icons} onClick={handleOpenSearch} color="inherit" aria-label="login">
+                                {/* SEARCH BOX */}
+                                <IconButton edge="start" className={classes.icons} color="inherit" aria-label="login">
                                     <SearchIcon />
                                 </IconButton>
                             </Tooltip>
@@ -232,20 +204,8 @@ const Header = ({ match }) => {
                             <Typography variant="body2" >United Kingdom/English</Typography>
                         )}
 
-                        {openSearch && (
-                            <TextField 
-                            size="small"
-                            variant="outlined"
-                            label="Search Products..."
-                            style={{ marginLeft: 5}}
-                        />
-                        )}
-
-                        <Tooltip TransitionComponent={Fade} TransitionProps={{ timeout: 600 }} title="Search">
-                        <IconButton edge="start" className={classes.icons} color="inherit" onClick={handleOpenSearch} aria-label="search">
-                            <SearchIcon />
-                        </IconButton>
-                        </Tooltip>
+                        {/* Cannot use History or Match in header so we import from react-router-dom */}
+                        <Route render={({history}) => <SearchBox history={history} />} />
 
                         <Tooltip TransitionComponent={Fade} TransitionProps={{ timeout: 600 }} title="Favourites">
                             <IconButton edge="start" className={classes.icons} color="inherit" component={Link} to={'/favourites'} aria-label="favorite">

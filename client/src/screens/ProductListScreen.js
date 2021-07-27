@@ -9,7 +9,10 @@ import { Typography } from '@material-ui/core';
 import productServices from '../services/productServices';
 import { useState } from 'react';
 
-const ListedProducts = () => {
+const ListedProducts = ({ match }) => {
+    //search keyword
+    const keyword = match.params.keyword;
+
     // states
     const [products, setProducts] = useState([]);
     const [error, setError] = useState('');
@@ -19,7 +22,7 @@ const ListedProducts = () => {
         const fetchProductList = async () => {
             try {
                 // sends GET request to server and filters out 'Accepted' customs
-                const response = await productServices.index();
+                const response = await productServices.index(keyword);
                 const acceptedCustoms = response.data.products.filter(product => {
                     return product.status === 'Accepted'
                 })
@@ -29,7 +32,7 @@ const ListedProducts = () => {
             }
         }
         fetchProductList()
-    }, []);
+    }, [keyword]);
   
     return (
         <>
