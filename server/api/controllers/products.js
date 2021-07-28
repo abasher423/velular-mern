@@ -4,6 +4,10 @@ import User from '../models/user.js';
 
 const products_get_all = async (req, res) => {
     try {
+        // how many items per page
+        const pageSize = 8;
+        const page = Number(req.query.pageNumber) || 1;
+
         // get keyword from query string
         const keywordName = req.query.keyword ? {
             name: {
@@ -12,10 +16,12 @@ const products_get_all = async (req, res) => {
             }
         } : {}
 
-        const products = await Product.find({ ...keywordName });
+        const count = await Product.countDocuments({ ...keywordName});
+        const products = await Product.find({ ...keywordName }).limit(pageSize).skip(pageSize * (page-1))
         if (products.length > 0){ //.where to add conditions or .limit for pagination
             const response = {
                 count: products.length,
+                page, pages: Math.ceil( count / pageSize),
                 products: products.map(product => {
                     return {
                         _id: product._id,

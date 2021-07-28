@@ -3,8 +3,8 @@ import api from './api';
 
 // All requests made to the server for products
 
-const index = (keyword = '') => {
-    return api().get(`/products?keyword=${keyword}`);
+const index = (keyword = '', pageNumber = '') => {
+    return api().get(`/products?keyword=${keyword}&pageNumber=${pageNumber}`);
 };
 const indexOne = (productId) => {
     return api().get(`/products/${productId}`);
