@@ -26,9 +26,12 @@ const App = () => {
     <>
       <Router>
           <Header />
-        <main style={{ overflow: "auto", flexGrow: 1}}>
+        <main style={{ flexGrow: 1}}>
           <Container>
             <Route path='/' component={HomePageScreen} exact />
+            <Route path='/search/:keyword' component={ProductListScreen} />
+            <Route path='/page/:pageNumber' component={ProductListScreen} />
+            <Route path='/search/:keyword/page/:pageNumber' component={ProductListScreen} />
             <Route path='/products' component={ProductListScreen} exact />
             <Route path='/products/:productId' component={ProductDetailScreen} />
             <Route path='/cart/:cartId?' component={CartScreen} exact/>
