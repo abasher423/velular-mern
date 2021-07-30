@@ -30,8 +30,7 @@ const ListedProducts = ({ match, history }) => {
                 const acceptedCustoms = response.data.products.filter(product => {
                     return product.status === 'Accepted'
                 })
-                // setProducts(acceptedCustoms);
-                setProducts(response.data.products); //TEST
+                setProducts(acceptedCustoms);
                 setPage(response.data.page);
                 setPages(response.data.pages);
             } catch(error){
@@ -40,14 +39,14 @@ const ListedProducts = ({ match, history }) => {
         }
         fetchProductList()
     }, [keyword, pageNumber]);
-   
+    
     const handlePage = (e, value) => {
         history.push(`/page/${value}`)
         setPage(value);
     }
     return (
         <>
-        <Typography variant="h2" style={{ marginBottom: "3rem", textAlign: "left" }}>Latest Products</Typography>
+        <Typography variant="h3" style={{ marginBottom: "1rem", textAlign: "left" }}>Latest Products</Typography>
         { error ? <Message status="error" text={error} />
             : <> <Grid container spacing={2} alignItems="stretch" style={{flexGrow: 1}}>
             {products.map(product => (

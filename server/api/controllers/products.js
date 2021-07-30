@@ -16,12 +16,12 @@ const products_get_all = async (req, res) => {
             }
         } : {}
 
-        const count = await Product.countDocuments({ ...keywordName});
+        const pageCount = await Product.countDocuments({ ...keywordName});
         const products = await Product.find({ ...keywordName }).limit(pageSize).skip(pageSize * (page-1))
         if (products.length > 0){ //.where to add conditions or .limit for pagination
             const response = {
                 count: products.length,
-                page, pages: Math.ceil( count / pageSize),
+                page, pages: Math.ceil(pageCount / pageSize),
                 products: products.map(product => {
                     return {
                         _id: product._id,
