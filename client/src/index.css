@@ -76,3 +76,9 @@ h6,
 p {
   font-family: "Montserrat";
 }
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+}
