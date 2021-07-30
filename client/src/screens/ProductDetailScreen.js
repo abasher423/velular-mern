@@ -24,6 +24,7 @@ import Alert from '@material-ui/lab/Alert';
 const useStyles = makeStyles( theme => ({
     root: {
         minWidth: 275,
+        
       },
     box: {
         display: "flex",
@@ -285,7 +286,7 @@ const ProductDetailScreen = ({ history, match }) => {
                                 <Divider style={{margin: "0.5rem 0"}}/>
                             </CardContent>
                             <CardActions>
-                                <Button // Code adapted from example in https://material-ui.com/components/buttons/
+                                <Button
                                 variant="contained" 
                                 color="primary" 
                                 size="small"
@@ -333,7 +334,7 @@ const ProductDetailScreen = ({ history, match }) => {
                     <Grid item xs={12}>
                         <Typography variant="h6" component="h2">Rating</Typography>
                         <FormControl className={classes.ratingDropDown} margin="normal">
-                            <Select // Select component adapted from example in https://material-ui.com/components/selects/
+                            <Select
                                 labelId="rating-label"
                                 id="rating-select"
                                 variant="outlined"
@@ -354,7 +355,7 @@ const ProductDetailScreen = ({ history, match }) => {
                     </Grid>
                     <Grid item xs={12}>
                         <Typography variant="h6" component="h2">Comment</Typography>
-                        <TextField // Textfield component adapted from example in https://material-ui.com/components/text-fields/
+                        <TextField
                             variant="outlined"
                             margin="normal"
                             label="Comment"
@@ -368,7 +369,7 @@ const ProductDetailScreen = ({ history, match }) => {
                         />
                     </Grid>
                     <Grid item xs={12}>
-                        <Button // Button component adapted from example in https://material-ui.com/components/buttons/
+                        <Button
                             variant="contained"
                             color="primary"
                             className={classes.submitBtn}

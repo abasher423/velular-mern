@@ -25,6 +25,9 @@ import { useHistory } from "react-router-dom";
 import { Avatar, Divider, Drawer, Fade, List, ListItem, ListItemIcon, ListItemText, SwipeableDrawer, TextField, Tooltip, useMediaQuery, useTheme } from '@material-ui/core';
 import { USER_LOGOUT } from '../constants/userConstants';
 import SearchBox from './SearchBox';
+import { Icon, InlineIcon } from '@iconify/react';
+import shoeSneaker from '@iconify-icons/mdi/shoe-sneaker';
+
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -102,6 +105,8 @@ const Header = () => {
     const handleMenuOption = option => {
         if (option === 'home') {
             history.push('/');
+        } else if (option === 'trainers'){
+            history.push('/page/1')
         } else {
             history.push(`/${option}`);
         }
@@ -137,10 +142,10 @@ const Header = () => {
                 )}
                 <Divider />
                 <List>
-                    {['Home', 'Favourites', 'Cart'].map((option, idx) => (
+                    {['Home', 'Trainers', 'Cart'].map((option, idx) => (
                         <ListItem button key={option} onClick={() => handleMenuOption(option[0].toLowerCase() + option.substring(1))}>
                             <ListItemIcon>
-                                {idx === 0 ? <HomeIcon /> : idx === 1 ? <FavoriteBorderIcon /> : idx === 2 ? 
+                                {idx === 0 ? <HomeIcon /> : idx === 1 ? <Icon icon={shoeSneaker} width="32" height="32" /> : idx === 2 ? 
                                 <ShoppingCartOutlinedIcon /> : <PersonOutlineOutlinedIcon />}
                             </ListItemIcon>
                             <ListItemText>{option}</ListItemText>
@@ -175,12 +180,7 @@ const Header = () => {
 
                     {mobile ? (
                         <>
-                            <Tooltip TransitionComponent={Fade} TransitionProps={{ timeout: 600 }} title="Search">
-                                {/* SEARCH BOX */}
-                                <IconButton edge="start" className={classes.icons} color="inherit" aria-label="login">
-                                    <SearchIcon />
-                                </IconButton>
-                            </Tooltip>
+                            <Route render={({history}) => <SearchBox history={history}/>} />
                             <IconButton
                                 color="inherit"
                                 aria-label="open drawer"
@@ -200,16 +200,13 @@ const Header = () => {
                         </>
                     ) : (
                         <>
-                        { !mobile && (
-                            <Typography variant="body2" >United Kingdom/English</Typography>
-                        )}
-
+                        <Typography variant="body2" >United Kingdom/English</Typography>
                         {/* Cannot use History or Match in header so we import from react-router-dom */}
                         <Route render={({history}) => <SearchBox history={history} />} />
 
-                        <Tooltip TransitionComponent={Fade} TransitionProps={{ timeout: 600 }} title="Favourites">
-                            <IconButton edge="start" className={classes.icons} color="inherit" component={Link} to={'/favourites'} aria-label="favorite">
-                                <FavoriteBorderIcon />
+                        <Tooltip TransitionComponent={Fade} TransitionProps={{ timeout: 600 }} title="Trainers">
+                            <IconButton edge="start" className={classes.icons} color="inherit" component={Link} to={'/page/1'} aria-label="favorite">
+                            <Icon icon={shoeSneaker} width="38" height="38" />
                             </IconButton>
                         </Tooltip>
 

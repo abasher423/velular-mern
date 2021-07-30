@@ -1,7 +1,7 @@
 import React from 'react';
 import Grid from '@material-ui/core/Grid';
 import SlideShow from '../components/SlideShow'
-import { Button, Container, Tooltip } from '@material-ui/core';
+import { Button, Container, Tooltip, useTheme, useMediaQuery } from '@material-ui/core';
 import makeStyles from '@material-ui/core/styles/makeStyles';
 import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
@@ -15,7 +15,8 @@ const useStyles = makeStyles(theme => ({
     slogan: {
         marginTop: "2rem",
         textAlign: "center",
-        maxWidth: "100%"
+        maxWidth: "100%",
+        paddingBottom: 18
     },
     sloganText: {
         marginTop: "2rem",
@@ -33,7 +34,8 @@ const useStyles = makeStyles(theme => ({
             height: 311,
             width: "auto"
         },
-        marginTop: "2rem"
+        marginTop: "2rem",
+        paddingBottom: 50
     },
     image: {
         textAlign: "center",
@@ -44,7 +46,8 @@ const useStyles = makeStyles(theme => ({
         position: "relative",
         backgroundSize: "cover",
         backgroundRepeat: "no-repeat",
-        backgroundPosition: "center"
+        backgroundPosition: "center",
+        backgroundImage: "url(/images/jordans_1.png)"
     },
     root: {
         justifyContent: "center"
@@ -77,11 +80,33 @@ const useStyles = makeStyles(theme => ({
         [theme.breakpoints.down('sm')] : {
             right: 100
         }
+    },
+    mainImage: {
+        textAlign: "center",
+        // margin: "1rem 0",
+        height: 500,
+        width: "auto",
+        backgroundSize: "cover",
+        backgroundRepeat: "no-repeat",
+        backgroundPosition: "center",
+        position: "relative"
+    },
+    quote: {
+        position: "absolute",
+        top: 200,
+        left: 50,
+        animation: "fadeIn 2s infinite alternate",
+        font: "italic bold 5em/1 Bodoni, serif",
+        fontSize: 50,
+        color: "grey"
     }
 }));
 
 const HomePageScreen = () => {
     const classes = useStyles();
+
+    const theme = useTheme();
+    const mobile = useMediaQuery(theme.breakpoints.down("sm"));
 
     // Random text for slogan info
     const sloganInfo = 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed malesuada consectetur nibh vitae porta. Morbi ullamcorper, odio vel fringilla luctus, purus lacus euismod neque, sed laoreet nisl enim eu nisl'
@@ -89,64 +114,63 @@ const HomePageScreen = () => {
     return (
         <Grid container spacing={0}>
             <Grid item xs={12}>
-                <Paper className={classes.carouselPaper}>
-                    <SlideShow />
-                </Paper>
+                <div className={classes.mainImage} style={ !mobile ? { backgroundImage: "url(/images/jordan_1.jpg)" } : {backgroundImage: "url(/images/jordan_2.jpg)"}}>
+                    {!mobile && <Typography variant="h6" className={classes.quote}>Be the change <br /> you want to see  <br /> in the world</Typography>}
+                </div>
             </Grid>
+            
 
             {/* ------------ Slogan ----------------- */}
             <Grid item xs={12} md={6}>
-                <Container>
-                    <Paper>
-                        <div className={classes.slogan}>
-                            <img src="/images/slogan.png" alt="slogan"/>
-                            <Tooltip title={sloganInfo}>
-                                <HelpIcon />
-                            </Tooltip>
-                        </div>
-                    </Paper>
-                </Container>
+                <Paper>
+                    <div className={classes.slogan}>
+                        <img src="/images/slogan.png" alt="slogan"/>
+                        <Tooltip title={sloganInfo}>
+                            <HelpIcon />
+                        </Tooltip>
+                    </div>
+                </Paper>
             </Grid>
 
             <Grid item xs={12} md={6}>
-                <Container>
-                    <Paper>
-                        <div className={classes.sloganText}>
-                            <Typography gutterBottom variant="h5" component="h2">
-                                Distinct Trainers for Distinct Individuals
-                            </Typography>
-                            <Button component={Link} to={'/products'}>Shop Now</Button>
-                        </div>
-                    </Paper>
-                </Container>
+                <Paper>
+                    <div className={classes.sloganText}>
+                        <Typography gutterBottom variant="h5" component="h2">
+                            Distinct Trainers for Distinct Individuals
+                        </Typography>
+                        <Button component={Link} to={'/products'}>Shop Now</Button>
+                    </div>
+                </Paper>
             </Grid>
 
              {/* ------------- Nike Air 1s ----------------- */}
              <Grid item xs={12} md={6}>
-                    <Container>
-                        <div className={classes.nikeImage}>
-                            <Link to={'/products'}>
-                                <Image src="/images/vans p3.jpg" />
-                            </Link>
-                        </div>        
-                    </Container>
-                </Grid>
+                    <div className={classes.nikeImage}>
+                        <Link to={'/products'}>
+                            <Image src="/images/vans p3.jpg" />
+                        </Link>
+                    </div>        
+             </Grid>
 
                 <Grid item xs={12} md={6}>
-                    <Container>
-                        <Paper>
-                        <div className={classes.text}>
-                            <Typography variant="h5" component="h2">
-                                Sophisticated Design
-                            </Typography>
-                            <Typography variant="h3" component="h2" style={{ margin: "2rem 0" }}>
-                                Nike Air 1s
-                            </Typography>
-                            <Button variant="outlined" component={Link} to={'/products'}>Continue</Button>
-                        </div>
-                        </Paper>
-                    </Container>
+                    <Paper>
+                    <div className={classes.text}>
+                        <Typography variant="h5" component="h2">
+                            Sophisticated Design
+                        </Typography>
+                        <Typography variant="h3" component="h2" style={{ margin: "2rem 0" }}>
+                            Nike Air 1s
+                        </Typography>
+                        <Button variant="outlined" component={Link} to={'/products'}>Continue</Button>
+                    </div>
+                    </Paper>
                 </Grid>
+
+                <Grid item xs={12}>
+                <Paper className={classes.carouselPaper} style={{ margin: "2rem 0" }}>
+                    <SlideShow />
+                </Paper>
+            </Grid>
 
                 {/* --------------- Cards ------------------- */}
                 <Container>
@@ -155,7 +179,7 @@ const HomePageScreen = () => {
                     <Paper className={classes.cardPaper}>
                     <div className={classes.image} style={{backgroundImage: "url(/images/air-force-01.jpg)"}}>
                         <div className={classes.cardText}>
-                            <Button // Button component adapted from example in https://material-ui.com/components/buttons/
+                            <Button
                                 variant="contained" 
                                 component={Link} 
                                 to={'/products'} 
@@ -173,9 +197,6 @@ const HomePageScreen = () => {
                     <Paper className={classes.cardPaper}>
                     <div className={classes.image} style={{backgroundImage: "url(/images/vans-1.jpg)"}}>
                             <div className={classes.cardText}>
-                                {/* <Typography variant="h4" component="h2" style={{margin: "1rem 0"}}> */}
-                                {/* Vans */}
-                                {/* </Typography> */}
                                 <Button variant="contained" component={Link} to={'/products'} >Learn More <NavigateNextIcon /></Button>
                             </div>
                     </div>
@@ -186,10 +207,7 @@ const HomePageScreen = () => {
                     <Paper className={classes.cardPaper}>
                     <div className={classes.image} style={{backgroundImage: "url(/images/air-max-2.jpg)"}}>
                         <div className={classes.cardText}>
-                            {/* <Typography variant="h4" component="h2">
-                                Air Max
-                            </Typography> */}
-                            <Button // Button component adapted from example in https://material-ui.com/components/buttons/
+                            <Button
                                 variant="contained" 
                                 component={Link} 
                                 to={'/products'} 

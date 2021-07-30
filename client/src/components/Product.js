@@ -33,7 +33,7 @@ const Product = ({ product }) => {
   const classes = useStyles();
   
   return (
-        <Card // Code adapted from https://material-ui.com/components/cards/ 
+        <Card
         className={classes.root}> 
           <Link to={`/products/${product._id}`} style={{ textDecoration: "none", color: "black"}}>
             <CardActionArea>
