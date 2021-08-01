@@ -46,20 +46,19 @@ const ListedProducts = ({ match, history }) => {
     }
     return (
         <>
-        <Typography variant="h3" style={{ marginBottom: "1rem", textAlign: "left" }}>Latest Products</Typography>
-        { error ? <Message status="error" text={error} />
-            : <> <Grid container spacing={2} alignItems="stretch" style={{flexGrow: 1}}>
-            {products.map(product => (
-                 <Grid item  xs={12} sm={6} md={3} key={product._id} style={{ flexGrow: 1 }}>
-                    <Card 
-                        product={product}
-                    />
-                </Grid>
-            ))}
-        </Grid> 
-        <Paginate pages={pages} page={page} keyword={keyword ? keyword : ''} handlePage={handlePage} />
-        </>}
-        
+            <Typography variant="h3" style={{ marginBottom: "1rem", textAlign: "left" }}>Latest Products</Typography>
+            { error ? <Message status="error" text={error} />
+                : <> <Grid container spacing={2} alignItems="stretch" style={{flexGrow: 1}}>
+                {products.map(product => (
+                    <Grid item  xs={12} sm={6} md={3} key={product._id} style={{ flexGrow: 1 }}>
+                        <Card 
+                            product={product}
+                        />
+                    </Grid>
+                ))}
+            </Grid> 
+            <Paginate pages={pages} page={page} keyword={keyword ? keyword : ''} handlePage={handlePage} />
+            </>}
         </>
     );
 }

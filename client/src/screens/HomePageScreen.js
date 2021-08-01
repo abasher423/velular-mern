@@ -10,18 +10,44 @@ import NavigateNextIcon from '@material-ui/icons/NavigateNext';
 import { Link } from 'react-router-dom';
 import HelpIcon from '@material-ui/icons/Help';
 
-// CSS to style UI component
 const useStyles = makeStyles(theme => ({
+    mainImage: {
+        textAlign: "center",
+        height: 500,
+        width: "auto",
+        backgroundSize: "cover",
+        backgroundRepeat: "no-repeat",
+        backgroundPosition: "center",
+        position: "relative",
+        [theme.breakpoints.down('xs')] : {
+            height: 300
+        }
+    },
+    quote: {
+        position: "absolute",
+        top: 200,
+        left: 50,
+        animation: "fadeIn 2s infinite alternate",
+        font: "italic bold 5em/1 Bodoni, serif",
+        fontSize: 50,
+        color: "grey"
+    },
     slogan: {
         marginTop: "2rem",
-        textAlign: "center",
-        maxWidth: "100%",
-        paddingBottom: 18
+        display: "flex",
+        flexDirection: "row",
+        justifyContent: "space-around",
+        alignItems: "center",
+        [theme.breakpoints.down('xs')] : {
+            flexDirection: "column"
+        }
     },
     sloganText: {
         marginTop: "2rem",
         textAlign: "center",
-        padding: "5px 0"
+    },
+    sloganInfo: {
+        textAlign: "center"
     },
     text: {
         display: "flex",
@@ -32,7 +58,8 @@ const useStyles = makeStyles(theme => ({
         width: "auto",
         [theme.breakpoints.down('sm')] : {
             height: 311,
-            width: "auto"
+            width: "auto",
+            marginTop: "-2rem"
         },
         marginTop: "2rem",
         paddingBottom: 50
@@ -49,7 +76,7 @@ const useStyles = makeStyles(theme => ({
         backgroundPosition: "center",
         backgroundImage: "url(/images/jordans_1.png)"
     },
-    root: {
+    learnBtn: {
         justifyContent: "center"
     },
     carouselPaper: {
@@ -64,41 +91,6 @@ const useStyles = makeStyles(theme => ({
         marginTop: "2rem",
         maxWidth: "100%",
         height: "auto"
-    },
-    cardPaper: {
-        // height: "500px"
-    },
-    cardText: {
-        display: "flex",
-        flexDirection: "column",
-        justifyContent: "center",
-        alignItems: "center",
-        position: "absolute",
-        bottom: 50,
-        right: 125,
-        color: "white",
-        [theme.breakpoints.down('sm')] : {
-            right: 100
-        }
-    },
-    mainImage: {
-        textAlign: "center",
-        // margin: "1rem 0",
-        height: 500,
-        width: "auto",
-        backgroundSize: "cover",
-        backgroundRepeat: "no-repeat",
-        backgroundPosition: "center",
-        position: "relative"
-    },
-    quote: {
-        position: "absolute",
-        top: 200,
-        left: 50,
-        animation: "fadeIn 2s infinite alternate",
-        font: "italic bold 5em/1 Bodoni, serif",
-        fontSize: 50,
-        color: "grey"
     }
 }));
 
@@ -112,35 +104,33 @@ const HomePageScreen = () => {
     const sloganInfo = 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed malesuada consectetur nibh vitae porta. Morbi ullamcorper, odio vel fringilla luctus, purus lacus euismod neque, sed laoreet nisl enim eu nisl'
 
     return (
-        <Grid container spacing={0}>
+        <Grid container spacing={0} className={classes.root}>
             <Grid item xs={12}>
                 <div className={classes.mainImage} style={ !mobile ? { backgroundImage: "url(/images/jordan_1.jpg)" } : {backgroundImage: "url(/images/jordan_2.jpg)"}}>
                     {!mobile && <Typography variant="h6" className={classes.quote}>Be the change <br /> you want to see  <br /> in the world</Typography>}
                 </div>
             </Grid>
             
-
+            
             {/* ------------ Slogan ----------------- */}
-            <Grid item xs={12} md={6}>
-                <Paper>
-                    <div className={classes.slogan}>
-                        <img src="/images/slogan.png" alt="slogan"/>
-                        <Tooltip title={sloganInfo}>
-                            <HelpIcon />
-                        </Tooltip>
-                    </div>
-                </Paper>
-            </Grid>
-
-            <Grid item xs={12} md={6}>
-                <Paper>
-                    <div className={classes.sloganText}>
-                        <Typography gutterBottom variant="h5" component="h2">
-                            Distinct Trainers for Distinct Individuals
-                        </Typography>
-                        <Button component={Link} to={'/products'}>Shop Now</Button>
-                    </div>
-                </Paper>
+            <Grid item xs={12}>
+                    <Paper className={classes.slogan}>
+                        <div>
+                            <img src="/images/slogan.png" alt="slogan"/>
+                            <div className={classes.sloganInfo}>
+                                <Tooltip title={sloganInfo}>
+                                    <HelpIcon />
+                                </Tooltip>
+                            </div>
+                        </div>
+            
+                        <div className={classes.sloganText}>
+                            <Typography gutterBottom variant="h5" component="h2">
+                                Distinct Trainers for Distinct Individuals
+                            </Typography>
+                            <Button component={Link} to={'/products'}>Shop Now</Button>
+                        </div>
+                    </Paper>
             </Grid>
 
              {/* ------------- Nike Air 1s ----------------- */}
@@ -173,54 +163,32 @@ const HomePageScreen = () => {
             </Grid>
 
                 {/* --------------- Cards ------------------- */}
-                <Container>
                 <Grid container justify="center" spacing={0}>
-                <Grid item xs={12} md={4}>
-                    <Paper className={classes.cardPaper}>
-                    <div className={classes.image} style={{backgroundImage: "url(/images/air-force-01.jpg)"}}>
-                        <div className={classes.cardText}>
-                            <Button
-                                variant="contained" 
-                                component={Link} 
-                                to={'/products'} 
-                                className={classes.root}
-                            >
-                                learn more 
-                            <NavigateNextIcon />
-                            </Button>
-                        </div>
-                    </div>
-                    </Paper>
-                </Grid>
-                
-                <Grid item xs={12} md={4}>
-                    <Paper className={classes.cardPaper}>
-                    <div className={classes.image} style={{backgroundImage: "url(/images/vans-1.jpg)"}}>
-                            <div className={classes.cardText}>
-                                <Button variant="contained" component={Link} to={'/products'} >Learn More <NavigateNextIcon /></Button>
-                            </div>
-                    </div>
-                    </Paper>
-                </Grid>
+                    <Grid item xs={12} md={4}>
+                        <Paper className={classes.cardPaper}>
+                            <Link to={'/products'}>
+                                <div className={classes.image} style={{backgroundImage: "url(/images/air-force-01.jpg)"}} />
+                            </Link>
+                        </Paper>
+                    </Grid>
+                    
+                    <Grid item xs={12} md={4}>
+                        <Paper className={classes.cardPaper}>
+                            <Link to={'/products'}>
+                                <div className={classes.image} style={{backgroundImage: "url(/images/vans-1.jpg)"}} />
+                            </Link>
+                        </Paper>
+                    </Grid>
 
-                <Grid item xs={12} md={4}>
-                    <Paper className={classes.cardPaper}>
-                    <div className={classes.image} style={{backgroundImage: "url(/images/air-max-2.jpg)"}}>
-                        <div className={classes.cardText}>
-                            <Button
-                                variant="contained" 
-                                component={Link} 
-                                to={'/products'} 
-                            >
-                                Learn More 
-                            <NavigateNextIcon />
-                            </Button>                                
-                        </div>
-                    </div>
-                    </Paper>
+                    <Grid item xs={12} md={4}>
+                        <Paper className={classes.cardPaper}>
+                        <Link to={'/products'}>
+                            <div className={classes.image} style={{backgroundImage: "url(/images/air-max-2.jpg)"}} />
+                        </Link>
+
+                        </Paper>
+                    </Grid>
                 </Grid>
-                </Grid>
-                </Container>
         </Grid>
     );
 };

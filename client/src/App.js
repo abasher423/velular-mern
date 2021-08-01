@@ -20,13 +20,15 @@ import CustomUpdateScreen from './screens/CustomUpdateScreen';
 import OrderListScreen from './screens/OrderListScreen';
 import CustomCreateScreen from './screens/CustomCreateScreen';
 import UserOrdersScreen from './screens/UserOrdersScreen';
+import ScrollToTop from './components/ScrollToTop';
 
 const App = () => {
   return (
     <>
       <Router>
           <Header />
-        <main style={{ flexGrow: 1}}>
+          <ScrollToTop />
+          <main style={{ flexGrow: 1, marginTop: "6rem", minHeight: "80vh"}}>
           <Container>
             <Route path='/' component={HomePageScreen} exact />
             <Route path='/search/:keyword' component={ProductListScreen} />

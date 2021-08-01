@@ -5,16 +5,27 @@ import User from '../models/user.js';
 const products_get_all = async (req, res) => {
     try {
         // how many items per page
-        const pageSize = 8;
+        const pageSize = 4;
         const page = Number(req.query.pageNumber) || 1;
 
         // get keyword from query string
         const keywordName = req.query.keyword ? {
-            name: {
+            $or: [
+            {
+                name: {
                 $regex: req.query.keyword,
-                $options: 'i'
-            }
-        } : {}
+                $options: "i",
+                },
+            },
+            {
+                brand: {
+                $regex: req.query.keyword,
+                $options: "i",
+                },
+            },
+            ],
+        }
+        : {};
 
         const pageCount = await Product.countDocuments({ ...keywordName});
         const products = await Product.find({ ...keywordName }).limit(pageSize).skip(pageSize * (page-1))
