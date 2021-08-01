@@ -19,19 +19,19 @@ const Message = ({ status, text }) => {
     const classes = useStyles();
     const [show, setShow] = useState(true);
 
-    useEffect(() => {
-      const timer = setTimeout(() => {
-        // after 3 seconds set show to false
-        setShow(false);
-      }, 5000)
+    // useEffect(() => {
+    //   const timer = setTimeout(() => {
+    //     // after 3 seconds set show to false
+    //     setShow(false);
+    //   }, 5000)
 
-      return () => {
-        clearTimeout(timer);
-      }
-    }, []);
+    //   return () => {
+    //     clearTimeout(timer);
+    //   }
+    // }, []);
 
-     // If show is false the component will return null and stop here
-    if (!show) return null
+    //  // If show is false the component will return null and stop here
+    // if (!show) return null
 
       // If show is true this will be returned
     return (

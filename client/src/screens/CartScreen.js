@@ -60,7 +60,7 @@ const useStyles = makeStyles((theme) => ({
         marginBottom: "2rem"
     },
     paper: {
-        minHeight: 600
+        minHeight: "80vh"
     }
   }));
 
@@ -70,7 +70,6 @@ const CartScreen = ({ history}) => {
 
     const { cartItems } = useSelector((state) => state.cart)
 
-    // function to remove item from cart from https://github.com/bradtraversy/proshop_mern/blob/master/frontend/src/screens/CartScreen.js
     const removeFromCartHandler = (productId) => {
         dispatch(deleteFromCart(productId));
     };
@@ -87,7 +86,7 @@ const CartScreen = ({ history}) => {
                     <Typography variant="h3" component="h1" className={classes.title}>Shopping Cart</Typography>
                 </Grid>
                 <Grid item xs={12} md={6}>
-                    <Card // Code adapted from example in https://material-ui.com/components/cards/
+                    <Card
                         className={classes.root} 
                         variant="outlined" 
                         align="center"
@@ -104,7 +103,7 @@ const CartScreen = ({ history}) => {
                             </div>
                         </CardContent>
                         <CardActions>
-                            <Button // Code adapted from https://material-ui.com/components/buttons/
+                            <Button
                             variant="contained" 
                             color="primary" 
                             size="small"
@@ -121,8 +120,7 @@ const CartScreen = ({ history}) => {
             <IconButton 
                 edge="start" 
                 className={classes.backIcon} 
-                color="inherit" component={Link} 
-                // to={cartItems ? `/products/${cartItems[cartItems.length-1].productId}` : '/products'} 
+                color="inherit" component={Link}
                 to={'/products'}
                 aria-label="back"
             >

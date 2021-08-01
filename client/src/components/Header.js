@@ -31,8 +31,7 @@ import shoeSneaker from '@iconify-icons/mdi/shoe-sneaker';
 
 const useStyles = makeStyles((theme) => ({
   root: {
-    flexGrow: 1,
-    marginBottom: "4rem"
+    flexGrow: 1
   },
   heading: {
     [theme.breakpoints.down('sm')] : {
@@ -45,7 +44,8 @@ const useStyles = makeStyles((theme) => ({
     textDecoration: 'none',
     color: 'black',
     [theme.breakpoints.down('sm')] : {
-        fontSize: theme.typography.pxToRem(25)
+        fontSize: theme.typography.pxToRem(25),
+        fontWeight: 700
     }
   },
   logo: {
@@ -145,7 +145,7 @@ const Header = () => {
                     {['Home', 'Trainers', 'Cart'].map((option, idx) => (
                         <ListItem button key={option} onClick={() => handleMenuOption(option[0].toLowerCase() + option.substring(1))}>
                             <ListItemIcon>
-                                {idx === 0 ? <HomeIcon /> : idx === 1 ? <Icon icon={shoeSneaker} width="32" height="32" /> : idx === 2 ? 
+                                {idx === 0 ? <HomeIcon /> : idx === 1 ? <Icon icon={shoeSneaker} width="25" height="25" /> : idx === 2 ? 
                                 <ShoppingCartOutlinedIcon /> : <PersonOutlineOutlinedIcon />}
                             </ListItemIcon>
                             <ListItemText>{option}</ListItemText>
@@ -171,7 +171,7 @@ const Header = () => {
 
     return (
         <header className={classes.root}>
-            <AppBar position="static" color="default" className={classes.appbar}>
+            <AppBar position="fixed" color="default" className={classes.appbar}>
                 <Container>
                 <Toolbar>
                     <Typography variant="h3" component={Link} to={'/'} className={classes.title}>
@@ -206,7 +206,7 @@ const Header = () => {
 
                         <Tooltip TransitionComponent={Fade} TransitionProps={{ timeout: 600 }} title="Trainers">
                             <IconButton edge="start" className={classes.icons} color="inherit" component={Link} to={'/page/1'} aria-label="favorite">
-                            <Icon icon={shoeSneaker} width="38" height="38" />
+                            <Icon icon={shoeSneaker} width="28" height="28" />
                             </IconButton>
                         </Tooltip>
 

@@ -6,11 +6,8 @@ import Link from 'react-router-dom/Link';
 const useStyles = makeStyles(theme => ({
     image: {
         textAlign: "center",
-        height: "45rem",
+        height: "30rem",
         width: "auto",
-        [theme.breakpoints.down('lg')] : {
-            // height: "400px"
-        },
         [theme.breakpoints.down('sm')] : {
             height: 200
         }
@@ -18,16 +15,11 @@ const useStyles = makeStyles(theme => ({
     carouselBtn: {}
 }))
 
-// code adapted from https://www.npmjs.com/package/react-material-ui-carousel
-// to implement the carousel
 const SlideShow = () => {
     const classes = useStyles();
 
     return(
         <Carousel 
-        navButtonsProps={{
-            
-        }} 
         navButtonsWrapperProps={{ 
             style: {
                 bottom: '0',
