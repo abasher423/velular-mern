@@ -106,7 +106,7 @@ const UserUpdateScreen = ({ match, history }) => {
         }
         // sends UPDATE request to the server
         await userServices.adminUpdateUser(userId, userData, token);
-        history.push('/users-list');
+        history.push('/admin/users-list');
     };
     
     return (
@@ -116,8 +116,8 @@ const UserUpdateScreen = ({ match, history }) => {
         </IconButton>
         <Container component="main" maxWidth="xs">
             <Typography variant="h3" component="h1">Update User</Typography>
-            <form className={classes.form}>
-                <TextField // Textfield component adapted from example in https://material-ui.com/components/text-fields/
+            <form className={classes.form} onSubmit={submitHandler}>
+                <TextField
                     variant="standard"
                     margin="normal"
                     autoComplete="true"
@@ -128,7 +128,7 @@ const UserUpdateScreen = ({ match, history }) => {
                     onChange={firstNameHandler}
                     name="firstName"
                 />
-                <TextField // Textfield component adapted from example in https://material-ui.com/components/text-fields/
+                <TextField
                     variant="standard"
                     margin="normal"
                     autoComplete="true"
@@ -139,7 +139,7 @@ const UserUpdateScreen = ({ match, history }) => {
                     onChange={lastNameHandler}
                     name="lastName"
                 />
-                <TextField // Textfield component adapted from example in https://material-ui.com/components/text-fields/
+                <TextField
                     variant="standard"
                     margin="normal"
                     autoComplete="true"
@@ -153,16 +153,16 @@ const UserUpdateScreen = ({ match, history }) => {
                 <FormControlLabel
                     className={classes.checkbox}
                     label="Set Admin"
-                    control={<Checkbox // Checkbox component adapted from example in https://material-ui.com/components/checkboxes/
+                    control={<Checkbox
                         onChange={roleHandler} 
                         checked={role === 'admin'? true : false}
                         color="primary" />}
                 />
-                <Button // Button component adapted from example in https://material-ui.com/components/buttons/
+                <Button
                     variant="contained"
                     color="primary"
                     className={classes.btn}
-                    onClick={submitHandler}
+                    type="submit"
                     fullWidth
                 >
                     Update

@@ -138,10 +138,10 @@ const UserRegisterScreen = ({ history, location }) => {
                 </Grid>
                 {message && <Message status="info" text={message}/>}
                 {error && <Message status="error" text={error} />}
-                <form className={classes.form}>
+                <form className={classes.form} onSubmit={submitHandler}>
                     <Grid container spacing={2}>
                         <Grid item xs={12} md={6} align="center">
-                            <TextField // Code adapted from example in https://material-ui.com/components/text-fields/
+                            <TextField
                                 variant="outlined"
                                 fullWidth
                                 required
@@ -153,7 +153,7 @@ const UserRegisterScreen = ({ history, location }) => {
                             />
                         </Grid>
                         <Grid item xs={12} md={6} align="center">
-                            <TextField // Code adapted from example in https://material-ui.com/components/text-fields/
+                            <TextField
                                 variant="outlined"
                                 fullWidth
                                 required
@@ -166,7 +166,7 @@ const UserRegisterScreen = ({ history, location }) => {
                         </Grid>
                     </Grid>
                         <Grid item xs={12} align="center">
-                            <TextField // Code adapted from example in https://material-ui.com/components/text-fields/
+                            <TextField
                                 variant="outlined"
                                 margin="normal"
                                 required
@@ -179,7 +179,7 @@ const UserRegisterScreen = ({ history, location }) => {
                             />
                         </Grid>
                         <Grid item xs={12} align="center">
-                            <TextField // Code adapted from example in https://material-ui.com/components/text-fields/
+                            <TextField
                                 variant="outlined"
                                 margin="normal"
                                 required
@@ -193,7 +193,7 @@ const UserRegisterScreen = ({ history, location }) => {
                             />
                         </Grid>
                         <Grid item xs={12} align="center">
-                            <TextField // Code adapted from example in https://material-ui.com/components/text-fields/
+                            <TextField
                                 variant="outlined"
                                 margin="normal"
                                 required
@@ -213,11 +213,10 @@ const UserRegisterScreen = ({ history, location }) => {
                             />
                         </Grid>
                         <Grid item xs={12} align="center">
-                            <Button // Code adapted from example in https://material-ui.com/components/buttons/
+                            <Button
                                 type="submit"
                                 variant="contained"
                                 fullWidth
-                                onClick={submitHandler}
                                 className={classes.submit}
                             >
                                 Register

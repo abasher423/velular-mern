@@ -52,6 +52,7 @@ const UserOrdersScreen = () => {
                     // decoding jwt to retrieve plaintext version of the user Id
                     const userId = await jwt(userInfo.token).userId;
                     const response = await orderServices.listUserOrders(userId, token);
+
                     const pastOrders = response.data.orders.filter(order => {
                         return order.isDelivered === true && order.isPaid === true;
                     });
@@ -61,10 +62,11 @@ const UserOrdersScreen = () => {
                     const unpaidOrders = response.data.orders.filter(order => {
                         return order.isDelivered === false && order.isPaid === false;
                     });
+
                     setPastOrders(pastOrders);
                     setOpenOrders(openOrders);
                     setUnpaidOrders(unpaidOrders);
-                    console.log(response)
+                  
                 } catch (error){
                     console.log(error);
                     setError(error.response && error.response.data.message);
@@ -74,7 +76,6 @@ const UserOrdersScreen = () => {
         fetchOrders();
     }, [pastOrders, openOrders, userInfo.token]);
 
-    // function reused from example in //https://material-ui.com/components/tabs/
     const handleTabChange = (event, newValue) => {
         setSelectedTab(newValue);
     };
@@ -93,7 +94,7 @@ const UserOrdersScreen = () => {
 
             <Grid item xs={12}>
                 <Paper className={classes.root}>
-                    <Tabs // Tabs component adapted from example in //https://material-ui.com/components/tabs/
+                    <Tabs
                         value={selectedTab}
                         variant="scrollable"
                         onChange={handleTabChange}

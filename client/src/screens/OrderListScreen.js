@@ -76,6 +76,7 @@ const OrderListScreen = () => {
         }
         fetchOrdersList();
     }, [userInfo.token])
+    console.log(ordersList)
 
     return (
         <>

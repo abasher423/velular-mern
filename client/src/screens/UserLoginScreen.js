@@ -95,13 +95,6 @@ const UserLoginScreen = ({ location, history }) => {
         dispatch(login(email, password));
     };
 
-    /*
-        * A login UI form for user authentication
-        * This was adapted from Material UI's free "Sign In" template
-        * Link here to template's GitHub:
-        * https://github.com/mui-org/material-ui/tree/master/docs/src/pages/getting-started/templates/sign-in
-    */
-
     return (
         <Container className={classes.container}>
             <Paper className={classes.paper}>
@@ -115,10 +108,10 @@ const UserLoginScreen = ({ location, history }) => {
             </Grid>
             {error && <Message status="error" text={error} />}
             {loading && <Loader />}
-            <form className={classes.form}>
+            <form className={classes.form} onSubmit={submitHandler}>
                 <Grid container>
                     <Grid item xs={12} align="center">
-                        <TextField // Code adapted from example in https://material-ui.com/components/textfields/
+                        <TextField
                             variant="outlined"
                             margin="normal"
                             required
@@ -131,7 +124,7 @@ const UserLoginScreen = ({ location, history }) => {
                         />
                     </Grid>
                     <Grid item xs={12} align="center">
-                        <TextField // Code adapted from example in https://material-ui.com/components/textfields/
+                        <TextField
                             variant="outlined"
                             margin="normal"
                             required
@@ -148,7 +141,6 @@ const UserLoginScreen = ({ location, history }) => {
                         <Button 
                             type="submit"
                             variant="contained"
-                            onClick={submitHandler}
                             className={classes.submit}
                         >
                             Sign in

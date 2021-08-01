@@ -250,7 +250,7 @@ const ProductDetailScreen = ({ history, match }) => {
                                 <div className={classes.box}>
                                     <Typography gutterBottom>Quantity</Typography>
                                     <FormControl className={classes.formControl}>
-                                        <Select // Code adapted from example in https://material-ui.com/components/selects/
+                                        <Select 
                                         labelId="quantity-select-label"
                                         id="quantity-select"
                                         value={quantity}
@@ -269,7 +269,7 @@ const ProductDetailScreen = ({ history, match }) => {
                                 <div className={classes.box}>
                                     <Typography gutterBottom>Size (3 - {product.size})</Typography>
                                     <FormControl className={classes.formControl}>
-                                        <Select // Code adapted from example in https://material-ui.com/components/selects/
+                                        <Select
                                         labelId="size-select-label"
                                         id="size-select"
                                         value={size}
@@ -326,59 +326,60 @@ const ProductDetailScreen = ({ history, match }) => {
                             <Divider className={classes.reviewDivider}/>
                          </Grid>
                      ))}
-                    <form>
-                    <Grid item xs={12}>
-                        <Typography variant="h4" component="h2" style={{margin: '2rem 0'}}>Write a Review</Typography>
-                        <Divider className={classes.ratingDivider}/>
-                    </Grid>  
-                    <Grid item xs={12}>
-                        <Typography variant="h6" component="h2">Rating</Typography>
-                        <FormControl className={classes.ratingDropDown} margin="normal">
-                            <Select
-                                labelId="rating-label"
-                                id="rating-select"
+                    <form onSubmit={submitHandler}>
+                        <Grid item xs={12}>
+                            <Typography variant="h4" component="h2" style={{margin: '2rem 0'}}>Write a Review</Typography>
+                            <Divider className={classes.ratingDivider}/>
+                        </Grid>  
+                        <Grid item xs={12}>
+                            <Typography variant="h6" component="h2">Rating</Typography>
+                            <FormControl className={classes.ratingDropDown} margin="normal">
+                                <Select
+                                    labelId="rating-label"
+                                    id="rating-select"
+                                    variant="outlined"
+                                    open={open}
+                                    value={rating}
+                                    required
+                                    onClose={handleClose}
+                                    onOpen={handleOpen}
+                                    onChange={ratingHandler}
+                                    >
+                                    <MenuItem value="0">Select Rating</MenuItem>
+                                    <MenuItem value="1">1 - Very Poor</MenuItem>
+                                    <MenuItem value="2">2 - Poor</MenuItem>
+                                    <MenuItem value="3">3 - Ok</MenuItem>
+                                    <MenuItem value="4">4 - Good</MenuItem>
+                                    <MenuItem value="5">5 - Excellent</MenuItem>
+                                </Select>
+                            </FormControl>
+                        </Grid>
+                        <Grid item xs={12}>
+                            <Typography variant="h6" component="h2">Comment</Typography>
+                            <TextField
                                 variant="outlined"
-                                open={open}
-                                value={rating}
-                                onClose={handleClose}
-                                onOpen={handleOpen}
-                                onChange={ratingHandler}
-                                >
-                                <MenuItem value="0">Select Rating</MenuItem>
-                                <MenuItem value="1">1 - Very Poor</MenuItem>
-                                <MenuItem value="2">2 - Poor</MenuItem>
-                                <MenuItem value="3">3 - Ok</MenuItem>
-                                <MenuItem value="4">4 - Good</MenuItem>
-                                <MenuItem value="5">5 - Excellent</MenuItem>
-                            </Select>
-                        </FormControl>
-                    </Grid>
-                    <Grid item xs={12}>
-                        <Typography variant="h6" component="h2">Comment</Typography>
-                        <TextField
-                            variant="outlined"
-                            margin="normal"
-                            label="Comment"
-                            id="comment"
-                            name="comment"
-                            rows={4}
-                            onChange={commentHandler}
-                            multiline
-                            fullWidth
-                            required
-                        />
-                    </Grid>
-                    <Grid item xs={12}>
-                        <Button
-                            variant="contained"
-                            color="primary"
-                            className={classes.submitBtn}
-                            onClick={submitHandler}
-                            fullWidth
-                        >
-                            Submit
-                        </Button>
-                    </Grid>
+                                margin="normal"
+                                label="Comment"
+                                id="comment"
+                                name="comment"
+                                rows={4}
+                                onChange={commentHandler}
+                                multiline
+                                fullWidth
+                                required
+                            />
+                        </Grid>
+                        <Grid item xs={12}>
+                            <Button
+                                variant="contained"
+                                color="primary"
+                                className={classes.submitBtn}
+                                type="submit"
+                                fullWidth
+                            >
+                                Submit
+                            </Button>
+                        </Grid>
                     </form>    
                 </Grid>
             </Container>

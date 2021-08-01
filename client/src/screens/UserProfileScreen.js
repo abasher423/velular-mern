@@ -9,7 +9,6 @@ import Link from '@material-ui/core/Link';
 import Paper from '@material-ui/core/Paper';
 import Box from '@material-ui/core/Box';
 import Grid from '@material-ui/core/Grid';
-import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import { useState } from 'react';
@@ -24,8 +23,7 @@ import { USER_LOGOUT } from '../constants/userConstants';
 // CSS to style UI component
 const useStyles = makeStyles((theme) => ({
     root: {
-      minHeight: '100vh',
-      margin: "-3.9rem 0"
+      // margin: "-3.9rem 0"
     },
     image: {
       backgroundImage: `url("/images/airjordan-1.jpg")`,
@@ -170,13 +168,6 @@ const useStyles = makeStyles((theme) => ({
       }
     }
 
-    /*
-      * A UI component for updating user information
-      * This was adapted from Material UI's free "Sign-in side" template
-      * Link here to template's GitHub:
-      * https://github.com/mui-org/material-ui/tree/master/docs/src/pages/getting-started/templates/sign-in-side
-    */
-
     return (
       <Grid container component="main" className={classes.root}>
         <CssBaseline />
@@ -186,9 +177,9 @@ const useStyles = makeStyles((theme) => ({
               Account
             </Typography>
             {error && (<Message status="error" text={error} />)}
-            <form className={classes.form}>
+            <form className={classes.form} onSubmit={submitHandler}>
             <Grid item xs={12}>
-            <TextField  // Code adapted from example in https://material-ui.com/components/text-fields/
+            <TextField
                     variant="standard"
                     margin="normal"
                     autoComplete="true"
@@ -201,7 +192,7 @@ const useStyles = makeStyles((theme) => ({
                 />
             </Grid>
             <Grid item xs={12}>
-                <TextField // Code adapted from example in https://material-ui.com/components/text-fields/
+                <TextField
                     variant="standard"
                     margin="normal"
                     autoComplete="true"
@@ -214,7 +205,7 @@ const useStyles = makeStyles((theme) => ({
                 />
             </Grid>
             <Grid item xs={12}>
-                <TextField // Code adapted from example in https://material-ui.com/components/text-fields/
+                <TextField
                     variant="standard"
                     margin="normal"
                     autoComplete="true"
@@ -227,7 +218,7 @@ const useStyles = makeStyles((theme) => ({
                 />
             </Grid>
             <Grid item xs={12}>
-                <TextField // Code adapted from example in https://material-ui.com/components/text-fields/
+                <TextField
                     variant="standard"
                     margin="normal"
                     fullWidth
@@ -240,7 +231,7 @@ const useStyles = makeStyles((theme) => ({
                 />
             </Grid>
             <Grid item xs={12}>
-                <TextField // Code adapted from example in https://material-ui.com/components/text-fields/
+                <TextField
                     variant="standard"
                     margin="normal"
                     fullWidth
@@ -263,7 +254,6 @@ const useStyles = makeStyles((theme) => ({
                     type="submit"
                     variant="contained"
                     fullWidth
-                    onClick={submitHandler}
                     className={classes.submit}
                 >
                     update
