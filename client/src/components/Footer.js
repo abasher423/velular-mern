@@ -16,8 +16,10 @@ const useStyles = makeStyles((theme) => ({
         marginTop: "2rem"
     },
     footer: {
-        backgroundColor: "grey",
-        height: 200
+        backgroundColor: "#1b1b1b",
+        height: 300,
+        marginTop: "2rem",
+        textAlign: "center"
     },
     heading: {
         fontSize: theme.typography.pxToRem(12),
@@ -47,13 +49,12 @@ const Footer = () => {
     
     const [expanded, setExpanded] = useState(false);
 
-    // This function is reused from Material UI example // https://material-ui.com/components/accordion/#controlled-accordion
     const handleAccordionChange = (panel) => (e, isExpanded) => {
         setExpanded(isExpanded ? panel : false);
     }
 
     return (
-        <Paper className={classes.paper}>
+        <>
             {!mobile ?
             <footer className={classes.footer}>
             <div className="footer-heading footer-1">
@@ -61,6 +62,8 @@ const Footer = () => {
                 <p>Air Force 1s</p>
                 <p>Vans</p>
                 <p>Air Max</p>
+                <p>Timberlands</p>
+                <p>Addidas</p>
                 <p>Gucci</p>
             </div>
             <div className="footer-heading footer-2">
@@ -68,6 +71,8 @@ const Footer = () => {
                 <p>Size Guide</p>
                 <p>Terms and Conditions</p>
                 <p>Privacy Policy</p>
+                <p>Payment Options</p>
+                <p>Refund</p>
                 <p>Legal</p>
             </div>
             <div className="footer-heading footer-2">
@@ -75,11 +80,14 @@ const Footer = () => {
                 <p><InstagramIcon /></p>
                 <p><TwitterIcon /></p>
                 <p><FacebookIcon/></p>
+                <p><YouTubeIcon/></p>
+                {/* <p><LinkedInIcon/></p> */}
             </div>
             </footer> :
+            <Paper className={classes.paper}>
                 <Grid container justify="center" className={classes.root}>
                 <Grid item xs={12}>
-                    <Accordion // code adapted from examples in https://material-ui.com/components/accordion/
+                    <Accordion
                         expanded={expanded === "panel1a"} 
                         onChange={handleAccordionChange("panel1a")}
                     >
@@ -99,7 +107,7 @@ const Footer = () => {
                             </div>
                         </AccordionDetails>
                     </Accordion> 
-                    <Accordion // code adapted from examples in https://material-ui.com/components/accordion/
+                    <Accordion
                         expanded={expanded === "panel1b"} 
                         onChange={handleAccordionChange("panel1b")}
                     >
@@ -119,7 +127,7 @@ const Footer = () => {
                             </div>
                         </AccordionDetails>
                     </Accordion>
-                    <Accordion // code adapted from examples in https://material-ui.com/components/accordion/
+                    <Accordion
                         expanded={expanded === "panel1c"} 
                         onChange={handleAccordionChange("panel1c")}
                     >
@@ -147,8 +155,10 @@ const Footer = () => {
                     <YouTubeIcon />
                     <LinkedInIcon />
                 </Grid>
-                </Grid>}
-            </Paper>
+                </Grid>
+                </Paper>}
+            
+            </>
     );
 };
 

@@ -1,45 +1,48 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import Grid from '@material-ui/core/Grid';
 import SlideShow from '../components/SlideShow'
-import { Button, Container, Tooltip, useTheme, useMediaQuery } from '@material-ui/core';
+import { Button, Container, Tooltip, useTheme, useMediaQuery, Box } from '@material-ui/core';
 import makeStyles from '@material-ui/core/styles/makeStyles';
 import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
-import Image from 'material-ui-image';
-import NavigateNextIcon from '@material-ui/icons/NavigateNext';
 import { Link } from 'react-router-dom';
 import HelpIcon from '@material-ui/icons/Help';
+import Aos from 'aos';
+import 'aos/dist/aos.css';
 
 const useStyles = makeStyles(theme => ({
     mainImage: {
         textAlign: "center",
-        height: 500,
+        height: "100vh",
         width: "auto",
         backgroundSize: "cover",
         backgroundRepeat: "no-repeat",
         backgroundPosition: "center",
         position: "relative",
+        borderRadius: 4,
+       boxShadow: "0px 2px 1px -1px rgb(0 0 0 / 20%), 0px 1px 1px 0px rgb(0 0 0 / 14%), 0px 1px 3px 0px rgb(0 0 0 / 12%)",
         [theme.breakpoints.down('xs')] : {
-            height: 300
+            height: 500,
+            marginTop: "2rem"
         }
     },
     quote: {
         position: "absolute",
-        top: 200,
-        left: 50,
+        top: 350,
+        left: 180,
         animation: "fadeIn 2s infinite alternate",
-        font: "italic bold 5em/1 Bodoni, serif",
-        fontSize: 50,
-        color: "grey"
+        color: "#1b1b1b"
     },
     slogan: {
-        marginTop: "2rem",
+        marginTop: "10rem",
         display: "flex",
         flexDirection: "row",
         justifyContent: "space-around",
         alignItems: "center",
+        paddingBottom: 15,
         [theme.breakpoints.down('xs')] : {
-            flexDirection: "column"
+            flexDirection: "column",
+            marginTop: "2rem"
         }
     },
     sloganText: {
@@ -54,43 +57,54 @@ const useStyles = makeStyles(theme => ({
         justifyContent: "center",
         flexDirection: "column",
         alignItems: "center",
-        height: 568,
+        height: 443,
         width: "auto",
         [theme.breakpoints.down('sm')] : {
             height: 311,
-            width: "auto",
-            marginTop: "-2rem"
+            width: "auto"
         },
-        marginTop: "2rem",
-        paddingBottom: 50
+        // marginTop: "2rem"
+    },
+    learnBtn: {
+        justifyContent: "center"
+    },
+    carousel: {
+        [theme.breakpoints.down('sm')] : {
+            marginTop: "2rem"
+        },
+        marginTop: "10rem",
+        display: "flex",
+        justifyContent: "center",
+        backgroundColor: "#1b1b1b"
+    },
+    carouselPaper: {
+        [theme.breakpoints.up('sm')] : {
+            padding: 5
+        },
+        margin: "9rem 1.5rem"
+    },
+    nikeImage: {
+    //    marginTop: "2rem",
+       borderRadius: 4,
+       boxShadow: "0px 2px 1px -1px rgb(0 0 0 / 20%), 0px 1px 1px 0px rgb(0 0 0 / 14%), 0px 1px 3px 0px rgb(0 0 0 / 12%)"
+    },
+    cardPaper: {
+        borderRadius: 4,
+        boxShadow: "0px 2px 1px -1px rgb(0 0 0 / 20%), 0px 1px 1px 0px rgb(0 0 0 / 14%), 0px 1px 3px 0px rgb(0 0 0 / 12%)"
     },
     image: {
         textAlign: "center",
         marginTop: "2rem",
         padding: "1rem",
-        height: 300,
+        height: 600,
         width: "auto",
         position: "relative",
         backgroundSize: "cover",
         backgroundRepeat: "no-repeat",
         backgroundPosition: "center",
-        backgroundImage: "url(/images/jordans_1.png)"
-    },
-    learnBtn: {
-        justifyContent: "center"
-    },
-    carouselPaper: {
-        maxWidth: 1280,
-        padding: "0.5rem",
-        [theme.breakpoints.up('sm')] : {
-            padding: "2rem"
-        },
-        margin: "0 1.5rem"
-    },
-    nikeImage: {
-        marginTop: "2rem",
-        maxWidth: "100%",
-        height: "auto"
+        [theme.breakpoints.down('sm')] : {
+            height: 300
+        }
     }
 }));
 
@@ -100,23 +114,38 @@ const HomePageScreen = () => {
     const theme = useTheme();
     const mobile = useMediaQuery(theme.breakpoints.down("sm"));
 
+    useEffect(() => {
+        Aos.init({ duration: 2000 });
+    }, []);
+
     // Random text for slogan info
     const sloganInfo = 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed malesuada consectetur nibh vitae porta. Morbi ullamcorper, odio vel fringilla luctus, purus lacus euismod neque, sed laoreet nisl enim eu nisl'
 
     return (
         <Grid container spacing={0} className={classes.root}>
             <Grid item xs={12}>
-                <div className={classes.mainImage} style={ !mobile ? { backgroundImage: "url(/images/jordan_1.jpg)" } : {backgroundImage: "url(/images/jordan_2.jpg)"}}>
-                    {!mobile && <Typography variant="h6" className={classes.quote}>Be the change <br /> you want to see  <br /> in the world</Typography>}
-                </div>
+                <Link to={'/products'}>
+                    <div className={classes.mainImage} style={ !mobile ? { backgroundImage: "url(/images/jordan_1.jpg)" } : {backgroundImage: "url(/images/jordan_2.jpg)"}}>
+                        {!mobile && <Typography variant="h6" className={classes.quote}>
+                            <Box fontSize={50} >
+                                "Be the change <br /> you want to see  <br /> in the world"
+                            </Box>
+                        </Typography>}
+                    </div>
+                </Link>
             </Grid>
             
-            
+            <Container>
             {/* ------------ Slogan ----------------- */}
-            <Grid item xs={12}>
+            <Grid item xs={12} data-aos={!mobile ? "fade-up" : ""}>
                     <Paper className={classes.slogan}>
                         <div>
-                            <img src="/images/slogan.png" alt="slogan"/>
+                            {/* <img src="/images/slogan.png" alt="slogan"/> */}
+                            <Typography variant="h1">
+                                <Box fontSize={45} fontWeight="fontWeightMedium" fontFamily="Monospace" textAlign="center">
+                                    One of One <span>Trainers</span>
+                                </Box>
+                            </Typography>
                             <div className={classes.sloganInfo}>
                                 <Tooltip title={sloganInfo}>
                                     <HelpIcon />
@@ -132,38 +161,42 @@ const HomePageScreen = () => {
                         </div>
                     </Paper>
             </Grid>
-
+            
              {/* ------------- Nike Air 1s ----------------- */}
-             <Grid item xs={12} md={6}>
-                    <div className={classes.nikeImage}>
+             <Grid container>
+                <Grid item xs={12} md={6} data-aos={!mobile ? "fade-left" : ""}>
+                    <div>
                         <Link to={'/products'}>
-                            <Image src="/images/vans p3.jpg" />
+                            <img src="/images/vans p3.jpg" alt="Vans" className={classes.nikeImage}/>
                         </Link>
                     </div>        
-             </Grid>
-
-                <Grid item xs={12} md={6}>
-                    <Paper>
-                    <div className={classes.text}>
-                        <Typography variant="h5" component="h2">
-                            Sophisticated Design
-                        </Typography>
-                        <Typography variant="h3" component="h2" style={{ margin: "2rem 0" }}>
-                            Nike Air 1s
-                        </Typography>
-                        <Button variant="outlined" component={Link} to={'/products'}>Continue</Button>
-                    </div>
-                    </Paper>
                 </Grid>
 
-                <Grid item xs={12}>
-                <Paper className={classes.carouselPaper} style={{ margin: "2rem 0" }}>
+                <Grid item xs={12} md={6} data-aos={!mobile ? "fade-right" : ""}>
+                    <Paper>
+                        <div className={classes.text}>
+                            <Typography variant="h5" component="h2">
+                                Sophisticated Design
+                            </Typography>
+                            <Typography variant="h3" component="h2" style={{ margin: "2rem 0" }}>
+                                Nike Air 1s
+                            </Typography>
+                            <Button variant="outlined" component={Link} to={'/products'}>Continue</Button>
+                        </div>
+                    </Paper>
+                </Grid>
+            </Grid>
+            </Container>
+
+            {/* --------------- Carousel -------------- */}
+            <Grid item xs={12} className={classes.carousel}>
+                <Paper className={classes.carouselPaper} data-aos="fade-down">
                     <SlideShow />
                 </Paper>
             </Grid>
 
                 {/* --------------- Cards ------------------- */}
-                <Grid container justify="center" spacing={0}>
+                <Grid container justify="center" spacing={0} >
                     <Grid item xs={12} md={4}>
                         <Paper className={classes.cardPaper}>
                             <Link to={'/products'}>
@@ -189,6 +222,7 @@ const HomePageScreen = () => {
                         </Paper>
                     </Grid>
                 </Grid>
+                
         </Grid>
     );
 };

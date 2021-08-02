@@ -20,15 +20,17 @@ const SlideShow = () => {
 
     return(
         <Carousel 
-        navButtonsWrapperProps={{ 
-            style: {
-                bottom: '0',
-                top: 'unset'
-            }
-        }} >
+            navButtonsWrapperProps={{ 
+                style: {
+                    bottom: '0',
+                    top: 'unset'
+                }
+            }}
+            indicators={false}
+        >
             <div className={classes.image}>
                 <Link to={'/products/6090aef9f6ea3f1b288aafdd'}>
-                    <img className="center" src="/images/air-max-5.jpg" alt="airmax"/>
+                    <img className={classes.img} src="/images/air-max-5.jpg" alt="airmax"/>
                 </Link>
             </div>
             <div className={classes.image}>

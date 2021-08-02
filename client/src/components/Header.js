@@ -22,7 +22,7 @@ import AddIcon from '@material-ui/icons/Add';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import { logout } from '../actions/userActions';
 import { useHistory } from "react-router-dom";
-import { Avatar, Divider, Drawer, Fade, List, ListItem, ListItemIcon, ListItemText, SwipeableDrawer, TextField, Tooltip, useMediaQuery, useTheme } from '@material-ui/core';
+import { Avatar, Box, Divider, Drawer, Fade, List, ListItem, ListItemIcon, ListItemText, SwipeableDrawer, TextField, Tooltip, useMediaQuery, useTheme } from '@material-ui/core';
 import { USER_LOGOUT } from '../constants/userConstants';
 import SearchBox from './SearchBox';
 import { Icon, InlineIcon } from '@iconify/react';
@@ -174,9 +174,12 @@ const Header = () => {
             <AppBar position="fixed" color="default" className={classes.appbar}>
                 <Container>
                 <Toolbar>
-                    <Typography variant="h3" component={Link} to={'/'} className={classes.title}>
-                        Velular
-                    </Typography>
+                    <img src="/images/logo.png" style={{ height: 50, padding: 0, margin: 0 }} alt="logo" />
+                    {!mobile && (<Typography variant="h3" component={Link} to={'/'} className={classes.title}>
+                        <Box letterSpacing={10} m={1}>
+                            elular
+                        </Box>
+                    </Typography>)}
 
                     {mobile ? (
                         <>
