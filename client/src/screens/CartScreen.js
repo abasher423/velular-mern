@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { Link } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import Message from '../components/Message';
@@ -60,6 +60,7 @@ const useStyles = makeStyles((theme) => ({
         marginBottom: "2rem"
     },
     paper: {
+        marginTop: "6rem",
         minHeight: "80vh"
     }
   }));

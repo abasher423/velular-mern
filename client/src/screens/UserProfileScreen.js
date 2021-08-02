@@ -1,13 +1,9 @@
 import React from 'react';
-import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import TextField from '@material-ui/core/TextField';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
-import Checkbox from '@material-ui/core/Checkbox';
-import Link from '@material-ui/core/Link';
 import Paper from '@material-ui/core/Paper';
-import Box from '@material-ui/core/Box';
 import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
@@ -23,7 +19,8 @@ import { USER_LOGOUT } from '../constants/userConstants';
 // CSS to style UI component
 const useStyles = makeStyles((theme) => ({
     root: {
-      // margin: "-3.9rem 0"
+      marginTop: "6rem", 
+      minHeight: "80vh"
     },
     image: {
       backgroundImage: `url("/images/airjordan-1.jpg")`,
@@ -45,14 +42,14 @@ const useStyles = makeStyles((theme) => ({
     },
     submit: {
       margin: theme.spacing(3, 0, 2),
-      backgroundColor: theme.palette.secondary.main,
+      backgroundColor: theme.palette.info.dark,
       color: "white",
-      border: `${theme.palette.secondary.main} 3px solid`,
+      border: `${theme.palette.info.dark} 3px solid`,
       fontWeight: 800,
       borderRadius: 25,
       "&:hover": {
         backgroundColor: "white",
-        color: theme.palette.secondary.main
+        color: theme.palette.info.dark
       }
     },
   }));

@@ -18,6 +18,10 @@ import PopupDialog from '../components/PopupDialog';
 
 
 const useStyles = makeStyles(theme => ({
+    container: {
+        marginTop: "6rem", 
+        minHeight: "80vh"
+    },
     root: {
         width: '100%',
     },
@@ -92,7 +96,6 @@ const CustomCreateScreen = () => {
                         }
                     }
                     const response = await productServices.fetchArtistCustoms(token);
-                    // code adapted for sorting algorithm from https://stackoverflow.com/questions/45924821/javascript-sorting-array-of-objects-by-string-property
                     const data = response.data.customs.sort(function(a,b) {return (a.status > b.status) ? 1 : ((b.status > a.status) ? -1 : 0);} );
                     setCustomDetails(data);
                 } catch (error){
@@ -112,7 +115,7 @@ const CustomCreateScreen = () => {
     const handleClickOpen = () => {
         setOpenForm(true);
     };
-    const submitHandler = async (customId) => {
+    const submitHandler = async (event, customId) => {
         const token = {
             headers: { // jwt token to be sent for verification
                 Authorization: `Bearer ${userInfo.token}` 
@@ -134,14 +137,14 @@ const CustomCreateScreen = () => {
     }
     
     return (
-        <Container>
+        <Container className={classes.container}>
             <Grid container spacing={2}>
                 <Grid item xs={12} className={classes.title}>
                     <Typography variant="h3" component="h1">Manage Customs</Typography>
                 </Grid>
                 <Grid item xs={12} className={classes.new}>
                 <Button
-                    variant="contained" // Code adapted from https://material-ui.com/components/buttons/
+                    variant="contained"
                     color="primary"
                     className={classes.createBtn}
                     onClick={handleClickOpen}
@@ -149,7 +152,7 @@ const CustomCreateScreen = () => {
                 >
                     Create New
                 </Button>
-                <PopupDialog // Code adapted from https://material-ui.com/components/dialogs/
+                <PopupDialog
                     openForm={openForm}
                     setOpenForm={setOpenForm}
                     setCustomDetails={setCustomDetails}
@@ -161,7 +164,7 @@ const CustomCreateScreen = () => {
                     <div className={classes.root}>
                     {customDetails && customDetails.map((custom, idx) => {
                         return (
-                        <Accordion key={idx} // Code adapted from https://material-ui.com/components/accordion/
+                        <Accordion key={idx}
                             expanded={expanded === `panel${idx}`}
                             style={
                                 custom.status ==='Accepted' ? {backgroundColor: '#eeffe6'} : 
@@ -213,14 +216,14 @@ const CustomCreateScreen = () => {
                             <Divider />
                         {custom.status === 'Pending' && (
                             <AccordionActions>
-                            <Button // code adapted from https://material-ui.com/components/buttons/
+                            <Button
                                 size="small" 
                                 className={classes.deleteBtn}
                                 onClick={() => deleteHandler(custom._id)}
                             >
                                 Delete
                             </Button>
-                            <Button // Code adapted from https://material-ui.com/components/buttons/
+                            <Button
                                 size="small"
                                 color="primary"
                                 className={classes.submitBtn}
@@ -232,7 +235,7 @@ const CustomCreateScreen = () => {
                         )}
                         {custom.status === 'Rejected' && (
                             <AccordionActions>
-                            <Button // Code adapted from https://material-ui.com/components/buttons/
+                            <Button
                                 size="small" 
                                 className={classes.deleteBtn}
                                 onClick={() => deleteHandler(custom._id)}
@@ -243,7 +246,7 @@ const CustomCreateScreen = () => {
                         )}
                         {custom.status === 'Accepted' && (
                             <AccordionActions>
-                            <Button // Code adapted from https://material-ui.com/components/buttons/
+                            <Button
                                 size="small" 
                                 color="primary"
                                 variant="contained"

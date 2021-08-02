@@ -2,10 +2,9 @@
 
 import React from 'react';
 import { useState, useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
-import CssBaseline from '@material-ui/core/CssBaseline';
 import TextField from '@material-ui/core/TextField';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Checkbox from '@material-ui/core/Checkbox';
@@ -14,19 +13,18 @@ import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
-import { register } from '../actions/userActions';
 import Message from '../components/Message';
-import Loader from '../components/Loader';
 import { Paper } from '@material-ui/core';
 import AuthenticationServices from '../services/AuthenticationServices';
 
 // CSS to style UI component
 const useStyles = makeStyles((theme) => ({
     paper: {
-      marginTop: theme.spacing(8),
       display: 'flex',
       flexDirection: 'column',
       alignItems: 'center',
+      marginTop: "6rem", 
+      minHeight: "80vh"
     },
     avatar: {
       margin: theme.spacing(1),
@@ -118,12 +116,6 @@ const UserRegisterScreen = ({ history, location }) => {
         setConfirmPassword(e.target.value);
     };
 
-    /*
-        * A registration UI form for user updating personal information
-        * This was adapted from Material UI's free "Sign up" template
-        * Link here to template's GitHub:
-        * https://github.com/mui-org/material-ui/tree/master/docs/src/pages/getting-started/templates/sign-up
-    */
     return (
         <Paper className={classes.paper}>
         <Container component="main" maxWidth="xs">

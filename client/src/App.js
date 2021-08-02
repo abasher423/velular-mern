@@ -28,9 +28,9 @@ const App = () => {
       <Router>
           <Header />
           <ScrollToTop />
-          <main style={{ flexGrow: 1, marginTop: "6rem", minHeight: "80vh"}}>
-          <Container>
-            <Route path='/' component={HomePageScreen} exact />
+          <main style={{ flexGrow: 1 }}>
+          <Route path='/' component={HomePageScreen} exact />
+          <Container> 
             <Route path='/search/:keyword' component={ProductListScreen} />
             <Route path='/page/:pageNumber' component={ProductListScreen} />
             <Route path='/search/:keyword/page/:pageNumber' component={ProductListScreen} />
@@ -51,7 +51,6 @@ const App = () => {
             <Route path='/customs/:customId' component={CustomUpdateScreen} />
             <Route path='/account' component={UserProfileScreen} exact />
           </Container>
-          
         </main>
         <Footer />
         </Router>

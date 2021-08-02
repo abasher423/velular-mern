@@ -1,9 +1,7 @@
 import React, { useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { listUsers, deleteUser } from '../actions/userActions';
+import { useSelector } from 'react-redux';
 import { Container, IconButton, Typography } from '@material-ui/core';
 import { Link } from 'react-router-dom';
-import Loader from '../components/Loader';
 import Message from '../components/Message';
 import { withStyles, makeStyles } from '@material-ui/core/styles';
 import Table from '@material-ui/core/Table';
@@ -22,13 +20,16 @@ import userServices from '../services/userServices';
 
 // CSS to style UI component
 const useStyles = makeStyles(theme => ({
+  container: {
+    marginTop: "6rem", 
+    minHeight: "80vh"
+  },
   title: {
     textAlign: 'center',
     margin: '2rem'
   }
 }));
 
-// function reused from example in https://material-ui.com/components/tables/
 const StyledTableCell = withStyles((theme) => ({
   head: {
     backgroundColor: theme.palette.common.white,
@@ -39,7 +40,6 @@ const StyledTableCell = withStyles((theme) => ({
   },
 }))(TableCell);
 
-// function reused from example in https://material-ui.com/components/tables/
 const StyledTableRow = withStyles((theme) => ({
   root: {
     '&:nth-of-type(odd)': {
@@ -102,11 +102,11 @@ const UserListScreen = ({ history }) => {
     }
 
     return (
-        <Container>
+        <Container className={classes.container}>
             <Typography variant="h3" component="h1" className={classes.title}>Manage Users</Typography>
             { error ? <Message status="error" text={error} /> : (
                 <TableContainer component={Paper}>
-                  <Table // Table component adapted from example in https://material-ui.com/components/tables/
+                  <Table
                     className={classes.table} 
                     aria-label="users table"
                   >

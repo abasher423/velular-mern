@@ -35,6 +35,8 @@ const useStyles = makeStyles((theme) => ({
         marginLeft: 'auto',
         marginRight: 'auto',
       },
+      marginTop: "6rem", 
+      minHeight: "80vh"
     },
     paper: {
       marginTop: theme.spacing(3),
@@ -104,7 +106,7 @@ const ShippingScreen = ({ history }) => {
     const submitHandler = (e) => {
         if (address === '' || city === '' || postCode === '' || country === ''){
             setActiveStep(0)
-            setMessage('Missing required fields');
+            setMessage('Missing required fields in shipping address');
         } else if (paymentMethod === ''){
             setActiveStep(1);
             setMessage('Missing Payment Method');
@@ -130,14 +132,6 @@ const ShippingScreen = ({ history }) => {
     const addPaymentMethod = (e) => {
         setPaymentMethod(e.target.value);
     };
-
-    /*
-      * A multistep form component for shippping
-      * The code was adapted by adding additional details, styles and input components
-      * This was adapted from Material UI's free "Checkout" template
-      * Link here to template's GitHub:
-      * https://github.com/mui-org/material-ui/tree/master/docs/src/pages/getting-started/templates/checkout
-    */
 
     function getStepContent(step) {
         switch (step) {
@@ -204,7 +198,7 @@ const ShippingScreen = ({ history }) => {
                       Back
                     </Button>
                   )}
-                  <Button // Code adapted from example in https://material-ui.com/components/buttons/
+                  <Button
                     variant="contained"
                     color="primary"
                     onClick={handleNext}
@@ -214,7 +208,7 @@ const ShippingScreen = ({ history }) => {
                       Next
                   </Button>
                   {activeStep === steps.length - 1 
-                    ? <Button // Code adapted from example in https://material-ui.com/components/buttons/
+                    ? <Button
                         variant="contained"
                         color="primary"
                         onClick={submitHandler}

@@ -1,9 +1,7 @@
 import React from 'react';
 import { useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux'
 import Card from '../components/Product';
 import Grid from '@material-ui/core/Grid'
-import Loader from '../components/Loader';
 import Message from '../components/Message';
 import { Typography } from '@material-ui/core';
 import productServices from '../services/productServices';
@@ -45,7 +43,7 @@ const ListedProducts = ({ match, history }) => {
         setPage(value);
     }
     return (
-        <>
+        <div style={{ marginTop: "6rem", minHeight: "80vh" }}>
             <Typography variant="h3" style={{ marginBottom: "1rem", textAlign: "left" }}>Latest Products</Typography>
             { error ? <Message status="error" text={error} />
                 : <> <Grid container spacing={2} alignItems="stretch" style={{flexGrow: 1}}>
@@ -59,7 +57,7 @@ const ListedProducts = ({ match, history }) => {
             </Grid> 
             <Paginate pages={pages} page={page} keyword={keyword ? keyword : ''} handlePage={handlePage} />
             </>}
-        </>
+        </div>
     );
 }
 

@@ -5,7 +5,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import Rating from '../components/Rating';
 import Button from '@material-ui/core/Button';
 import Grid from '@material-ui/core/Grid';
-import { Container, Divider, IconButton, InputLabel, Paper, TextField } from '@material-ui/core';
+import { Container, Divider, IconButton, Paper, TextField } from '@material-ui/core';
 import Typography from '@material-ui/core/Typography';
 import CardContent from '@material-ui/core/CardContent';
 import CardActions from '@material-ui/core/CardActions';
@@ -18,13 +18,15 @@ import Message from '../components/Message';
 import { addToCart } from '../actions/cartActions';
 import ArrowBackIcon from '@material-ui/icons/ArrowBack';
 import productServices from '../services/productServices';
-import Alert from '@material-ui/lab/Alert';
 
 // CSS to style UI component
 const useStyles = makeStyles( theme => ({
+    paper: {
+        marginTop: "6rem", 
+        minHeight: "80vh"
+    },
     root: {
-        minWidth: 275,
-        
+        minWidth: 275
       },
     box: {
         display: "flex",
@@ -145,8 +147,9 @@ const ProductDetailScreen = ({ history, match }) => {
     const commentHandler = (e) => {
         setComment(e.target.value);
     }
-    const submitHandler = async () => {
+    const submitHandler = async (e) => {
         try {
+            e.preventDefault();
             if (userInfo){
                 const reviewData = { rating, comment };
                 const token = {
@@ -199,7 +202,7 @@ const ProductDetailScreen = ({ history, match }) => {
     }
     
     return (
-        <Paper>
+        <Paper className={classes.paper}>
             <Container>
             <Typography variant="h3">Product Details</Typography>
             <IconButton edge="start" className={classes.backIcon} color="inherit" component={Link} to={'/products'} aria-label="back">

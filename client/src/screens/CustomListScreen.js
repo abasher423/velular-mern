@@ -20,6 +20,10 @@ import LoopIcon from '@material-ui/icons/Loop';
 
 // CSS to style UI component
 const useStyles = makeStyles(theme => ({
+  container: {
+    marginTop: "6rem", 
+    minHeight: "80vh"
+  },
     title: {
         textAlign: 'center',
         margin: '2rem'
@@ -55,7 +59,6 @@ const useStyles = makeStyles(theme => ({
     }
 }));
 
-// function reused from https://material-ui.com/components/tables/
 const StyledTableCell = withStyles((theme) => ({
     head: {
       backgroundColor: '#d9e8ff',
@@ -67,7 +70,6 @@ const StyledTableCell = withStyles((theme) => ({
     },
   }))(TableCell);
   
-  // function reused from https://material-ui.com/components/tables/
   const StyledTableRow = withStyles((theme) => ({
     root: {
       '&:nth-of-type(odd)': {
@@ -142,11 +144,11 @@ const CustomListScreen = () => {
     }
 
     return (
-        <Container>
+        <Container className={classes.container}>
             <Typography variant="h3" component="h1" className={classes.title}>Manage Pending Customs</Typography>
             {error && <Message status="error" text={error} />}
             <TableContainer component={Paper}>
-                  <Table // Table component adapted from https://material-ui.com/components/tables/
+                  <Table
                     className={classes.table} 
                     aria-label="customs table"
                   >

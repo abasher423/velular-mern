@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Container, Divider, FormControl, Grid, InputLabel, MenuItem, Select } from '@material-ui/core';
-import { Button, Checkbox, FormControlLabel, IconButton, TextField, Typography } from '@material-ui/core';
+import { Button, IconButton, TextField, Typography } from '@material-ui/core';
 import makeStyles from '@material-ui/core/styles/makeStyles';
 import ArrowBackIcon from '@material-ui/icons/ArrowBack';
 import { Link } from 'react-router-dom';
@@ -124,7 +124,8 @@ const CustomUpdateScreen = ({ match, history }) => {
     customData[7].value = reason;
     
     // HANDLERS
-    const updateHandler = async () => {
+    const updateHandler = async (e) => {
+        e.preventDefault();
         const token = {
             headers: {
                 Authorization: `Bearer ${userInfo.token}`
@@ -197,11 +198,11 @@ const CustomUpdateScreen = ({ match, history }) => {
                         <img className={classes.image} src={customDetails.productImage} alt="custom" />
                     </Grid>
                     <Grid item xs={8}>
-                        <form className={classes.form}>
+                        <form className={classes.form} onSubmit={updateHandler}>
                             <Container maxWidth="xs">
                                 <Grid container spacing={1}>
                                     <Grid item xs={6}>
-                                        <TextField // Textfield component adapted from https://material-ui.com/components/text-fields/
+                                        <TextField
                                             variant="standard"
                                             margin="normal"
                                             autoComplete="true"
@@ -213,7 +214,7 @@ const CustomUpdateScreen = ({ match, history }) => {
                                         />
                                     </Grid>
                                     <Grid item xs={6}>
-                                        <TextField // Textfield component adapted from https://material-ui.com/components/text-fields/
+                                        <TextField
                                             variant="standard"
                                             margin="normal"
                                             autoComplete="true"
@@ -227,7 +228,7 @@ const CustomUpdateScreen = ({ match, history }) => {
                                     <Grid item xs={6}>
                                     <FormControl className={classes.sizeFormControl}>
                                         <InputLabel id="demo-controlled-open-select-label">Size</InputLabel>
-                                        <Select // Select component adapted from https://material-ui.com/components/selects/
+                                        <Select
                                             labelId="demo-controlled-open-select-label"
                                             id="select-size"
                                             open={openSize}
@@ -241,7 +242,7 @@ const CustomUpdateScreen = ({ match, history }) => {
                                     </FormControl>
                                     </Grid>
                                     <Grid item xs={6}>
-                                        <TextField // Textfield component adapted from https://material-ui.com/components/text-fields/
+                                        <TextField
                                             variant="standard"
                                             margin="normal"
                                             autoComplete="true"
@@ -255,7 +256,7 @@ const CustomUpdateScreen = ({ match, history }) => {
                                     <Grid item xs={12}>
                                         <FormControl className={classes.brandFormControl} margin="normal">
                                             <InputLabel id="demo-controlled-open-select-label">Brand</InputLabel>
-                                            <Select // Select component adapted from https://material-ui.com/components/selects/
+                                            <Select
                                                 labelId="demo-controlled-open-select-label"
                                                 id="select-brand"
                                                 open={openBrand}
@@ -274,7 +275,7 @@ const CustomUpdateScreen = ({ match, history }) => {
                                         </FormControl>
                                     </Grid>
                                     <Grid item xs={12}>
-                                        <TextField // Textfield component adapted from https://material-ui.com/components/text-fields/
+                                        <TextField
                                             variant="standard"
                                             margin="normal"
                                             autoComplete="true"
@@ -289,7 +290,7 @@ const CustomUpdateScreen = ({ match, history }) => {
                                     <Grid item xs={12}>
                                         <FormControl className={classes.categoryFormControl} margin="normal">
                                             <InputLabel id="demo-controlled-open-select-label">Category</InputLabel>
-                                            <Select // Select component adapted from https://material-ui.com/components/selects/
+                                            <Select
                                                 labelId="demo-controlled-open-select-label"
                                                 id="demo-controlled-open-select"
                                                 open={open}
@@ -305,7 +306,7 @@ const CustomUpdateScreen = ({ match, history }) => {
                                         </FormControl>
                                     </Grid>
                                     <Grid item xs={12}>
-                                    <TextField // Textfield component adapted from https://material-ui.com/components/text-fields/
+                                    <TextField
                                         id="outlined-multiline-static"
                                         label="Note"
                                         margin="normal"
@@ -318,11 +319,11 @@ const CustomUpdateScreen = ({ match, history }) => {
                                     />
                                     </Grid>
                                     <Grid item xs={12}>
-                                        <Button // Button component adapted from https://material-ui.com/components/buttons/
+                                        <Button
                                             variant="contained"
                                             color="primary"
                                             className={classes.btn}
-                                            onClick={updateHandler}
+                                            type="submit"
                                             fullWidth
                                         >
                                             Update

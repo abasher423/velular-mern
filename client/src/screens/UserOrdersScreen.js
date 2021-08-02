@@ -9,7 +9,6 @@ import OrderOpenTab from '../components/OrderOpenTab';
 import OrderUnpaidTab from '../components/OrderUnpaidTab';
 import { useEffect } from 'react';
 import orderServices from '../services/orderServices';
-import { token } from 'morgan';
 import jwt from 'jwt-decode';
 import { useSelector } from 'react-redux';
 import { Grid, Typography } from '@material-ui/core';
@@ -17,6 +16,10 @@ import Message from '../components/Message';
 
 // CSS to style UI component
 const useStyles = makeStyles(theme => ({
+    container: {
+        marginTop: "6rem", 
+        minHeight: "80vh"
+    },
     root: {
         flexGrow: 1
     },
@@ -81,7 +84,7 @@ const UserOrdersScreen = () => {
     };
 
     return (
-        <Grid container>
+        <Grid container className={classes.container}>
             <Grid item xs={12}>
                 <Typography variant="h4" className={classes.heading}>Your Orders</Typography>
             </Grid>

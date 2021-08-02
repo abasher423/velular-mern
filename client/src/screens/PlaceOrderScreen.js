@@ -59,8 +59,8 @@ const useStyles = makeStyles((theme) => ({
         color: "white"
     },
     paper: {
-        minHeight: 700,
-        padding: "1rem"
+        marginTop: "6rem", 
+        minHeight: "80vh"
     }
   }));
 
@@ -183,7 +183,7 @@ const PlaceOrderScreen = ({ history }) => {
                     </Grid>
                 </Grid>
                 <Grid item xs={12} md={4} className={classes.main}>
-                    <Card // Code adapted from example in https://material-ui.com/components/cards/
+                    <Card 
                         className={classes.root} 
                         variant="outlined" 
                         align="center"
@@ -217,7 +217,7 @@ const PlaceOrderScreen = ({ history }) => {
                             </div>
                         </CardContent>
                         <CardActions>
-                            <Button // Code adapted from example in https://material-ui.com/components/buttons/
+                            <Button
                             variant="contained" 
                             color="primary" 
                             size="small"

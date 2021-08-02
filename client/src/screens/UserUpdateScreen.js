@@ -8,6 +8,10 @@ import userServices from '../services/userServices';
 
 // CSS to style UI component
 const useStyles = makeStyles(theme => ({
+    root: {
+        marginTop: "6rem", 
+        minHeight: "80vh"
+    },
     btn: {
         backgroundColor: theme.palette.info.dark,
        "&:hover": {
@@ -98,7 +102,8 @@ const UserUpdateScreen = ({ match, history }) => {
             }
         }
     };
-    const submitHandler = async () => {
+    const submitHandler = async (e) => {
+        e.preventDefault();
         const token = {
             headers: {
                 Authorization: `Bearer ${userInfo.token}`
@@ -110,7 +115,7 @@ const UserUpdateScreen = ({ match, history }) => {
     };
     
     return (
-        <>
+        <div className={classes.root}>
         <IconButton edge="start" className={classes.backIcon} color="inherit" component={Link} to={'/admin/users-list'} aria-label="back">
             <ArrowBackIcon />
         </IconButton>
@@ -169,7 +174,7 @@ const UserUpdateScreen = ({ match, history }) => {
                 </Button>
             </form>
         </Container>
-        </>
+        </div>
     );
 };
 

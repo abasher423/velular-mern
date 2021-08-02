@@ -1,18 +1,16 @@
-import { Avatar, Button, Card, CardActions, CardContent, Container, Divider, Grid, IconButton, List, ListItem, ListItemAvatar, ListItemText, Paper, Typography, useMediaQuery, useTheme 
+import { Avatar, Button, Card, CardContent, Divider, Grid, List, ListItem, ListItemAvatar, ListItemText, Paper, Typography 
 } from '@material-ui/core';
 import makeStyles from '@material-ui/core/styles/makeStyles';
 import React from 'react';
 import { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import ArrowBackIcon from '@material-ui/icons/ArrowBack';
-import { Link } from 'react-router-dom';
 import { getOrderDetails, payOrder } from '../actions/orderActions';
 import Message from '../components/Message';
 import Loader from '../components/Loader';
 import Alert from '@material-ui/lab/Alert';
 import { PayPalButton } from 'react-paypal-button-v2';
 import AuthenticationServices from '../services/AuthenticationServices';
-import { ORDER_LIST_USER_RESET, ORDER_PAY_RESET } from '../constants/orderConstants';
+import { ORDER_PAY_RESET } from '../constants/orderConstants';
 import orderServices from '../services/orderServices';
 
 
@@ -138,7 +136,7 @@ const OrderScreen = ({ match, history }) => {
     };
     
     return loading ? <Loader /> : error ? <Message status="error" text={error} /> : <>
-        <Paper style={{ padding: "1rem"}} >
+        <Paper style={{ padding: "1rem", marginTop: "6rem", minHeight: "80vh"}} >
         <Grid container spacing={1}>
             <Grid item xs={12}>
                 <Typography component="h2" variant="h4" className={classes.heading}>ORDER # {order._id}</Typography>

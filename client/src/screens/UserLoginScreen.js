@@ -1,5 +1,3 @@
-// https://github.com/mui-org/material-ui/blob/master/docs/src/pages/getting-started/templates/sign-in/SignIn.js
-
 import { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import Message from '../components/Message';
@@ -12,7 +10,9 @@ const useStyles = makeStyles(theme => ({
     container: {
         display: "flex",
         justifyContent: "center",
-        alignItems: "center"
+        alignItems: "center",
+        marginTop: "6rem", 
+        minHeight: "80vh"
     },
     form: {
         width: '100%', // Fix IE 11 issue.

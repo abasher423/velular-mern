@@ -1,8 +1,6 @@
 import React, { useEffect } from 'react';
-import { Button, Container, IconButton, Typography } from '@material-ui/core';
+import { Button, Container, Typography } from '@material-ui/core';
 import { Link } from 'react-router-dom';
-import Loader from '../components/Loader';
-import Message from '../components/Message';
 import { withStyles, makeStyles } from '@material-ui/core/styles';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
@@ -11,10 +9,7 @@ import TableContainer from '@material-ui/core/TableContainer';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
-import CheckIcon from '@material-ui/icons/Check';
 import CloseIcon from '@material-ui/icons/Close';
-import EditIcon from '@material-ui/icons/Edit';
-import DeleteIcon from '@material-ui/icons/Delete';
 import { useState } from 'react';
 import { useSelector } from 'react-redux';
 import orderServices from '../services/orderServices';
@@ -22,6 +17,10 @@ import CheckCircleOutlineIcon from '@material-ui/icons/CheckCircleOutline';
 
 // CSS to style UI component
 const useStyles = makeStyles(theme => ({
+    root: {
+      marginTop: "6rem", 
+      minHeight: "80vh"
+    },
     title: {
         textAlign: 'center'
     },
@@ -34,7 +33,6 @@ const useStyles = makeStyles(theme => ({
     }
 }));
 
-// Table style code adapted from example in https://material-ui.com/components/tables/
 const StyledTableCell = withStyles((theme) => ({
     head: {
       backgroundColor: theme.palette.common.white,
@@ -45,7 +43,6 @@ const StyledTableCell = withStyles((theme) => ({
     },
   }))(TableCell);
   
-  // Table style code adapted from example in https://material-ui.com/components/tables/
   const StyledTableRow = withStyles((theme) => ({
     root: {
       '&:nth-of-type(odd)': {
@@ -79,11 +76,11 @@ const OrderListScreen = () => {
     console.log(ordersList)
 
     return (
-        <>
+        <div className={classes.root}>
         <Typography variant="h3" component="h1" className={classes.title}>Manage Orders ({ordersList ? ordersList.length : '0'})</Typography>
         <Container>
             <TableContainer component={Paper}>
-                  <Table // Table component adapted from example in https://material-ui.com/components/tables/
+                  <Table
                     className={classes.table} 
                     aria-label="customs table"
                   >
@@ -118,7 +115,7 @@ const OrderListScreen = () => {
                               )}
                             </StyledTableCell>
                           <StyledTableCell>
-                            <Button // Button component adapted from example in https://material-ui.com/components/buttons/
+                            <Button
                                 variant="contained"
                                 component={Link}
                                 to={`/orders/${order.order._id}`}
@@ -132,7 +129,7 @@ const OrderListScreen = () => {
                   </Table>
                 </TableContainer>
         </Container>
-        </>
+        </div>
     );
 };
 

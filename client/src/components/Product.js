@@ -15,11 +15,14 @@ import { Divider } from '@material-ui/core';
 const useStyles = makeStyles(theme => ({
   root: {
     maxWidth: 345,
-    height: "100%"
+    height: "100%",
+  },
+  cardArea: {
+    // height: "100%",
   },
   media: {
     height: 270,
-    width: "auto"
+    width: "auto",
   },
   divide: {
     margin: "0.25rem 0"
@@ -33,10 +36,10 @@ const Product = ({ product }) => {
   const classes = useStyles();
   
   return (
+      <Link to={`/products/${product._id}`} style={{ textDecoration: "none", color: "black"}}>
         <Card
         className={classes.root}> 
-          <Link to={`/products/${product._id}`} style={{ textDecoration: "none", color: "black"}}>
-            <CardActionArea>
+            <CardActionArea className={classes.cardArea}>
                 <CardMedia
                 className={classes.media}
                 image={product.productImage}
@@ -59,13 +62,13 @@ const Product = ({ product }) => {
                       {`£${product.pricing.price}`}
                   </Typography>
                   <Divider className={classes.divide}/>
-                  <Typography gutterBottom className={classes.ratingText}>
+                  <Typography  className={classes.ratingText}>
                     <Rating value={product.averageRating} text={`${product.averageRating} stars`}/>
                   </Typography>
                 </CardContent>
                 </CardActionArea>
-            </Link>
         </Card>
+        </Link>
   );
 }
 
