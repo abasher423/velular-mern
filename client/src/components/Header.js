@@ -12,20 +12,16 @@ import MenuItem from '@material-ui/core/MenuItem';
 import IconButton from '@material-ui/core/IconButton';
 import Container from '@material-ui/core/Container';
 import { Link } from 'react-router-dom'
-import SearchIcon from '@material-ui/icons/Search';
-import FavoriteBorderIcon from '@material-ui/icons/FavoriteBorder';
 import ShoppingCartOutlinedIcon from '@material-ui/icons/ShoppingCartOutlined';
 import PersonOutlineOutlinedIcon from '@material-ui/icons/PersonOutlineOutlined';
 import HomeIcon from '@material-ui/icons/Home';
 import MenuIcon from '@material-ui/icons/Menu';
-import AddIcon from '@material-ui/icons/Add';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import { logout } from '../actions/userActions';
 import { useHistory } from "react-router-dom";
-import { Avatar, Box, Divider, Drawer, Fade, List, ListItem, ListItemIcon, ListItemText, SwipeableDrawer, TextField, Tooltip, useMediaQuery, useTheme } from '@material-ui/core';
-import { USER_LOGOUT } from '../constants/userConstants';
+import {Box, Divider, Drawer, Fade, List, ListItem, ListItemIcon, ListItemText, Tooltip, useMediaQuery, useTheme } from '@material-ui/core';
 import SearchBox from './SearchBox';
-import { Icon, InlineIcon } from '@iconify/react';
+import { Icon } from '@iconify/react';
 import shoeSneaker from '@iconify-icons/mdi/shoe-sneaker';
 
 
@@ -85,6 +81,8 @@ const Header = () => {
 
     const userLogin = useSelector(state => state.userLogin);
     const { userInfo } = userLogin;
+
+    const { cartItems } = useSelector((state) => state.cart)
 
     const handleDrawerOpen = () => {
         setOpenDrawer(true);
@@ -174,9 +172,9 @@ const Header = () => {
             <AppBar position="fixed" color="default" className={classes.appbar}>
                 <Container>
                 <Toolbar>
-                    <img src="/images/logo.png" style={{ height: 50, padding: 0, margin: 0 }} alt="logo" />
+                    <Link to={"/"}><img src="/images/logo.png" style={{ height: 50, padding: 0, margin: 0 }} alt="logo" /></Link>
                     {!mobile && (<Typography variant="h3" component={Link} to={'/'} className={classes.title}>
-                        <Box letterSpacing={10} m={1}>
+                        <Box letterSpacing={10} m={1} fontWeight="fontWeightMedium">
                             elular
                         </Box>
                     </Typography>)}
@@ -216,6 +214,11 @@ const Header = () => {
                         <Tooltip TransitionComponent={Fade} TransitionProps={{ timeout: 600 }} title="Cart">
                             <IconButton edge="start" className={classes.icons} component={Link} to={'/cart'} color="inherit" aria-label="cart">
                                 <ShoppingCartOutlinedIcon />
+                                <Typography variant="body2">
+                                    <Box fontSize={25} fontWeight={800} style={{ marginLeft: "3px", color: "#FFA500"}}>
+                                        {cartItems && cartItems.length > 0 && cartItems.length}
+                                    </Box>
+                                </Typography>
                             </IconButton>
                         </Tooltip>
                         

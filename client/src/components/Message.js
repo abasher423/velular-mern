@@ -1,5 +1,4 @@
- // https://stackoverflow.com/questions/65214950/how-to-disappear-alert-after-5-seconds-in-react-js
-import { useState, useEffect } from 'react'
+// import { useState } from 'react'
 import { makeStyles } from '@material-ui/core/styles';
 import Alert from '@material-ui/lab/Alert';
 
@@ -13,11 +12,10 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-// code adapted from example https://stackoverflow.com/questions/62286242/react-material-ui-delayed-permission-dialog
 // to display message for only 5seconds
 const Message = ({ status, text }) => {
     const classes = useStyles();
-    const [show, setShow] = useState(true);
+    // const [show, setShow] = useState(true);
 
     // useEffect(() => {
     //   const timer = setTimeout(() => {

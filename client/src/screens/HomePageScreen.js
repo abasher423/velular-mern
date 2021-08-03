@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import Grid from '@material-ui/core/Grid';
 import SlideShow from '../components/SlideShow'
-import { Button, Container, Tooltip, useTheme, useMediaQuery, Box } from '@material-ui/core';
+import { Button, Container, Tooltip, useTheme, useMediaQuery, Box, IconButton } from '@material-ui/core';
 import makeStyles from '@material-ui/core/styles/makeStyles';
 import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
@@ -9,12 +9,17 @@ import { Link } from 'react-router-dom';
 import HelpIcon from '@material-ui/icons/Help';
 import Aos from 'aos';
 import 'aos/dist/aos.css';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faCreditCard } from '@fortawesome/free-solid-svg-icons';
+import { faDraftingCompass } from '@fortawesome/free-solid-svg-icons';
+import { faTruck } from '@fortawesome/free-solid-svg-icons';
+import { faAngleDoubleRight } from '@fortawesome/free-solid-svg-icons';
 
 const useStyles = makeStyles(theme => ({
     mainImage: {
         textAlign: "center",
         height: "100vh",
-        width: "auto",
+        // width: "auto",
         backgroundSize: "cover",
         backgroundRepeat: "no-repeat",
         backgroundPosition: "center",
@@ -40,7 +45,7 @@ const useStyles = makeStyles(theme => ({
         justifyContent: "space-around",
         alignItems: "center",
         paddingBottom: 15,
-        [theme.breakpoints.down('xs')] : {
+        [theme.breakpoints.down('md')] : {
             flexDirection: "column",
             marginTop: "2rem"
         }
@@ -58,15 +63,36 @@ const useStyles = makeStyles(theme => ({
         flexDirection: "column",
         alignItems: "center",
         height: 443,
-        width: "auto",
+        // width: "auto",
         [theme.breakpoints.down('sm')] : {
             height: 311,
-            width: "auto"
+            // width: "auto"
         },
-        // marginTop: "2rem"
     },
     learnBtn: {
         justifyContent: "center"
+    },
+    iconContainer: {
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+        textAlign: "center",
+        [theme.breakpoints.up('md')]:{
+            height: "100vh"
+        },
+        [theme.breakpoints.down('md')]:{
+            padding: "4rem 0"
+        }
+    },
+    continue: {
+        // animation: "fadeIn 2s infinite alternate",
+        fontSize: 20
+    },
+    boxText: {
+        marginTop: 30,
+        [theme.breakpoints.down('md')]:{
+            fontSize: 30
+        }
     },
     carousel: {
         [theme.breakpoints.down('sm')] : {
@@ -84,9 +110,8 @@ const useStyles = makeStyles(theme => ({
         margin: "9rem 1.5rem"
     },
     nikeImage: {
-    //    marginTop: "2rem",
        borderRadius: 4,
-       boxShadow: "0px 2px 1px -1px rgb(0 0 0 / 20%), 0px 1px 1px 0px rgb(0 0 0 / 14%), 0px 1px 3px 0px rgb(0 0 0 / 12%)"
+       boxShadow: "0px 2px 1px -1px rgb(0 0 0 / 20%), 0px 1px 1px 0px rgb(0 0 0 / 14%), 0px 1px 3px 0px rgb(0 0 0 / 12%)",
     },
     cardPaper: {
         borderRadius: 4,
@@ -94,14 +119,17 @@ const useStyles = makeStyles(theme => ({
     },
     image: {
         textAlign: "center",
-        marginTop: "2rem",
         padding: "1rem",
         height: 600,
-        width: "auto",
+        // width: "auto",
         position: "relative",
         backgroundSize: "cover",
         backgroundRepeat: "no-repeat",
         backgroundPosition: "center",
+        transition: "all .2s ease-in-out",
+        "&:hover":{
+            transform: "scale(1.1)"
+        },
         [theme.breakpoints.down('sm')] : {
             height: 300
         }
@@ -142,7 +170,7 @@ const HomePageScreen = () => {
                         <div>
                             {/* <img src="/images/slogan.png" alt="slogan"/> */}
                             <Typography variant="h1">
-                                <Box fontSize={45} fontWeight="fontWeightMedium" fontFamily="Monospace" textAlign="center">
+                                <Box fontSize={45} fontWeight="fontWeightMedium"  textAlign="center">
                                     One of One <span>Trainers</span>
                                 </Box>
                             </Typography>
@@ -188,41 +216,95 @@ const HomePageScreen = () => {
             </Grid>
             </Container>
 
+
             {/* --------------- Carousel -------------- */}
             <Grid item xs={12} className={classes.carousel}>
-                <Paper className={classes.carouselPaper} data-aos="fade-down">
+                <Paper className={classes.carouselPaper} data-aos={!mobile ? "fade-down" : ""}>
                     <SlideShow />
                 </Paper>
             </Grid>
 
-                {/* --------------- Cards ------------------- */}
-                <Grid container justify="center" spacing={0} >
-                    <Grid item xs={12} md={4}>
-                        <Paper className={classes.cardPaper}>
-                            <Link to={'/products'}>
-                                <div className={classes.image} style={{backgroundImage: "url(/images/air-force-01.jpg)"}} />
-                            </Link>
-                        </Paper>
-                    </Grid>
+            {/* ------------------- Icons ----------------- */}
+            <Container className={classes.iconContainer}>
+                <Grid container spacing={1}>
                     
-                    <Grid item xs={12} md={4}>
-                        <Paper className={classes.cardPaper}>
-                            <Link to={'/products'}>
-                                <div className={classes.image} style={{backgroundImage: "url(/images/vans-1.jpg)"}} />
-                            </Link>
-                        </Paper>
-                    </Grid>
+                        <Grid item xs={12} md={4} data-aos={!mobile ? "fade-right" : ""}>
+                            <FontAwesomeIcon icon={faCreditCard} size={!mobile ? "8x" : "4x"} />
+                            <Typography variant="h3" className={classes.boxText}>
+                                <Box textAlign="center">
+                                    Purchase
+                                </Box>
+                            </Typography>
+                            <Typography variant="h4" className={classes.boxText}>
+                                <Box textAlign="center">
+                                <span style={{ color: "#FFA500"}}>Buy</span> premium custom shoes designed by independent artists
+                                </Box>
+                            </Typography>
+                        </Grid>
 
-                    <Grid item xs={12} md={4}>
-                        <Paper className={classes.cardPaper}>
+                        <Grid item xs={12} md={4} data-aos={!mobile ? "fade-right" : ""} data-aos-delay={300}>
+                            <FontAwesomeIcon icon={faDraftingCompass} size={!mobile ? "8x" : "4x"} />
+                            <Typography variant="h3" className={classes.boxText}>
+                                <Box textAlign="center">
+                                    Design
+                                </Box>
+                            </Typography>
+                            <Typography variant="h4" className={classes.boxText}>
+                                <Box textAlign="center">
+                                    <span style={{ color: "#FFA500"}}>Create</span> custom quality shoes ready to be sold to valued customers
+                                </Box>
+                            </Typography>
+                        </Grid>
+
+                        <Grid item xs={12} md={4} data-aos={!mobile ? "fade-right" : ""} data-aos-delay={600}>
+                            <FontAwesomeIcon icon={faTruck} size={!mobile ? "8x" : "4x"} />
+                            <Typography variant="h3" className={classes.boxText}>
+                                <Box textAlign="center">
+                                    Shipping
+                                </Box>
+                            </Typography>
+                            <Typography variant="h4" className={classes.boxText}>
+                                <Box textAlign="center">
+                                <span style={{ color: "#FFA500"}}>Enjoy</span> next day delivery on selected custom designed sneakers
+                                </Box>
+                            </Typography>
+                        </Grid>
+
+                        <Grid item xs={12} align="center" data-aos={!mobile ? "fade-right" : ""} data-aos-delay={900}>
+                        <IconButton edge="start" color="inherit" component={Link} to={'/page/1'} aria-label="continue" className={classes.continue}>
+                            <FontAwesomeIcon icon={faAngleDoubleRight} size={!mobile ? "3x" : "4x"} />
+                        </IconButton>
+                        </Grid>
+                </Grid>
+            </Container>
+
+            {/* --------------- Cards ------------------- */}
+            <Grid container justify="center" spacing={0} >
+                <Grid item xs={12} md={4}>
+                    <Paper className={classes.cardPaper}>
                         <Link to={'/products'}>
-                            <div className={classes.image} style={{backgroundImage: "url(/images/air-max-2.jpg)"}} />
+                            <div className={classes.image} style={{backgroundImage: "url(/images/air-force-01.jpg)"}} />
                         </Link>
-
-                        </Paper>
-                    </Grid>
+                    </Paper>
                 </Grid>
                 
+                <Grid item xs={12} md={4}>
+                    <Paper className={classes.cardPaper}>
+                        <Link to={'/products'}>
+                            <div className={classes.image} style={{backgroundImage: "url(/images/vans-1.jpg)"}} />
+                        </Link>
+                    </Paper>
+                </Grid>
+
+                <Grid item xs={12} md={4}>
+                    <Paper className={classes.cardPaper}>
+                    <Link to={'/products'}>
+                        <div className={classes.image} style={{backgroundImage: "url(/images/air-max-2.jpg)"}} />
+                    </Link>
+
+                    </Paper>
+                </Grid>
+            </Grid>
         </Grid>
     );
 };
