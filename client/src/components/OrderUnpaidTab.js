@@ -1,10 +1,8 @@
-import { CardHeader, Divider, Grid, Link, makeStyles, Typography, useMediaQuery, useTheme } from "@material-ui/core";
+import { Divider, Grid, Link, makeStyles, Typography, useMediaQuery, useTheme } from "@material-ui/core";
 import Card from '@material-ui/core/Card';
-import CardActions from '@material-ui/core/CardActions';
 import CardContent from '@material-ui/core/CardContent';
 import Button from '@material-ui/core/Button';
 import Alert from "@material-ui/lab/Alert";
-import RepeatIcon from '@material-ui/icons/Repeat';
 
 // CSS to style UI component
 const useStyles = makeStyles(theme => ({
@@ -87,7 +85,7 @@ const OrderUnpaidTab = ({ orders }) => {
                 )}
                 <Grid item xs={12}>
                     {orders && orders.map(order => (
-                        <Card // Code adapted from example in https://material-ui.com/components/cards/ 
+                        <Card
                             variant="outlined" 
                             className={classes.root} 
                             key={order._id}
@@ -129,7 +127,7 @@ const OrderUnpaidTab = ({ orders }) => {
                                                     </Link>
                                                 </Grid>
                                                 <Grid item xs={12} md={3} className={classes.completeOrder}>
-                                                    <Button // Code adapted from example in https://material-ui.com/components/buttons/
+                                                    <Button
                                                         variant="contained"
                                                         fullWidth={mobile ? true : false}
                                                         href={`/orders/${order._id}`}

@@ -200,6 +200,10 @@ const ProductDetailScreen = ({ history, match }) => {
         }
         return results;
     }
+
+    const addDecimals = (num) => {
+        return (Math.round(num * 100) / 100).toFixed(2);
+    }
     
     return (
         <Paper className={classes.paper}>
@@ -225,7 +229,7 @@ const ProductDetailScreen = ({ history, match }) => {
                             <Divider style={{margin: "0.5rem 0"}}/>
                             <Typography variant="h4" component="h3">{product.brand}</Typography>
                             <Divider style={{margin: "0.5rem 0"}}/>
-                            <Typography variant="h6" component="p">{`Price: £${product.price}`}</Typography> 
+                            <Typography variant="h6" component="p">{`Price: £${addDecimals(product.price)}`}</Typography> 
                             <Divider style={{margin: "0.5rem 0"}}/>
                             <Typography variant="h6" color="textSecondary" component="p">{product.description}</Typography> 
                         </div>
@@ -236,7 +240,7 @@ const ProductDetailScreen = ({ history, match }) => {
                             <CardContent justify="space-between">
                                 <div className={classes.box}>
                                     <Typography gutterBottom>Price</Typography>
-                                    <Typography variant="h5"gutterBottom>{`£${product.price}`}</Typography>
+                                    <Typography variant="h5"gutterBottom>{`£${addDecimals(product.price)}`}</Typography>
                                 </div>
                                 <Divider style={{margin: "0.5rem 0"}}/>
                                 

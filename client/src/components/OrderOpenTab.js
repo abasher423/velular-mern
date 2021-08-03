@@ -1,10 +1,8 @@
-import { CardHeader, Divider, Grid, Link, makeStyles, Typography, useMediaQuery, useTheme } from "@material-ui/core";
+import { Divider, Grid, Link, makeStyles, Typography, useMediaQuery, useTheme } from "@material-ui/core";
 import Card from '@material-ui/core/Card';
-import CardActions from '@material-ui/core/CardActions';
 import CardContent from '@material-ui/core/CardContent';
 import Button from '@material-ui/core/Button';
 import Alert from "@material-ui/lab/Alert";
-import RepeatIcon from '@material-ui/icons/Repeat';
 
 // css to style UI component
 const useStyles = makeStyles(theme => ({
@@ -78,7 +76,7 @@ const OrderOpenTab = ({ orders }) => {
                 )}
                 <Grid item xs={12}>
                     {orders && orders.map(order => (
-                        <Card // Code adapted from example in https://material-ui.com/components/cards/ 
+                        <Card
                             variant="outlined" 
                             className={classes.root} 
                             key={order._id}
@@ -121,13 +119,13 @@ const OrderOpenTab = ({ orders }) => {
                                                     </Link>
                                                 </Grid>
                                                 <Grid item xs={12} md={3} className={classes.orderItemBtns}>
-                                                    <Button // Code adapted from example in https://material-ui.com/components/buttons/ 
+                                                    <Button
                                                         variant="contained"
                                                         fullWidth={mobile ? true : false}
                                                         className={classes.supportBtn}>
                                                             Get Order Support
                                                     </Button>
-                                                    <Button // Code adapted from example in https://material-ui.com/components/buttons/ 
+                                                    <Button
                                                         variant="contained"
                                                         fullWidth={mobile ? true : false}
                                                         className={classes.viewOrderBtn}

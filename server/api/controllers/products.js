@@ -210,6 +210,7 @@ const products_create_product = async (req, res) => {
                 artist: result.artist,
                 description: result.description,
                 brand: result.brand,
+                category: result.category,
                 size: result.size,
                 quantityInStock: result.quantityInStock,
                 pricing: {

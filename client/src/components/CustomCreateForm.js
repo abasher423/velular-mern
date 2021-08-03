@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from 'react';
-import { Container, Divider, FormControl, Grid, InputLabel, makeStyles, MenuItem, Select } from '@material-ui/core';
-import { Button,IconButton, TextField, Typography } from '@material-ui/core';
+import React, { useState } from 'react';
+import { Container, FormControl, Grid, InputLabel, makeStyles, MenuItem, Select } from '@material-ui/core';
+import { Button, TextField } from '@material-ui/core';
 import CloudUploadIcon from '@material-ui/icons/CloudUpload';
 import SaveIcon from '@material-ui/icons/Save';
 import productServices from '../services/productServices';
@@ -98,6 +98,7 @@ const CustomCreateForm = ({ setOpenForm, setCustomDetails }) => {
     };
 
     const saveHandler = async (e) => {
+        e.preventDefault();
         try {
             const data = new FormData();
             data.append('name', productName);
@@ -126,12 +127,12 @@ const CustomCreateForm = ({ setOpenForm, setCustomDetails }) => {
     }
     
     return (
-        <form>
+        <form onSubmit={saveHandler}>
             <Container maxWidth="sm">
                 <Grid container className={classes.container}>
                     {error && <Message status="error" text={error} />}
                     <Grid item xs={6}>
-                    <TextField // Code adapted from examples in https://material-ui.com/components/text-fields/ 
+                    <TextField 
                         variant="standard"
                         margin="normal"
                         autoComplete="true"
@@ -143,7 +144,7 @@ const CustomCreateForm = ({ setOpenForm, setCustomDetails }) => {
                     />
                     </Grid>
                     <Grid item xs={6}>
-                    <TextField // Code adapted from examples in https://material-ui.com/components/text-fields/ 
+                    <TextField 
                         variant="standard"
                         margin="normal"
                         autoComplete="true"
@@ -158,7 +159,7 @@ const CustomCreateForm = ({ setOpenForm, setCustomDetails }) => {
                     <Grid item xs={6}>
                     <FormControl className={classes.sizeFormControl}>
                         <InputLabel id="controlled-size-select-label" required>Size</InputLabel>
-                        <Select // Code adapted from examples in https://material-ui.com/components/selects/
+                        <Select
                             labelId="controlled-size-select-label"
                             id="select-size"
                             open={openSize}
@@ -172,7 +173,7 @@ const CustomCreateForm = ({ setOpenForm, setCustomDetails }) => {
                     </FormControl>
                     </Grid>
                     <Grid item xs={6}>
-                        <TextField // Code adapted from examples in https://material-ui.com/components/text-fields/ 
+                        <TextField 
                             variant="standard"
                             margin="normal"
                             autoComplete="true"
@@ -187,7 +188,7 @@ const CustomCreateForm = ({ setOpenForm, setCustomDetails }) => {
                     <Grid item xs={6}>
                         <FormControl className={classes.brandFormControl} margin="normal">
                             <InputLabel id="controlled-brand-select-label" required>Brand</InputLabel>
-                            <Select // Code adapted from examples in https://material-ui.com/components/selects/
+                            <Select
                                 labelId="controlled-brand-select-label"
                                 id="select-brand"
                                 open={openBrand}
@@ -208,7 +209,7 @@ const CustomCreateForm = ({ setOpenForm, setCustomDetails }) => {
                     <Grid item xs={6}>
                         <FormControl className={classes.categoryFormControl} margin="normal">
                             <InputLabel id="open-select-label required">Category</InputLabel>
-                            <Select // Code adapted from examples in https://material-ui.com/components/selects/
+                            <Select
                                 labelId="open-select-label"
                                 id="open-select"
                                 open={open}
@@ -224,7 +225,7 @@ const CustomCreateForm = ({ setOpenForm, setCustomDetails }) => {
                         </FormControl>
                     </Grid>
                     <Grid item xs={12}>
-                        <TextField // Code adapted from examples in https://material-ui.com/components/text-fields/ 
+                        <TextField 
                             variant="outlined"
                             margin="normal"
                             id="description"
@@ -238,7 +239,7 @@ const CustomCreateForm = ({ setOpenForm, setCustomDetails }) => {
                         />
                     </Grid>
                     <Grid item xs={12}>
-                        <Button // Code adapted from examples in https://material-ui.com/components/buttons/
+                        <Button
                             variant="contained"
                             color="default"
                             fullWidth
@@ -258,11 +259,11 @@ const CustomCreateForm = ({ setOpenForm, setCustomDetails }) => {
                         </Button>
                     </Grid>
                     <Grid item xs={12}>
-                    <Button // Code adapted from examples in https://material-ui.com/components/buttons/
+                    <Button
                         variant="contained"
                         color="primary"
                         fullWidth
-                        onClick={saveHandler}
+                        type="submit"
                         className={classes.button2}
                         startIcon={<SaveIcon />}
                     >

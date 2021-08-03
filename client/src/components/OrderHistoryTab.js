@@ -1,6 +1,5 @@
-import { CardHeader, Divider, Grid, Link, makeStyles, Typography, useMediaQuery, useTheme } from "@material-ui/core";
+import { Divider, Grid, Link, makeStyles, Typography, useMediaQuery, useTheme } from "@material-ui/core";
 import Card from '@material-ui/core/Card';
-import CardActions from '@material-ui/core/CardActions';
 import CardContent from '@material-ui/core/CardContent';
 import Button from '@material-ui/core/Button';
 import Alert from "@material-ui/lab/Alert";
@@ -86,7 +85,7 @@ const OrderHistoryTab = ({ orders }) => {
                 )}
                 <Grid item xs={12}>
                     {orders && orders.map(order => (
-                        <Card // Code adapted from example in https://material-ui.com/components/cards/ 
+                        <Card
                             variant="outlined" 
                             className={classes.root} 
                             key={order._id}
@@ -128,14 +127,14 @@ const OrderHistoryTab = ({ orders }) => {
                                                         <Typography>{orderItem.description}</Typography>
                                                     </Link>
                                                     
-                                                    <Button // Code adapted from example in https://material-ui.com/components/buttons/
+                                                    <Button
                                                         variant="contained"
                                                         fullWidth={mobile ? true : false}
                                                         className={classes.buyAgainBtn}>
                                                             <RepeatIcon /> 
                                                             Buy it again
                                                     </Button>
-                                                    <Button // Code adapted from example in https://material-ui.com/components/buttons/
+                                                    <Button
                                                         fullWidth={mobile ? true : false}
                                                         href={`/orders/${order._id}`}
                                                         style={{ borderRadius: 25 }}
@@ -150,7 +149,7 @@ const OrderHistoryTab = ({ orders }) => {
                                                         className={classes.supportBtn}>
                                                             Get Product Support
                                                     </Button>
-                                                    <Button  // Code adapted from example in https://material-ui.com/components/buttons/
+                                                    <Button 
                                                         variant="contained"
                                                         fullWidth={mobile ? true : false}
                                                         style={{ borderRadius: 25}}

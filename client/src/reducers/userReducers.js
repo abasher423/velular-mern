@@ -5,13 +5,6 @@ import {
     USER_LOGOUT
 } from "../constants/userConstants";
 
-/*
-    * Three functions to create an action in Redux for logging in
-    * This was reused from a Udemy course "MERN eCommerce From Scratch" by Brad Traversy
-    * Link here to course' GitHub:
-    * https://github.com/bradtraversy/proshop_mern/blob/master/frontend/src/reducers/orderReducer.js
-*/
-
 export const userLoginReducer = (state = {}, action) => {
     switch (action.type){
         case USER_LOGIN_REQUEST:

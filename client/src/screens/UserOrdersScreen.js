@@ -84,7 +84,8 @@ const UserOrdersScreen = () => {
     };
 
     return (
-        <Grid container className={classes.container}>
+        <div className={classes.container}>
+        <Grid container>
             <Grid item xs={12}>
                 <Typography variant="h4" className={classes.heading}>Your Orders</Typography>
             </Grid>
@@ -101,8 +102,8 @@ const UserOrdersScreen = () => {
                         value={selectedTab}
                         variant="scrollable"
                         onChange={handleTabChange}
-                        indicatorColor="secondary"
-                        textColor="secondary"
+                        indicatorColor="primary"
+                        textColor="primary"
                     >
                         <Tab label="orders" />
                         <Tab label="Open Orders" />
@@ -114,6 +115,7 @@ const UserOrdersScreen = () => {
                 </Paper>
             </Grid>
         </Grid>
+        </div>
     );
 };
 

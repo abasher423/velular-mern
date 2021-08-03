@@ -1,14 +1,6 @@
 import { CART_ADD_ITEM, CART_DELETE_ITEM, CART_SAVE_PAYMENT_METHOD, CART_SAVE_SHIPPING_DETAILS } from '../constants/cartConstants';
 import productServices from '../services/productServices';
 
-/*
-    * Functions in this module dispatch actions for shopping cart
-    * The code was adapted by renaming variable names and adding additional properties to be stored in the cart 
-    * This was adapted from a Udemy course by Brad Traversy
-    * Link here to course' GitHub:
-    * https://github.com/bradtraversy/proshop_mern/blob/master/frontend/src/actions/cartActions.js
-*/
-
 // getState fetches the state tree (for local storage)
 export const addToCart = (productId, quantity, size) => async (dispatch, getState) => {
     const { data } = await productServices.indexOne(productId);
@@ -18,6 +10,7 @@ export const addToCart = (productId, quantity, size) => async (dispatch, getStat
             productId: data._id,
             artist: data.artist,
             name: data.name,
+            category: data.category,
             description: data.description,
             brand: data.brand,
             productImage: data.productImage,

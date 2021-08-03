@@ -11,14 +11,6 @@ import {
 } from '../constants/orderConstants';
 import orderServices from '../services/orderServices';
 
-/*
-    * Two functions to create and pay for an order in the frontend
-    * The code was adapted by renaming variable names
-    * This was adapted from a Udemy course by Brad Traversy
-    * Link here to course' GitHub:
-    * https://github.com/bradtraversy/proshop_mern/blob/master/frontend/src/actions/orderActions.js
-*/
-
 export const createOrder = (orderData) => async (dispatch, getState) => {
     try {
         dispatch({

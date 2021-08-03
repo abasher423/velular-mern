@@ -13,7 +13,6 @@ const useStyles = makeStyles((theme) => ({
 
 const Loader = () => {
     const classes = useStyles();
-    // Code adapted from https://material-ui.com/components/progress/
     return (
         <div className={classes.root}>
           <LinearProgress color="secondary" />

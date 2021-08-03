@@ -12,13 +12,6 @@ import {
     ORDER_PAY_RESET
 } from '../constants/orderConstants';
 
-/*
-    * Three functions to create an action in Redux for creating, fetching and paying orders
-    * This was reused from a Udemy course "MERN eCommerce From Scratch" by Brad Traversy
-    * Link here to course' GitHub:
-    * https://github.com/bradtraversy/proshop_mern/blob/master/frontend/src/reducers/orderReducer.js
-*/
-
 export const orderCreateReducer = (state = {}, action) => {
     switch(action.type){
         case ORDER_CREATE_REQUEST:

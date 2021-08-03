@@ -74,13 +74,6 @@ const OrderScreen = ({ match, history }) => {
     const dispatch = useDispatch();
     const classes = useStyles();
 
-    /*
-    * Variables and functions used to add the PayPal Script and fetch order details 
-    * This was reused from Udemy course "MERN eCommerce From Scratch" by Brad Traversy
-    * Link here to course' GitHub:
-    * https://github.com/bradtraversy/proshop_mern/blob/master/frontend/src/screens/OrderScreen.js
-    */
-
     const userLogin = useSelector(state => state.userLogin);
     const { userInfo } = userLogin;
 
@@ -260,7 +253,7 @@ const OrderScreen = ({ match, history }) => {
                     )}
                     { userInfo && userInfo.role === 'admin' && order.isPaid && !order.isDelivered && (
                         <CardContent>
-                            <Button // Code adapted from example in https://material-ui.com/components/buttons/
+                            <Button
                             variant="contained"
                             color="primary"
                             className={classes.delivered}

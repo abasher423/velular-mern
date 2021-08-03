@@ -1,6 +1,4 @@
 import React from 'react';
-import Button from '@material-ui/core/Button';
-import TextField from '@material-ui/core/TextField';
 import Dialog from '@material-ui/core/Dialog';
 import CloseIcon from '@material-ui/icons/Close';
 import DialogContent from '@material-ui/core/DialogContent';
@@ -32,7 +30,7 @@ const PopupDialog = ({ openForm, setOpenForm, setCustomDetails}) => {
 
     return (
         <Container>
-            <Dialog // Code adapted from https://material-ui.com/components/dialogs/ 
+            <Dialog
                 open={openForm}
                 maxWidth="md"
                 aria-labelledby="form-dialog-title"

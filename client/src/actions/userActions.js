@@ -6,14 +6,6 @@ import {
 } from "../constants/userConstants";
 import authenticationServices from '../services/AuthenticationServices';
 
-/*
-    * Two functions to login and logout and storing info into localstorage aswell clearing once logged out
-    * The code was adapted by renaming variable names
-    * This was adapted from a Udemy course by Brad Traversy
-    * Link here to course' GitHub:
-    * https://github.com/bradtraversy/proshop_mern/blob/master/frontend/src/actions/userActions.js
-*/
-
 export const login = (email, password) => async (dispatch) => {
     try {
         dispatch({

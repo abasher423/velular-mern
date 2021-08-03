@@ -1,4 +1,4 @@
-import { Accordion, AccordionDetails, AccordionSummary, Container, Grid, Paper, Typography, useMediaQuery, useTheme } from '@material-ui/core';
+import { Accordion, AccordionDetails, AccordionSummary, Grid, Paper, Typography, useMediaQuery, useTheme } from '@material-ui/core';
 import makeStyles from '@material-ui/core/styles/makeStyles';
 import React from 'react';
 import FacebookIcon from '@material-ui/icons/Facebook';
