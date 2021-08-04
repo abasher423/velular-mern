@@ -200,7 +200,7 @@ const CartScreen = ({ history}) => {
                                             <Grid item xs={12} md={2}>
                                                 <Typography variant="h5">
                                                     <Box fontWeight={600} textAlign={mobile ? "left" : "right"}>
-                                                        £{addDecimals(item.price)}
+                                                        £{addDecimals(item.price * item.quantity)}
                                                     </Box>
                                                 </Typography>
                                             </Grid>
