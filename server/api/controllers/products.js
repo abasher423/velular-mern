@@ -23,12 +23,18 @@ const products_get_all = async (req, res) => {
                 $options: "i",
                 },
             },
+            {
+                category: {
+                $regex: req.query.keyword,
+                $options: "i",
+                },
+            },
             ],
         }
         : {};
 
         const pageCount = await Product.countDocuments({ ...keywordName});
-        const products = await Product.find({ ...keywordName }).limit(pageSize).skip(pageSize * (page-1))
+        const products = await Product.find({ ...keywordName }).sort(-'averageRating').limit(pageSize).skip(pageSize * (page-1));
         if (products.length > 0){ //.where to add conditions or .limit for pagination
             const response = {
                 count: products.length,
