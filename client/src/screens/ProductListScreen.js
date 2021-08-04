@@ -43,7 +43,7 @@ const ListedProducts = ({ match, history }) => {
         setPage(value);
     }
     return (
-        <div style={{ marginTop: "6rem", minHeight: "80vh" }}>
+        <div style={{ marginTop: "6rem", minHeight: "100vh" }}>
             <Typography variant="h3" style={{ marginBottom: "1rem", textAlign: "left" }}>Latest Products</Typography>
             { error ? <Message status="error" text={error} />
                 : <> <Grid container spacing={2} alignItems="stretch" style={{flexGrow: 1}}>

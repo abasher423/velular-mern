@@ -152,6 +152,7 @@ const CustomCreateForm = ({ setOpenForm, setCustomDetails }) => {
                         label="Proposed Price (£)"
                         name="price"
                         type="number"
+                        inputProps={{ step: "0.01" }}
                         required
                         onChange={priceHandler}
                     />
@@ -234,6 +235,7 @@ const CustomCreateForm = ({ setOpenForm, setCustomDetails }) => {
                             multiline
                             required
                             rows={4}
+                            inputProps={{ minLength: 50 }}
                             onChange={descriptionHandler}
                             name="description"
                         />

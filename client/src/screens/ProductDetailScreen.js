@@ -1,11 +1,10 @@
 import React from 'react';
 import { useState, useEffect } from 'react';
-import Link from 'react-router-dom/Link';
 import { useDispatch, useSelector } from 'react-redux';
 import Rating from '../components/Rating';
 import Button from '@material-ui/core/Button';
 import Grid from '@material-ui/core/Grid';
-import { Container, Divider, IconButton, Paper, TextField } from '@material-ui/core';
+import { Container, Divider, Paper, TextField } from '@material-ui/core';
 import Typography from '@material-ui/core/Typography';
 import CardContent from '@material-ui/core/CardContent';
 import CardActions from '@material-ui/core/CardActions';
@@ -16,8 +15,9 @@ import makeStyles from '@material-ui/core/styles/makeStyles';
 import Card from '@material-ui/core/Card';
 import Message from '../components/Message';
 import { addToCart } from '../actions/cartActions';
-import ArrowBackIcon from '@material-ui/icons/ArrowBack';
+import ArrowBackIosIcon from '@material-ui/icons/ArrowBackIos';
 import productServices from '../services/productServices';
+import { Link } from 'react-router-dom';
 
 // CSS to style UI component
 const useStyles = makeStyles( theme => ({
@@ -57,14 +57,9 @@ const useStyles = makeStyles( theme => ({
         marginTop: '1rem',
         marginBottom: '2rem'
     },
-    backIcon: {
-        marginTop: "1rem",
-        "&:hover": {
-            backgroundColor: "black"
-        },
-        backgroundColor: theme.palette.text.secondary,
-        color: "white",
-        marginBottom: "2rem"
+    backBtn: {
+        margin: "1rem 0",
+        backgroundColor: "#f5f5f5"
     },
     divider: {
         margin: theme.spacing(4)
@@ -209,9 +204,9 @@ const ProductDetailScreen = ({ history, match }) => {
         <Paper className={classes.paper}>
             <Container>
             <Typography variant="h3">Product Details</Typography>
-            <IconButton edge="start" className={classes.backIcon} color="inherit" component={Link} to={'/products'} aria-label="back">
-                <ArrowBackIcon />
-            </IconButton>
+            <Button variant="contained" component={Link} to={'/products'} className={classes.backBtn}>
+                <ArrowBackIosIcon /> Product List
+            </Button>
             </Container>
             <Container>
                 {error ? <Message status="error" text={error} /> : (

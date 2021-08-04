@@ -160,7 +160,7 @@ const CustomCreateScreen = () => {
                 />
                 </Grid>
                 <Grid item xs={12}>
-                    {error && <Message status="error" text={error} />}
+                    {error && <Message status="info" text={error} />}
                     <div className={classes.root}>
                     {customDetails && customDetails.map((custom, idx) => {
                         return (

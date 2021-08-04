@@ -172,13 +172,17 @@ const Header = () => {
             <AppBar position="fixed" color="default" className={classes.appbar}>
                 <Container>
                 <Toolbar>
-                    <Link to={"/"}><img src="/images/logo.png" style={{ height: 50, padding: 0, margin: 0 }} alt="logo" /></Link>
-                    {!mobile && (<Typography variant="h3" component={Link} to={'/'} className={classes.title}>
-                        <Box letterSpacing={10} m={1} fontWeight="fontWeightMedium">
-                            elular
-                        </Box>
-                    </Typography>)}
-
+                    {mobile ? (
+                        <Link to={"/"}><img src="/images/logo.png" style={{ height: 50, padding: 0, margin: 0, flexGrow: 1 }} alt="logo" /></Link>
+                    ): (<Typography variant="h3" component={Link} to={'/'} className={classes.title}>
+                            <Box m={1} fontWeight={800}>
+                                <u style={{color: "orange"}}>
+                                    <span style={{color: "orange"}}>V</span>
+                                </u>
+                                    elular
+                            </Box>
+                        </Typography>)}
+                    
                     {mobile ? (
                         <>
                             <Route render={({history}) => <SearchBox history={history}/>} />

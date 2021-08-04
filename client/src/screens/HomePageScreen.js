@@ -19,24 +19,36 @@ const useStyles = makeStyles(theme => ({
     mainImage: {
         textAlign: "center",
         height: "100vh",
-        // width: "auto",
+        width: "auto",
         backgroundSize: "cover",
         backgroundRepeat: "no-repeat",
         backgroundPosition: "center",
         position: "relative",
         borderRadius: 4,
-       boxShadow: "0px 2px 1px -1px rgb(0 0 0 / 20%), 0px 1px 1px 0px rgb(0 0 0 / 14%), 0px 1px 3px 0px rgb(0 0 0 / 12%)",
+        boxShadow: "0px 2px 1px -1px rgb(0 0 0 / 20%), 0px 1px 1px 0px rgb(0 0 0 / 14%), 0px 1px 3px 0px rgb(0 0 0 / 12%)",
         [theme.breakpoints.down('xs')] : {
             height: 500,
             marginTop: "2rem"
-        }
+        },
     },
     quote: {
         position: "absolute",
-        top: 350,
-        left: 180,
-        animation: "fadeIn 2s infinite alternate",
-        color: "#1b1b1b"
+        top: 600,
+        left: 280,
+        fontSize: 50,
+        fontWeight: 800,
+        // animation: "fadeIn 2s infinite alternate",
+        color: "#1b1b1b",
+        [theme.breakpoints.down('lg')] :{
+            left: 300,
+            top: 670,
+            fontSize: 40,
+        },
+        [theme.breakpoints.down('md')] :{
+            left: 200,
+            top: 750,
+            fontSize: 30,
+        }
     },
     slogan: {
         marginTop: "10rem",
@@ -47,7 +59,7 @@ const useStyles = makeStyles(theme => ({
         paddingBottom: 15,
         [theme.breakpoints.down('md')] : {
             flexDirection: "column",
-            marginTop: "2rem"
+            marginTop: "0.5rem"
         }
     },
     sloganText: {
@@ -63,10 +75,10 @@ const useStyles = makeStyles(theme => ({
         flexDirection: "column",
         alignItems: "center",
         height: 443,
-        // width: "auto",
+        width: "auto",
         [theme.breakpoints.down('sm')] : {
             height: 311,
-            // width: "auto"
+            width: "auto"
         },
     },
     learnBtn: {
@@ -112,6 +124,8 @@ const useStyles = makeStyles(theme => ({
     nikeImage: {
        borderRadius: 4,
        boxShadow: "0px 2px 1px -1px rgb(0 0 0 / 20%), 0px 1px 1px 0px rgb(0 0 0 / 14%), 0px 1px 3px 0px rgb(0 0 0 / 12%)",
+       height: "100%",
+       width: "100%"
     },
     cardPaper: {
         borderRadius: 4,
@@ -121,7 +135,7 @@ const useStyles = makeStyles(theme => ({
         textAlign: "center",
         padding: "1rem",
         height: 600,
-        // width: "auto",
+        width: "auto",
         position: "relative",
         backgroundSize: "cover",
         backgroundRepeat: "no-repeat",
@@ -141,6 +155,7 @@ const HomePageScreen = () => {
 
     const theme = useTheme();
     const mobile = useMediaQuery(theme.breakpoints.down("sm"));
+    const mobile2 = useMediaQuery(theme.breakpoints.down("md"));
 
     useEffect(() => {
         Aos.init({ duration: 2000 });
@@ -154,9 +169,9 @@ const HomePageScreen = () => {
             <Grid item xs={12}>
                 <Link to={'/products'}>
                     <div className={classes.mainImage} style={ !mobile ? { backgroundImage: "url(/images/jordan_1.jpg)" } : {backgroundImage: "url(/images/jordan_2.jpg)"}}>
-                        {!mobile && <Typography variant="h6" className={classes.quote}>
-                            <Box fontSize={50} >
-                                "Be the change <br /> you want to see  <br /> in the world"
+                        {!mobile2 && <Typography variant="h6" className={classes.quote}>
+                            <Box >
+                                <span style={{color: "orange"}}>Be</span> the change <br /> you want to see  <br /> in the world
                             </Box>
                         </Typography>}
                     </div>
@@ -165,7 +180,7 @@ const HomePageScreen = () => {
             
             <Container>
             {/* ------------ Slogan ----------------- */}
-            <Grid item xs={12} data-aos={!mobile ? "fade-up" : ""}>
+            <Grid item xs={12}>
                     <Paper className={classes.slogan}>
                         <div>
                             {/* <img src="/images/slogan.png" alt="slogan"/> */}
@@ -192,15 +207,14 @@ const HomePageScreen = () => {
             
              {/* ------------- Nike Air 1s ----------------- */}
              <Grid container>
-                <Grid item xs={12} md={6} data-aos={!mobile ? "fade-left" : ""}>
-                    <div>
-                        <Link to={'/products'}>
-                            <img src="/images/vans p3.jpg" alt="Vans" className={classes.nikeImage}/>
-                        </Link>
-                    </div>        
+                <Grid item xs={12} md={6}>
+                      
+                            <Link to={'/products/608b75a8cf423f44243ed11d'}>
+                                <img src="/images/vans-p3.jpg" alt="Vans" className={classes.nikeImage}/>
+                            </Link>
                 </Grid>
 
-                <Grid item xs={12} md={6} data-aos={!mobile ? "fade-right" : ""}>
+                <Grid item xs={12} md={6}>
                     <Paper>
                         <div className={classes.text}>
                             <Typography variant="h5" component="h2">
@@ -219,7 +233,7 @@ const HomePageScreen = () => {
 
             {/* --------------- Carousel -------------- */}
             <Grid item xs={12} className={classes.carousel}>
-                <Paper className={classes.carouselPaper} data-aos={!mobile ? "fade-down" : ""}>
+                <Paper className={classes.carouselPaper}>
                     <SlideShow />
                 </Paper>
             </Grid>
@@ -282,7 +296,7 @@ const HomePageScreen = () => {
             <Grid container justify="center" spacing={0} >
                 <Grid item xs={12} md={4}>
                     <Paper className={classes.cardPaper}>
-                        <Link to={'/products'}>
+                        <Link to={'/products/60a31b6abf4e9e0004e912fb'}>
                             <div className={classes.image} style={{backgroundImage: "url(/images/air-force-01.jpg)"}} />
                         </Link>
                     </Paper>
@@ -290,7 +304,7 @@ const HomePageScreen = () => {
                 
                 <Grid item xs={12} md={4}>
                     <Paper className={classes.cardPaper}>
-                        <Link to={'/products'}>
+                        <Link to={'/products/610aaba7851c6b298c22deaa'}>
                             <div className={classes.image} style={{backgroundImage: "url(/images/vans-1.jpg)"}} />
                         </Link>
                     </Paper>
@@ -298,8 +312,8 @@ const HomePageScreen = () => {
 
                 <Grid item xs={12} md={4}>
                     <Paper className={classes.cardPaper}>
-                    <Link to={'/products'}>
-                        <div className={classes.image} style={{backgroundImage: "url(/images/air-max-2.jpg)"}} />
+                    <Link to={'/products/610aaf8ccaea2f5408180c6a'}>
+                        <div className={classes.image} style={{backgroundImage: "url(/images/airforce-1d.jpg)"}} />
                     </Link>
 
                     </Paper>

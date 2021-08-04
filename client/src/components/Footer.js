@@ -13,7 +13,7 @@ import { useState } from 'react';
 // css styles
 const useStyles = makeStyles((theme) => ({
     root: {
-        marginTop: "2rem"
+        marginTop: "0.5rem"
     },
     footer: {
         backgroundColor: "#1b1b1b",

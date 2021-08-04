@@ -39,7 +39,7 @@ const SlideShow = () => {
                 </Link>
             </div>
             <div className={classes.image}>
-                <Link to={'/products'}>
+                <Link to={'/products/60a31b6abf4e9e0004e912fb'}>
                     <img src="/images/air-max-4.jpg" alt="airforce" />
                 </Link>
             </div>

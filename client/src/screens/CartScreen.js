@@ -8,7 +8,7 @@ import { Button, Typography, Divider, Paper, FormControl, Select, MenuItem, Icon
 import makeStyles from '@material-ui/core/styles/makeStyles';
 import { addToCart, deleteFromCart } from '../actions/cartActions';
 import DeleteIcon from '@material-ui/icons/Delete';
-import ArrowBackIcon from '@material-ui/icons/ArrowBack';
+import ArrowBackIosIcon from '@material-ui/icons/ArrowBackIos';
 
 // CSS to style UI component
 const useStyles = makeStyles((theme) => ({
@@ -27,6 +27,11 @@ const useStyles = makeStyles((theme) => ({
         marginTop: "4.7rem",
         width: 334,
     }
+    },
+    backBtn: {
+        marginTop: "2rem",
+        marginBottom: "1rem",
+        backgroundColor: "#f5f5f5"
     },
     box: {
         display: "flex",
@@ -114,15 +119,9 @@ const CartScreen = ({ history}) => {
                 </Grid>
             </Grid>
             {!mobile && (
-            <IconButton 
-                edge="start" 
-                className={classes.backIcon} 
-                color="inherit" component={Link}
-                to={'/products'}
-                aria-label="back"
-            >
-                <ArrowBackIcon />
-            </IconButton>)}
+            <Button variant="contained" component={Link} to={'/products'} className={classes.backBtn}>
+                <ArrowBackIosIcon /> Product List
+            </Button>)}
             {cartItems.length === 0 
                 ?   <div>
                     
@@ -131,7 +130,7 @@ const CartScreen = ({ history}) => {
                 : (
                     <>
                         {!mobile && (
-                            <Typography variant="body1" textAlign="right">
+                            <Typography variant="body1">
                                 <Box textAlign="right" style={{ paddingRight: 17 }}>Price</Box>  
                         </Typography>
                         )}
