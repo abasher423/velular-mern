@@ -4,7 +4,7 @@
 
 This is the [E-Commerce web application which is currently being hosted on Heroku](https://velular.herokuapp.com)
 
-![velular](https://user-images.githubusercontent.com/56160528/131346459-adb76083-4b99-48f3-b32f-c5f8d39336d7.png)
+[![velular](https://user-images.githubusercontent.com/56160528/131346459-adb76083-4b99-48f3-b32f-c5f8d39336d7.png)](https://velular.herokuapp.com)
 
 ## Features Implemented
 
