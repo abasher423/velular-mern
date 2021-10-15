@@ -1,14 +1,6 @@
 import mongoose from 'mongoose';
 const { Schema } = mongoose;
 
-/*
-    * A schema for orders that maps to the MongoDB orders collection
-    * The code was adapted by adding additional properties that is required for Velular
-    * This was adapted from a Udemy course by Brad Traversy
-    * Link here to udemy course's github:
-    * https://github.com/bradtraversy/proshop_mern/blob/master/backend/models/orderModel.js
-*/
-
 const orderSchema = new Schema({
     _id: { type: mongoose.Schema.ObjectId, required: true },
     currency: { type: String, default: 'GBP'},
